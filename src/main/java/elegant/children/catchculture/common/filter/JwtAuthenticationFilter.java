@@ -1,0 +1,71 @@
+package elegant.children.catchculture.common.filter;
+
+import elegant.children.catchculture.common.security.JwtTokenProvider;
+import elegant.children.catchculture.entity.user.Role;
+import elegant.children.catchculture.repository.UserRepository;
+import elegant.children.catchculture.common.utils.ClientUtils;
+import elegant.children.catchculture.common.utils.CookieUtils;
+import elegant.children.catchculture.common.utils.RedisUtils;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.RememberMeAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Optional;
+
+@RequiredArgsConstructor
+@Slf4j
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
+    private final RedisUtils redisUtils;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        log.info("JwtAuthenticationFilter");
+        final Optional<Cookie> authorization = CookieUtils.getCookie(request, "Authorization");
+        if (authorization.isPresent()) {
+            String token = CookieUtils.deserialize(authorization.get().getValue(), String.class);
+            token = resolveToken(token);
+            log.info("token: {}", token);
+            if(jwtTokenProvider.validateToken(token)) {
+                String ip = ClientUtils.getRemoteIP(request);
+                String redisIP = redisUtils.getData(token);
+                if(redisIP != null && redisIP.equals(ip)) {
+                    final String email = jwtTokenProvider.getEmail(token);
+                    final Role role = jwtTokenProvider.getRole(token);
+                    final ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+                    simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role.name()));
+                    userRepository.findByEmail(email)
+                            .ifPresentOrElse(user -> {
+                                final RememberMeAuthenticationToken rememberMeAuthenticationToken = new RememberMeAuthenticationToken(user.getEmail(), user, simpleGrantedAuthorities);
+                                SecurityContextHolder.getContext().setAuthentication(rememberMeAuthenticationToken);
+                            }, () -> {
+                                log.info("다시 로그인해주세요.");
+                                new RuntimeException("다시 로그인해주세요.");
+                            });
+                }
+            }
+        }
+        filterChain.doFilter(request, response);
+
+    }
+
+    private String resolveToken(String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            return token.substring(7);
+        }
+        return token;
+    }
+}
