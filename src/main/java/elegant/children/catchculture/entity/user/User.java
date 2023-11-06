@@ -12,11 +12,13 @@ import lombok.*;
 public class User {
 
     @Id @GeneratedValue
-    @Column(name = "user_id")
     private int id;
 
     @Column(nullable = false)
     private String email;
+
+    @Column
+    private String storedFileURL;
 
     @Column
     private int point;
@@ -27,9 +29,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
+    @Column(nullable = false)
     private String nickname;
 
-    private String socialId;
     @PrePersist
     public void prePersist() {
         this.point = 0;

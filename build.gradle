@@ -44,6 +44,8 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	// 위치 저장용
+	implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '6.1.7.Final'
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 

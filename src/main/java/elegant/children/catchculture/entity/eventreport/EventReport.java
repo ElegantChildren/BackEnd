@@ -18,10 +18,7 @@ public class EventReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "event_report_id")
     private int id;
-
-
 
     @Embedded
     private CulturalEventDetail culturalEventDetail;

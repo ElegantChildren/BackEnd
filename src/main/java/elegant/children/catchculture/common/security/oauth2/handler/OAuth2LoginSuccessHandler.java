@@ -32,22 +32,15 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String redirectUrl = "";
         log.info("OAuth2LoginSuccessHandler");
         log.info("authentication: {}", authentication);
-        final Optional<Cookie> cookie = CookieUtils.getCookie(request, REDIRECT_URL);
-        if (cookie.isPresent()) {
-            redirectUrl = CookieUtils.deserialize(cookie.get().getValue(), String.class);
-            CookieUtils.deleteCookie(request, response, REDIRECT_URL);
-        }
-        log.info("redirectUrl: {}", redirectUrl);
-        log.info("request_url: {}", request.getRequestURL());
+//        final Optional<Cookie> cookie = CookieUtils.getCookie(request, REDIRECT_URL);
+//        if (cookie.isPresent()) {
+//            redirectUrl = CookieUtils.deserialize(cookie.get().getValue(), String.class);
+//            CookieUtils.deleteCookie(request, response, REDIRECT_URL);
+//        }
         final CustomOAuth2User principal = (CustomOAuth2User) authentication.getPrincipal();
-
         final String token = jwtTokenProvider.generateToken(principal.getEmail(), principal.getRole());
-
-
         jwtTokenProvider.sendJwtTokenCookie(response, token);
         redisUtils.setData(token, ClientUtils.getRemoteIP(request), (long) (60 * 60 * 24 * 7));
-
-
-//        response.sendRedirect("http://localhost:8080/" + redirectUrl);
+        response.sendRedirect("http://localhost:8080");
     }
 }

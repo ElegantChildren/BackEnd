@@ -5,16 +5,18 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/elegantChildren?useSSL=false&serverTimezone=Asia/Seoul
     username: root
-    password: 
+    password:
   jpa:
     hibernate:
       ddl-auto: create
     open-in-view: false
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 100
+    database-platform: org.hibernate.spatial.dialect.mysql.MySQLSpatialDialect
 logging:
   level:
     org.hibernate.sql: debug

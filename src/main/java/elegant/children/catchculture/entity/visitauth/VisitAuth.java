@@ -19,10 +19,11 @@ public class VisitAuth {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "visit_auth_id")
     private int id;
 
-    private String storedFileName;
+    private String storedFileURL;
+
+    private Boolean isAuthenticated;
 
     private LocalDateTime createdAt;
     @ManyToOne(fetch = FetchType.LAZY)

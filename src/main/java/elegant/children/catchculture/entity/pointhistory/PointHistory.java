@@ -1,5 +1,6 @@
-package elegant.children.catchculture.entity.culturalevent;
+package elegant.children.catchculture.entity.pointhistory;
 
+import elegant.children.catchculture.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,26 +14,24 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class CulturalEvent {
+public class PointHistory {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-//    private Point point; 위도,경도
-    @Embedded
-    private CulturalEventDetail culturalEventDetail;
+    private String description;
 
-    private int viewCount;
-    private int likeCount;
-    //ex) 만 8세 이상
+    private int pointChange;
 
     private LocalDateTime createdAt;
 
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
-        this.viewCount = 0;
-        this.likeCount = 0;
     }
 }

@@ -1,4 +1,4 @@
-package elegant.children.catchculture.entity.culturalevent;
+package elegant.children.catchculture.entity.notice;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,26 +13,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class CulturalEvent {
+public class Notice {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private String title;
 
-//    private Point point; 위도,경도
-    @Embedded
-    private CulturalEventDetail culturalEventDetail;
-
-    private int viewCount;
-    private int likeCount;
-    //ex) 만 8세 이상
+    private String content;
 
     private LocalDateTime createdAt;
 
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
-        this.viewCount = 0;
-        this.likeCount = 0;
     }
 }

@@ -19,16 +19,16 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
     private int id;
 
-    private String storedFileName;
+    private String storedFileURL;
 
     private String description;
 
     private int rating;
 
     private LocalDateTime createdAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

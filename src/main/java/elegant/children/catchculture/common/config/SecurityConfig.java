@@ -1,7 +1,6 @@
 package elegant.children.catchculture.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import elegant.children.catchculture.common.filter.CustomCookieSettingFilter;
 import elegant.children.catchculture.common.filter.JwtAuthenticationFilter;
 import elegant.children.catchculture.common.security.JwtTokenProvider;
 import elegant.children.catchculture.common.security.oauth2.CustomOAuth2UserService;
@@ -40,7 +39,7 @@ public class SecurityConfig {
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequestsConfigurer ->
                         authorizeRequestsConfigurer.anyRequest().permitAll())
-                .addFilterBefore(customCookieSettingFilter(), LogoutFilter.class)
+//                .addFilterBefore(customCookieSettingFilter(), LogoutFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.oauth2Login(oauth2 -> {
@@ -54,10 +53,10 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public CustomCookieSettingFilter customCookieSettingFilter() {
-        return new CustomCookieSettingFilter();
-    }
+//    @Bean
+//    public CustomCookieSettingFilter customCookieSettingFilter() {
+//        return new CustomCookieSettingFilter();
+//    }
 
 
     @Bean
