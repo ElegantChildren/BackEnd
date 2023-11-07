@@ -27,6 +27,10 @@ jwt:
     expiration: 86400000 # 1day
     header: Authorization
 
+openapi:
+  key: 426e594f5673737338366a70714f68
+
+
 
 
 

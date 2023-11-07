@@ -6,7 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
-@WebMvcTest(controllers = TestController.class)
+@WebMvcTest(controllers = CulturalEventRegistrationController.class)
 class TestControllerTest {
 
 //        @Autowired

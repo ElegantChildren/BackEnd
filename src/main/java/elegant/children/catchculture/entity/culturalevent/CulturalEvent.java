@@ -18,8 +18,6 @@ public class CulturalEvent {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
-//    private Point point; 위도,경도
     @Embedded
     private CulturalEventDetail culturalEventDetail;
 

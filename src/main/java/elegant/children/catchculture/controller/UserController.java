@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Tag(name = "로그인 후 사용가능한 페이지", description = "마이 페이지")
-
 @RequestMapping("/user")
 public class UserController {
 
