@@ -14,12 +14,12 @@ spring:
             redirect-uri: http://localhost:8080/login/oauth2/code/kakao
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
-            scope: profile_nickname, account_email
+            scope: profile_image, profile_nickname, account_email
             client-name: Kakao
           naver:
             client-id: ZT6DC2RHoiOh0nck6y9P
             client-secret: pRAcRLFSL_
-            scope: name, email
+            scope: profile_image, name, email
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8080/login/oauth2/code/naver
             client-name: Naver
