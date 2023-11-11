@@ -7,9 +7,8 @@ import java.util.Map;
 @Slf4j
 public class NaverOAuth2UserInfo extends OAuth2UserInfo {
 
-    public NaverOAuth2UserInfo(Map<String, Object> attributes) {
+    public NaverOAuth2UserInfo(final Map<String, Object> attributes) {
         super(attributes);
-
         for (String s : attributes.keySet()) {
             log.info("key: " + s + " value: " + attributes.get(s));
         }
@@ -23,13 +22,19 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
 
     @Override
     public String getNickname() {
-        Map<String, String> response = (Map<String, String>) attributes.get("response");
-        return response.get("nickname").toString();
+        final Map<String, String> response = (Map<String, String>) attributes.get("response");
+        return response.get("name").toString();
     }
 
     @Override
     public String getEmail() {
-        Map<String, String> response = (Map<String, String>) attributes.get("response");
+        final Map<String, String> response = (Map<String, String>) attributes.get("response");
         return response.get("email").toString();
+    }
+
+    @Override
+    public String getProfileImageURL() {
+        final Map<String, String> response = (Map<String, String>) attributes.get("response");
+        return response.get("profile_image").toString();
     }
 }

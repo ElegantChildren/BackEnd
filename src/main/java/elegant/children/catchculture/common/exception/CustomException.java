@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public class CustomException extends RuntimeException{
 
     private ErrorCode errorCode;
@@ -30,7 +31,7 @@ public class CustomException extends RuntimeException{
 
     public static void sendError(final ObjectMapper objectMapper, final HttpServletResponse response, final ErrorCode errorCode) {
         final Map<String, Object> errorMap = new HashMap<>();
-        response.setStatus(errorCode.getStatus());
+        response.setStatus(errorCode.getStatus().value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 

@@ -5,6 +5,7 @@ import elegant.children.catchculture.common.security.oauth2.CustomOAuth2User;
 import elegant.children.catchculture.common.utils.ClientUtils;
 import elegant.children.catchculture.common.utils.CookieUtils;
 import elegant.children.catchculture.common.utils.RedisUtils;
+import elegant.children.catchculture.entity.user.Role;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,15 +33,12 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String redirectUrl = "";
         log.info("OAuth2LoginSuccessHandler");
         log.info("authentication: {}", authentication);
-//        final Optional<Cookie> cookie = CookieUtils.getCookie(request, REDIRECT_URL);
-//        if (cookie.isPresent()) {
-//            redirectUrl = CookieUtils.deserialize(cookie.get().getValue(), String.class);
-//            CookieUtils.deleteCookie(request, response, REDIRECT_URL);
-//        }
         final CustomOAuth2User principal = (CustomOAuth2User) authentication.getPrincipal();
-        final String token = jwtTokenProvider.generateToken(principal.getEmail(), principal.getRole());
+        final String email = principal.getEmail();
+        final Role role = principal.getRole();
+        final String token = jwtTokenProvider.generateToken(email, role);
         jwtTokenProvider.sendJwtTokenCookie(response, token);
-        redisUtils.setData(token, ClientUtils.getRemoteIP(request), (long) (60 * 60 * 24 * 7));
+        redisUtils.setData(email, ClientUtils.getRemoteIP(request), (long) (60 * 60 * 24 * 7));
         response.sendRedirect("http://localhost:8080");
     }
 }

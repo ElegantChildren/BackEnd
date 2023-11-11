@@ -1,5 +1,6 @@
 package elegant.children.catchculture.common.exception;
 
+import elegant.children.catchculture.dto.error.ErrorResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,5 +17,13 @@ public class ControllerAdvice {
         log.info("RuntimeException: {}", e.getMessage());
         e.printStackTrace();
         return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponseDTO> handleCustomException(CustomException e) {
+        final ErrorCode errorCode = e.getErrorCode();
+        log.info("CustomException: {}", errorCode);
+        return ResponseEntity.status(errorCode.getStatus()).body(ErrorResponseDTO.of(errorCode));
+
     }
 }

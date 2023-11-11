@@ -21,6 +21,7 @@ public class VisitAuth {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(columnDefinition = "TEXT")
     private String storedFileURL;
 
     private Boolean isAuthenticated;

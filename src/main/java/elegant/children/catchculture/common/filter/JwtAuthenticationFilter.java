@@ -1,8 +1,9 @@
 package elegant.children.catchculture.common.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import elegant.children.catchculture.common.security.JwtTokenProvider;
 import elegant.children.catchculture.entity.user.Role;
-import elegant.children.catchculture.repository.UserRepository;
+import elegant.children.catchculture.repository.user.UserRepository;
 import elegant.children.catchculture.common.utils.ClientUtils;
 import elegant.children.catchculture.common.utils.CookieUtils;
 import elegant.children.catchculture.common.utils.RedisUtils;
@@ -29,6 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final RedisUtils redisUtils;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -38,24 +40,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authorization.isPresent()) {
             String token = CookieUtils.deserialize(authorization.get().getValue(), String.class);
             token = resolveToken(token);
-            log.info("token: {}", token);
             if(jwtTokenProvider.validateToken(token)) {
-                String ip = ClientUtils.getRemoteIP(request);
-                String redisIP = redisUtils.getData(token);
-                if(redisIP != null && redisIP.equals(ip)) {
-                    final String email = jwtTokenProvider.getEmail(token);
-                    final Role role = jwtTokenProvider.getRole(token);
-                    final ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
-                    simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role.name()));
-                    userRepository.findByEmail(email)
-                            .ifPresentOrElse(user -> {
+                final String email = jwtTokenProvider.getEmail(token);
+                final Role role = jwtTokenProvider.getRole(token);
+                final String ip = ClientUtils.getRemoteIP(request);
+                if(!redisUtils.getData(email).equals(ip)) {
+                    log.info("다시 로그인해주세요.");
+                    //todo: 다시 로그인해주세요. 에러 처리
+                    new RuntimeException("다시 로그인해주세요.");
+                }
+                final ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+                simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role.name()));
+                userRepository.findByEmail(email)
+                        .ifPresentOrElse(user -> {
                                 final RememberMeAuthenticationToken rememberMeAuthenticationToken = new RememberMeAuthenticationToken(user.getEmail(), user, simpleGrantedAuthorities);
                                 SecurityContextHolder.getContext().setAuthentication(rememberMeAuthenticationToken);
-                            }, () -> {
+                                }, () -> {
                                 log.info("다시 로그인해주세요.");
                                 new RuntimeException("다시 로그인해주세요.");
                             });
-                }
+
             }
         }
         filterChain.doFilter(request, response);

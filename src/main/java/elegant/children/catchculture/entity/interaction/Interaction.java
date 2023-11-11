@@ -1,4 +1,4 @@
-package elegant.children.catchculture.entity.review;
+package elegant.children.catchculture.entity.interaction;
 
 import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
 import elegant.children.catchculture.entity.user.User;
@@ -8,28 +8,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Review {
+public class Interaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(columnDefinition = "TEXT")
-    private String storedFileURL;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    private int rating;
-
-    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -39,8 +27,15 @@ public class Review {
     @JoinColumn(name = "cultural_event_id")
     private CulturalEvent culturalEvent;
 
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
+    @Enumerated(EnumType.STRING)
+    private LikeStar likeStar;
+
+    public static Interaction createInteraction(final User user, final CulturalEvent culturalEvent, final LikeStar likeStar) {
+        return Interaction.builder()
+                .user(user)
+                .culturalEvent(culturalEvent)
+                .likeStar(likeStar)
+                .build();
     }
+
 }

@@ -3,7 +3,7 @@ package elegant.children.catchculture.common.security.oauth2;
 import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.entity.user.SocialType;
 import elegant.children.catchculture.entity.user.User;
-import elegant.children.catchculture.repository.UserRepository;
+import elegant.children.catchculture.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -79,7 +79,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.info("user: {}", user);
 
         if(user != null) {
-            if (user.getEmail().equals(email)) {
+            if (user.getEmail().equals(email) && !user.getSocialType().equals(socialType)) {
                 // TODO: 2023-10-11 다중 접속 처리 필요 이메일 같으면 토큰만 발급
                 throw new AlreadyEmailExistException(ErrorCode.EMAIL_DUPLICATION);
             }

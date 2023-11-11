@@ -1,5 +1,6 @@
 package elegant.children.catchculture.common.security;
 
+import elegant.children.catchculture.common.utils.CookieUtils;
 import elegant.children.catchculture.entity.user.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -31,7 +32,7 @@ public class JwtTokenProvider {
 
     public void sendJwtTokenCookie(HttpServletResponse response, final String token) {
         final String cookieValue = PREFIX + token;
-//        CookieUtils.addCookie(response, header, cookieValue, tokenExpiration);
+        CookieUtils.addCookie(response, header, cookieValue, tokenExpiration);
 
             response.setHeader("Authorization", cookieValue);
 

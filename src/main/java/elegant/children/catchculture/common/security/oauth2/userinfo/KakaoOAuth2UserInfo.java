@@ -5,8 +5,11 @@ import java.util.Map;
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo{
 
 
-    public KakaoOAuth2UserInfo(Map<String, Object> attributes) {
+    public KakaoOAuth2UserInfo(final Map<String, Object> attributes) {
         super(attributes);
+        for (String s : attributes.keySet()) {
+            System.out.println("key: " + s + " value: " + attributes.get(s));
+        }
     }
 
     @Override
@@ -16,8 +19,8 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo{
 
     @Override
     public String getNickname() {
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String, Object> profile = (Map<String, Object>) account.get("profile");
+        final Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
+        final Map<String, Object> profile = (Map<String, Object>) account.get("profile");
 
         if (account == null || profile == null) {
             return null;
@@ -28,12 +31,20 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo{
 
     @Override
     public String getEmail() {
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
+        final Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
 
         if (account == null) {
             return null;
         }
 
-        return (String) account.get("email");
+        return account.get("email").toString();
+    }
+
+    @Override
+    public String getProfileImageURL() {
+        final Map<String, Object> account = (Map<String, Object>) attributes.get("properties");
+
+
+        return account.get("profile_image").toString();
     }
 }

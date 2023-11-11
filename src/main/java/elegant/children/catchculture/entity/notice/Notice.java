@@ -19,8 +19,10 @@ public class Notice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private LocalDateTime createdAt;

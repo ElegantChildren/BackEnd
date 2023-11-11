@@ -1,4 +1,4 @@
-package elegant.children.catchculture.repository;
+package elegant.children.catchculture.repository.user;
 
 import elegant.children.catchculture.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -17,7 +17,7 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String storedFileURL;
 
     @Column

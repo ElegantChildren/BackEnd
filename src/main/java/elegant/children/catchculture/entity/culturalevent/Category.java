@@ -3,7 +3,6 @@ package elegant.children.catchculture.entity.culturalevent;
 import java.util.Arrays;
 
 public enum Category {
-    //todo 영어 이름으로 바꿔야할듯
     POPUP_STORE("팝업스토어"),
     FESTIVAL("축제"),
     TRADITIONAL_MUSIC("국악"),

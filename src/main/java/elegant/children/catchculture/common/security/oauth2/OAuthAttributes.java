@@ -74,6 +74,7 @@ public class OAuthAttributes {
                 .socialType(socialType)
                 .email(oauth2UserInfo.getEmail())
                 .nickname(oauth2UserInfo.getNickname())
+                .storedFileURL(oauth2UserInfo.getProfileImageURL())
                 .role(Role.USER)
                 .build();
     }

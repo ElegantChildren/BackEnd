@@ -1,6 +1,7 @@
 package elegant.children.catchculture.common.utils;
 
 import elegant.children.catchculture.entity.culturalevent.Category;
+import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
 import elegant.children.catchculture.entity.culturalevent.CulturalEventDetail;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +18,7 @@ public class RegistrationUtils {
     private static final String OPEN_API_SUFFIX = "/json/culturalEventInfo/";
     private static final String CODE = "INFO-000";
 
-    private static final String GUNAME = "GUNAME"; //구이름
+//    private static final String GUNAME = "GUNAME"; //구이름
     private static final String CODENAME = "CODENAME"; //카테고리
     private static final String TITLE = "TITLE"; //제목
     private static final String PLACE = "PLACE"; //장소
@@ -31,7 +32,7 @@ public class RegistrationUtils {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String CULTURAL_EVENT = "축제";
-    private static final String SUNG_DONG = "성동구";
+//    private static final String SUNG_DONG = "성동구";
     private static final String FREE = "무료";
 
 
@@ -48,9 +49,9 @@ public class RegistrationUtils {
         return (List<HashMap<String, Object>>) ((Map)result.get("culturalEventInfo")).get("row");
     }
 
-    public static boolean isThisSungDong(final HashMap<String, Object> event) {
-        return event.get(GUNAME).equals(SUNG_DONG);
-    }
+//    public static boolean isThisSungDong(final HashMap<String, Object> event) {
+//        return event.get(GUNAME).equals(SUNG_DONG);
+//    }
 
     public static Category getCategory(final HashMap<String, Object> event) {
         final String category = (String) event.get(CODENAME);
@@ -99,17 +100,21 @@ public class RegistrationUtils {
         return (String) event.get(ORG_LINK);
     }
 
-    public static CulturalEventDetail createCulturalEventDetail(final HashMap<String, Object> event) {
-        return CulturalEventDetail.builder()
+    public static CulturalEvent createCulturalEvent(final HashMap<String, Object> event) {
+        final CulturalEventDetail culturalEventDetail = CulturalEventDetail.builder()
                 .storedFileURL(getMainImg(event))
                 .startDate(getStartDate(event))
                 .endDate(getEndDate(event))
                 .title(getTitle(event))
                 .place(getPlace(event))
                 .category(getCategory(event))
-                .geography(CulturalEventDetail.createGeography(getLot(event), getLat(event)))
                 .reservationLink(getOrgLink(event))
                 .isFree(getIsFree(event))
+                .build();
+
+        return CulturalEvent.builder()
+                .geography(CulturalEvent.createGeography(getLot(event), getLat(event)))
+                .culturalEventDetail(culturalEventDetail)
                 .build();
     }
 

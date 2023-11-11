@@ -3,7 +3,7 @@ package elegant.children.catchculture.controller;
 import elegant.children.catchculture.common.utils.RegistrationUtils;
 import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
 import elegant.children.catchculture.entity.culturalevent.CulturalEventDetail;
-import elegant.children.catchculture.repository.CulturalEventRepository;
+import elegant.children.catchculture.repository.culturalEvent.CulturalEventRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,10 +71,7 @@ public class CulturalEventRegistrationController {
     private void addCulturalEventToList(final List<CulturalEvent> culturalEventList, final HashMap<String, Object> result) {
         if(RegistrationUtils.isResultSuccess(result)) {
             RegistrationUtils.getEventInfo(result).forEach(event -> {
-                    final CulturalEventDetail culturalEventDetail = RegistrationUtils.createCulturalEventDetail(event);
-                    culturalEventList.add(CulturalEvent.builder()
-                            .culturalEventDetail(culturalEventDetail)
-                            .build());
+                    culturalEventList.add(RegistrationUtils.createCulturalEvent(event));
 
 //                    if(RegistrationUtils.isThisSungDong(event)) {
 //                        final CulturalEventDetail culturalEventDetail = RegistrationUtils.createCulturalEventDetail(event);

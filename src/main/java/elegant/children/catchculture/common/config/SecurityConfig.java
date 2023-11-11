@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import elegant.children.catchculture.common.filter.JwtAuthenticationFilter;
 import elegant.children.catchculture.common.security.JwtTokenProvider;
 import elegant.children.catchculture.common.security.oauth2.CustomOAuth2UserService;
-import elegant.children.catchculture.repository.UserRepository;
+import elegant.children.catchculture.repository.user.UserRepository;
 import elegant.children.catchculture.common.security.oauth2.handler.OAuth2LoginFailureHandler;
 import elegant.children.catchculture.common.security.oauth2.handler.OAuth2LoginSuccessHandler;
 import elegant.children.catchculture.common.utils.RedisUtils;
@@ -18,7 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +28,8 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisUtils redisUtils;
     private final ObjectMapper objectMapper;
+    private final String OAUTH_BASE_URL = "/oauth2/authorization/**";
+    private final String SWAGGER = "/swagger-ui/index.html";
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -38,12 +39,15 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagementConfigurer ->
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequestsConfigurer ->
-                        authorizeRequestsConfigurer.anyRequest().permitAll())
-//                .addFilterBefore(customCookieSettingFilter(), LogoutFilter.class)
+                        authorizeRequestsConfigurer.requestMatchers(OAUTH_BASE_URL, "/set-up/**", SWAGGER).permitAll()
+                )
+                .authorizeHttpRequests(authorizeRequestsConfigurer ->
+                        authorizeRequestsConfigurer.anyRequest().permitAll()
+                )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.oauth2Login(oauth2 -> {
-            oauth2.loginPage("/oauth2/authorization/**");
+            oauth2.loginPage(OAUTH_BASE_URL);
             oauth2.successHandler(oAuth2LoginSuccessHandler());
             oauth2.failureHandler(oAuth2LoginFailureHandler());
             oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()));
@@ -53,15 +57,9 @@ public class SecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public CustomCookieSettingFilter customCookieSettingFilter() {
-//        return new CustomCookieSettingFilter();
-//    }
-
-
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtTokenProvider, userRepository, redisUtils);
+        return new JwtAuthenticationFilter(jwtTokenProvider, userRepository, redisUtils, objectMapper);
     }
 
     @Bean

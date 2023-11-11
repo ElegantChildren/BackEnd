@@ -24,6 +24,8 @@ public class PointHistory {
     @JoinColumn(name = "user_id")
     private User user;
 
+
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private int pointChange;
