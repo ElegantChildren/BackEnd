@@ -1,13 +1,18 @@
 package elegant.children.catchculture.controller;
 
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventDetailsResponseDTO;
+import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
+import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
+import elegant.children.catchculture.repository.culturalEvent.SortType;
 import elegant.children.catchculture.service.culturalEvent.CulturalEventService;
 import elegant.children.catchculture.service.interaction.InteractionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,6 +21,14 @@ public class CulturalEventController {
 
     private final CulturalEventService culturalEventService;
     private final InteractionService interactionService;
+
+    @GetMapping
+    public ResponseEntity<List<CulturalEventListResponseDTO>> getCulturalEventList(final @RequestParam(required = false) List<Category> category,
+                                                                                   final @RequestParam(required = false, defaultValue = "0") int offset,
+                                                                                   final @RequestParam(required = false, defaultValue = "RECENT") SortType sortType) {
+
+        return ResponseEntity.ok(culturalEventService.getCulturalEventList(category, offset, sortType));
+    }
 
     @GetMapping("/{culturalEventId}")
     public ResponseEntity<CulturalEventDetailsResponseDTO> getCulturalEventDetails(final @PathVariable int culturalEventId, final @AuthenticationPrincipal User user) {
