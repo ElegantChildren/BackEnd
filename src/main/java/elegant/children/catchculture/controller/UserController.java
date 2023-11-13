@@ -18,7 +18,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<User> userTest(@AuthenticationPrincipal User user) {
         if(user == null) {
-            throw new RuntimeException("유저가 없습니다.3");
+            throw new RuntimeException("유저가 없습니다.");
         }
         return ResponseEntity.ok(user);
     }
