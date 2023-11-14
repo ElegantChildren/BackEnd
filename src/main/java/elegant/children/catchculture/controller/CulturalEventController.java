@@ -26,7 +26,6 @@ public class CulturalEventController {
     public ResponseEntity<List<CulturalEventListResponseDTO>> getCulturalEventList(final @RequestParam(required = false) List<Category> category,
                                                                                    final @RequestParam(required = false, defaultValue = "0") int offset,
                                                                                    final @RequestParam(required = false, defaultValue = "RECENT") SortType sortType) {
-
         return ResponseEntity.ok(culturalEventService.getCulturalEventList(category, offset, sortType));
     }
 

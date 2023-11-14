@@ -7,6 +7,7 @@ import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventQueryRepository;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventRepository;
 import elegant.children.catchculture.repository.culturalEvent.SortType;
+import elegant.children.catchculture.repository.interaction.InteractionQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -23,11 +24,14 @@ public class CulturalEventService {
 
     private final CulturalEventQueryRepository culturalEventQueryRepository;
     private final CulturalEventRepository culturalEventRepository;
+    private final InteractionQueryRepository interactionQueryRepository;
 
     @Transactional
     public CulturalEventDetailsResponseDTO getCulturalEventDetails(final int culturalEventId, final User user) {
 
         final CulturalEventDetailsResponseDTO culturalEventDetails = culturalEventQueryRepository.getCulturalEventDetails(culturalEventId, user.getId());
+        culturalEventDetails.setLikeAndBookmark(interactionQueryRepository.existByLikeAndUserIdAndCulturalEventId(user.getId(), culturalEventId),
+                                                interactionQueryRepository.existByStarAndUserIdAndCulturalEventId(user.getId(), culturalEventId));
         culturalEventRepository.updateViewCount(culturalEventId);
         log.info("culturalEventDetails = {}", culturalEventDetails);
 

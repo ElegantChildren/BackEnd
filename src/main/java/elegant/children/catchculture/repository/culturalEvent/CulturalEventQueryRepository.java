@@ -32,7 +32,18 @@ public class CulturalEventQueryRepository {
 
     public CulturalEventDetailsResponseDTO getCulturalEventDetails(final int culturalEventId, final int userId) {
         return queryFactory.select(Projections.fields(CulturalEventDetailsResponseDTO.class,
-                        culturalEvent.culturalEventDetail,
+                        culturalEvent.culturalEventDetail.startDate,
+                        culturalEvent.culturalEventDetail.endDate,
+                        culturalEvent.culturalEventDetail.title,
+                        culturalEvent.culturalEventDetail.place,
+                        culturalEvent.culturalEventDetail.storedFileURL.as("storedFileURL"),
+                        culturalEvent.culturalEventDetail.description,
+                        culturalEvent.culturalEventDetail.category,
+                        culturalEvent.culturalEventDetail.reservationLink,
+                        culturalEvent.culturalEventDetail.wayToCome,
+                        culturalEvent.culturalEventDetail.sns,
+                        culturalEvent.culturalEventDetail.telephone,
+                        culturalEvent.culturalEventDetail.isFree,
                         visitAuth.isAuthenticated))
                 .from(culturalEvent)
                 .leftJoin(visitAuth)
@@ -92,20 +103,24 @@ public class CulturalEventQueryRepository {
     private OrderSpecifier[] getSortType(final SortType sortType) {
 
         List<OrderSpecifier> orderSpecifier = new ArrayList<>();
-        orderSpecifier.add(new OrderSpecifier<>(Order.ASC, culturalEvent.culturalEventDetail.startDate));
         switch (sortType) {
             case VIEW_COUNT:
                 orderSpecifier.add(new OrderSpecifier<>(Order.DESC, culturalEvent.viewCount));
+                startDateASC(orderSpecifier);
             case LIKE:
                 orderSpecifier.add(new OrderSpecifier<>(Order.DESC, culturalEvent.likeCount));
+                startDateASC(orderSpecifier);
             case RECENT:
+                startDateASC(orderSpecifier);
                 orderSpecifier.add(new OrderSpecifier<>(Order.ASC, culturalEvent.culturalEventDetail.endDate));
 
         }
         return orderSpecifier.toArray(new OrderSpecifier[orderSpecifier.size()]);
     }
 
-
+    private static void startDateASC(final List<OrderSpecifier> orderSpecifier) {
+        orderSpecifier.add(new OrderSpecifier<>(Order.ASC, culturalEvent.culturalEventDetail.startDate));
+    }
 
 
 }
