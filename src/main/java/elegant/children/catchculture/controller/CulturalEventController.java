@@ -36,6 +36,7 @@ public class CulturalEventController {
         return ResponseEntity.ok(culturalEventService.getCulturalEventDetails(culturalEventId, user));
     }
 
+
     @PostMapping("/{culturalEventId}/like")
     public ResponseEntity<Void> likeCulturalEvent(final @PathVariable int culturalEventId, final @AuthenticationPrincipal User user) {
 
