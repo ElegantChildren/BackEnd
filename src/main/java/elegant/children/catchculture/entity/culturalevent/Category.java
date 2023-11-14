@@ -18,6 +18,7 @@ public enum Category {
     ETC("기타");
 
     private String code;
+
     Category(String code) {
         this.code = code;
     }
@@ -27,7 +28,7 @@ public enum Category {
 
     public static Category of(final String code) {
         return Arrays.stream(Category.values())
-                .filter(category -> category.getCode().contains(code))
+                .filter(category -> category.getCode().equals(code))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
     }

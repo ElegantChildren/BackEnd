@@ -1,6 +1,5 @@
 package elegant.children.catchculture.entity.culturalevent;
 
-import elegant.children.catchculture.entity.visitauth.VisitAuth;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +26,7 @@ public class CulturalEvent {
     private CulturalEventDetail culturalEventDetail;
 
     private int viewCount;
+    private int likeCount;
 
     @Column(columnDefinition = "GEOMETRY")
     private Point geography;
@@ -52,9 +52,18 @@ public class CulturalEvent {
         this.viewCount++;
     }
 
+    public void addLikeCount() {
+        this.likeCount++;
+    }
+
+    public void minusLikeCount() {
+        this.likeCount--;
+    }
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
         this.viewCount = 0;
+        this.likeCount = 0;
     }
 }

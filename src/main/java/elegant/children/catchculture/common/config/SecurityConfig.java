@@ -29,7 +29,7 @@ public class SecurityConfig {
     private final RedisUtils redisUtils;
     private final ObjectMapper objectMapper;
     private final String OAUTH_BASE_URL = "/oauth2/authorization/**";
-    private final String SWAGGER = "/swagger-ui/index.html";
+    private final String SWAGGER = "/swagger-ui/**";
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
