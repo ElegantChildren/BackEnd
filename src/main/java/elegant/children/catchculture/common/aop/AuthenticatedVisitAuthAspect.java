@@ -5,6 +5,7 @@ import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.repository.VisitAuthRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
@@ -12,13 +13,14 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticatedVisitAuthAspect {
 
 
     private final VisitAuthRepository visitAuthRepository;
 
-    @Before("@annotation(elegant.children.catchculture.common.annotation.AuthenticatedVisitAuth) && args(user, culturalEventId)")
-    public void isCulturalEventAuthenticated(final User user, final int culturalEventId) {
+    @Before("@annotation(elegant.children.catchculture.common.annotation.AuthenticatedVisitAuth) && args(culturalEventId, user)")
+    public void isCulturalEventAuthenticated(final int culturalEventId, final User user ) {
         visitAuthRepository.isAuthenticated(user.getId(), culturalEventId)
                 .ifPresentOrElse(
                         isAuthenticated -> {

@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/elegantChildren?useSSL=false&serverTimezone=Asia/Seoul
     username: root
-    password:
+    password: ykbaik100!
   jpa:
     hibernate:
       ddl-auto: update
@@ -12,8 +12,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 948608093274-1g12niauejkfgbdg2qot01d6fb2doahp.apps.googleusercontent.com
-            client-secret: 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
+            client-id: 1059461192535-c8giu285cbt1fkokf1bbtnpojsd7lru2.apps.googleusercontent.com
+            client-secret: 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
             scope: profile, email
             redirect-uri: http://localhost:8080/login/oauth2/code/google
           kakao:

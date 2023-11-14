@@ -30,6 +30,7 @@ public class InteractionService {
                     throw new CustomException(ErrorCode.ALREADY_LIKE);
                 });
         interactionRepository.save(Interaction.createInteraction(user, culturalEvent, LikeStar.LIKE));
+        culturalEvent.addLikeCount();
 
     }
 
@@ -53,6 +54,7 @@ public class InteractionService {
                 .ifPresent(interaction -> {
                     interactionRepository.delete(interaction);
                 });
+        culturalEvent.minusLikeCount();
     }
 
     public void deleteStarCulturalEvent(int culturalEventId, User user) {
