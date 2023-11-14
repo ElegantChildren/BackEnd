@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: local
+    include: production
     open-in-view: false
     properties:
       hibernate:

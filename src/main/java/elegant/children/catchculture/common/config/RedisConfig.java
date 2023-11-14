@@ -13,7 +13,7 @@ public class RedisConfig {
     @Bean
     RedisConnectionFactory redisConnectionFactory() {
         LettuceConnectionFactory redisConfig = new LettuceConnectionFactory();
-        redisConfig.setHostName("localhost");
+        redisConfig.setHostName("elegant.kro.kr");
         redisConfig.setPort(6379);
 
         return redisConfig;
