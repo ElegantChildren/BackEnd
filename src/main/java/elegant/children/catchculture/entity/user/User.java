@@ -18,7 +18,7 @@ public class User {
     private String email;
 
     @Column(columnDefinition = "TEXT")
-    private String storedFileURL;
+    private String storedFileUrl;
 
     @Column
     private int point;

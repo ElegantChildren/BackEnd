@@ -6,7 +6,7 @@ spring:
     password: 1q2w3e4r
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   security:
     oauth2:
       client:

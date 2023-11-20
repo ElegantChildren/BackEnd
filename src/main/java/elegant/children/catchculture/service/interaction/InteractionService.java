@@ -23,7 +23,7 @@ public class InteractionService {
 
     public void likeCulturalEvent(final int culturalEventId, final User user) {
         final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 문화행사입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_EVENT_ID));
 
         interactionRepository.findByUserIdAndCulturalEventIdAndLikeStar(user.getId(), culturalEventId, LikeStar.LIKE)
                 .ifPresent(interaction -> {

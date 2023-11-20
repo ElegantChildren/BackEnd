@@ -15,7 +15,6 @@ public class ControllerAdvice {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
         log.info("RuntimeException: {}", e.getMessage());
-        e.printStackTrace();
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 

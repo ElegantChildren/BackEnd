@@ -55,7 +55,6 @@ public class RegistrationUtils {
 
     public static Category getCategory(final HashMap<String, Object> event) {
         final String category = (String) event.get(CODENAME);
-        System.out.println("category = " + category);
         if(category.startsWith(CULTURAL_EVENT)){
             return Category.FESTIVAL;
         }
@@ -92,8 +91,8 @@ public class RegistrationUtils {
         return lat.isEmpty() ? -200D : Double.valueOf(lat);
     }
 
-    public static String getMainImg(final HashMap<String, Object> event) {
-        return (String) event.get(MAIN_IMG);
+    public static List<String> getMainImg(final HashMap<String, Object> event) {
+        return List.of(event.get(MAIN_IMG).toString());
     }
 
     public static String getOrgLink(final HashMap<String, Object> event) {
@@ -102,7 +101,7 @@ public class RegistrationUtils {
 
     public static CulturalEvent createCulturalEvent(final HashMap<String, Object> event) {
         final CulturalEventDetail culturalEventDetail = CulturalEventDetail.builder()
-                .storedFileURL(getMainImg(event))
+                .storedFileUrl(getMainImg(event))
                 .startDate(getStartDate(event))
                 .endDate(getEndDate(event))
                 .title(getTitle(event))

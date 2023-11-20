@@ -29,6 +29,8 @@ public class CustomException extends RuntimeException{
         }
     }
 
+
+
     public static void sendError(final ObjectMapper objectMapper, final HttpServletResponse response, final ErrorCode errorCode) {
         final Map<String, Object> errorMap = new HashMap<>();
         response.setStatus(errorCode.getStatus().value());
