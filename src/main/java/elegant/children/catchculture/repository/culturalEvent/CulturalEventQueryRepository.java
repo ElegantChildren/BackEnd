@@ -9,10 +9,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventDetailsResponseDTO;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
 import elegant.children.catchculture.entity.culturalevent.Category;
-import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
-import elegant.children.catchculture.entity.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +33,7 @@ public class CulturalEventQueryRepository {
     public CulturalEventDetailsResponseDTO getCulturalEventDetails(final int culturalEventId, final int userId) {
         return queryFactory.select(Projections.fields(CulturalEventDetailsResponseDTO.class,
                         culturalEvent.culturalEventDetail,
-                        visitAuth.isAuthenticated))
+                        visitAuth.isAuthenticated.as("isAuthenticated")))
                 .from(culturalEvent)
                 .leftJoin(visitAuth)
                 .on(
@@ -45,20 +45,16 @@ public class CulturalEventQueryRepository {
                 .fetchOne();
     }
 
-    public List<CulturalEventListResponseDTO> getCulturalEventList(final List<Category> categoryList, final Pageable pageable, final SortType sortType) {
+    public Page<CulturalEventListResponseDTO> getCulturalEventList(final List<Category> categoryList, final Pageable pageable, final PartitionType sortType) {
 
         final LocalDateTime now = LocalDateTime.now();
 
-        return queryFactory.select(Projections.fields(
-                CulturalEventListResponseDTO.class,
-                culturalEvent.id.as("culturalEventId"),
-                culturalEvent.culturalEventDetail.title,
-                culturalEvent.culturalEventDetail.startDate,
-                culturalEvent.culturalEventDetail.endDate,
-                culturalEvent.culturalEventDetail.place,
-                culturalEvent.culturalEventDetail.storedFileURL.as("storedFileURL"),
-                culturalEvent.likeCount,
-                culturalEvent.viewCount,
+        final List<CulturalEventListResponseDTO> content = queryFactory.select(Projections.constructor(
+                        CulturalEventListResponseDTO.class,
+                        culturalEvent.id,
+                        culturalEvent.culturalEventDetail,
+                        culturalEvent.likeCount,
+                        culturalEvent.viewCount,
                         Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
                                 culturalEvent.culturalEventDetail.endDate,
                                 now).as("remainDay")
@@ -75,13 +71,24 @@ public class CulturalEventQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+        log.info("content : {}", content);
+
+        final long count = queryFactory
+                .select(culturalEvent.count())
+                .from(culturalEvent)
+                .where(
+                        notFinishedCulturalEvent(now),
+                        categoryIn(categoryList)
+                )
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, count);
 
 
     }
 
 
     private BooleanExpression categoryIn(final List<Category> categoryList) {
-        log.info("categoryList = {}", categoryList);
         return categoryList == null || categoryList.isEmpty() ? null : culturalEvent.culturalEventDetail.category.in(categoryList);
     }
 
@@ -89,23 +96,109 @@ public class CulturalEventQueryRepository {
         return culturalEvent.culturalEventDetail.endDate.after(now);
     }
 
-    private OrderSpecifier[] getSortType(final SortType sortType) {
+    private OrderSpecifier[] getSortType(final PartitionType sortType) {
 
         List<OrderSpecifier> orderSpecifier = new ArrayList<>();
-        orderSpecifier.add(new OrderSpecifier<>(Order.ASC, culturalEvent.culturalEventDetail.startDate));
         switch (sortType) {
             case VIEW_COUNT:
                 orderSpecifier.add(new OrderSpecifier<>(Order.DESC, culturalEvent.viewCount));
+                startDateASC(orderSpecifier);
             case LIKE:
                 orderSpecifier.add(new OrderSpecifier<>(Order.DESC, culturalEvent.likeCount));
+                startDateASC(orderSpecifier);
             case RECENT:
+                startDateASC(orderSpecifier);
                 orderSpecifier.add(new OrderSpecifier<>(Order.ASC, culturalEvent.culturalEventDetail.endDate));
 
         }
         return orderSpecifier.toArray(new OrderSpecifier[orderSpecifier.size()]);
     }
 
+    private static void startDateASC(final List<OrderSpecifier> orderSpecifier) {
+        orderSpecifier.add(new OrderSpecifier<>(Order.ASC, culturalEvent.culturalEventDetail.startDate));
+    }
 
 
+    public Page<CulturalEventListResponseDTO> getCulturalEventListWithCondition(final String keyword, final Pageable pageable, final PartitionType sortType) {
 
+        final LocalDateTime now = LocalDateTime.now();
+
+        final List<CulturalEventListResponseDTO> content = queryFactory.select(Projections.fields(
+                        CulturalEventListResponseDTO.class,
+                        culturalEvent.id,
+                        culturalEvent.culturalEventDetail,
+                        culturalEvent.likeCount,
+                        culturalEvent.viewCount,
+                        Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
+                                culturalEvent.culturalEventDetail.endDate,
+                                now).as("remainDay")
+                ))
+                .from(culturalEvent)
+                .where(
+                        notFinishedCulturalEvent(now),
+                        titleContains(keyword)
+                ).orderBy(
+                        getSortType(sortType)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+        final long count = queryFactory
+                .select(culturalEvent.count())
+                .from(culturalEvent)
+                .where(
+                        notFinishedCulturalEvent(now),
+                        titleContains(keyword)
+                )
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, count);
+
+    }
+
+//    public Page<CulturalEventListResponseDTO> getCulturalEventResponseDTOWithUser(final List<Category> categoryList, final int userId,
+//                                                                                  final Pageable pageable, final PartitionType partitionType) {
+//
+//        final LocalDateTime now = LocalDateTime.now();
+//        final List<CulturalEventListResponseDTO> content;
+//        if(partitionType.equals(PartitionType.LIKE) || partitionType.equals(PartitionType.STAR)) {
+//            content = queryFactory.select(Projections.constructor(
+//                    CulturalEventListResponseDTO.class,
+//                    culturalEvent.id,
+//                    culturalEvent.culturalEventDetail,
+//                    culturalEvent.likeCount,
+//                    culturalEvent.viewCount,
+//                    Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
+//                            culturalEvent.culturalEventDetail.endDate,
+//                            now).as("remainDay")
+//            ))
+//                    .from(culturalEvent)
+//                    .leftJoin(visitAuth)
+//                    .on(
+//                            userIdEq(userId)
+//                    )
+//                    .where(
+//                            notFinishedCulturalEvent(now),
+//                            categoryIn(categoryList),
+//                            visitAuth.isAuthenticated.eq(true)
+//                    )
+//                    .orderBy(
+//                            getSortType(partitionType)
+//                    )
+//                    .offset(pageable.getOffset())
+//                    .limit(pageable.getPageSize())
+//                    .fetch();
+//        }
+//
+//    }
+
+    private BooleanExpression titleContains(final String keyword) {
+        return keyword == null ? null : culturalEvent.culturalEventDetail.title.contains(keyword);
+    }
+
+    public BooleanExpression userIdEq(final int userId) {
+        return userId == 0 ? null : visitAuth.user.id.eq(userId);
+    }
 }

@@ -2,7 +2,6 @@ package elegant.children.catchculture.controller;
 
 import elegant.children.catchculture.common.utils.RegistrationUtils;
 import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
-import elegant.children.catchculture.entity.culturalevent.CulturalEventDetail;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

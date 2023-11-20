@@ -1,5 +1,6 @@
 package elegant.children.catchculture.entity.visitauth;
 
+import elegant.children.catchculture.common.converter.StoredFileUrlConverter;
 import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
 import elegant.children.catchculture.entity.user.User;
 import jakarta.persistence.*;
@@ -22,7 +23,8 @@ public class VisitAuth {
     private int id;
 
     @Column(columnDefinition = "TEXT")
-    private String storedFileURL;
+    @Convert(converter = StoredFileUrlConverter.class)
+    private String storedFileUrl;
 
     private Boolean isAuthenticated;
 

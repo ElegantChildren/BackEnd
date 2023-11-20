@@ -1,26 +1,52 @@
 package elegant.children.catchculture.controller;
 
+import elegant.children.catchculture.dto.user.UserProfileResponseDTO;
+import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
+import elegant.children.catchculture.repository.culturalEvent.PartitionType;
+import elegant.children.catchculture.service.culturalEvent.CulturalEventService;
+import elegant.children.catchculture.service.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Tag(name = "로그인 후 사용가능한 페이지", description = "마이 페이지")
-@RequestMapping()
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
+    private final UserService userService;
+    private final CulturalEventService culturalEventService;
     @GetMapping
     public ResponseEntity<User> userTest(@AuthenticationPrincipal User user) {
         if(user == null) {
             throw new RuntimeException("유저가 없습니다.");
         }
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserProfileResponseDTO> getUserProfile(final @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(UserProfileResponseDTO.of(user.getStoredFileUrl(), user.getNickname()));
+    }
+
+    @PatchMapping("/profile/nickname")
+    public void updateUserProfile(final @AuthenticationPrincipal User user) {
+        userService.updateUserNickname(user);
+    }
+
+    @GetMapping("/cultural-event")
+    public ResponseEntity<Void> getCulturalEventList(final @AuthenticationPrincipal User user,
+                                                     final @RequestParam(required = false) List<Category> category,
+                                                     final @RequestParam(required = false, defaultValue = "0") int offset,
+                                                     final @RequestParam(required = false, defaultValue = "LIKE") PartitionType sortType) {
+
+        return ResponseEntity.ok().build();
     }
 
 

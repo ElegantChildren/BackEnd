@@ -13,8 +13,15 @@ import java.io.Serializable;
 @ToString
 public class CulturalEventDetailsResponseDTO implements Serializable {
 
-
     private CulturalEventDetail culturalEventDetail;
+
     private boolean isAuthenticated;
+    private boolean isLiked;
+    private boolean isBookmarked;
+
+    public void setLikeAndBookmark(final boolean isLiked, final boolean isBookmarked) {
+        this.isLiked = isLiked;
+        this.isBookmarked = isBookmarked;
+    }
 
 }

@@ -1,7 +1,9 @@
 package elegant.children.catchculture.entity.culturalevent;
 
-import java.util.Arrays;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
+@Slf4j
 public enum Category {
     POPUP_STORE("팝업스토어"),
     FESTIVAL("축제"),
@@ -28,9 +30,11 @@ public enum Category {
 
     public static Category of(final String code) {
         return Arrays.stream(Category.values())
-                .filter(category -> category.getCode().equals(code))
+                .filter(category -> category.getCode().contains(code))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException("존재하지 않는 카테고리입니다.");
+                });
     }
 
 
