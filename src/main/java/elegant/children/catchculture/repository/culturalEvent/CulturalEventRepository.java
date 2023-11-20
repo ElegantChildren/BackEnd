@@ -14,4 +14,7 @@ public interface CulturalEventRepository extends JpaRepository<CulturalEvent, In
     @Modifying(clearAutomatically = true)
     @Query("update CulturalEvent ce set ce.viewCount = ce.viewCount + 1 where ce.id = :culturalEventId")
     void updateViewCount(int culturalEventId);
+
+    @Query("select ce from CulturalEvent ce where ce.culturalEventDetail.place = :place")
+    CulturalEvent findByPlace(final String place);
 }

@@ -1,27 +1,31 @@
 package elegant.children.catchculture.entity.culturalevent;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import elegant.children.catchculture.common.converter.StoredFileUrlConverter;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Embeddable
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Getter
 public class CulturalEventDetail implements Serializable {
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String storedFileURL;
+    @Convert(converter = StoredFileUrlConverter.class)
+    private List<String> storedFileUrl;
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime startDate;
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime endDate;
     @Column(nullable = false)
     private String title;

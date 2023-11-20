@@ -2,6 +2,7 @@ package elegant.children.catchculture.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elegant.children.catchculture.common.filter.JwtAuthenticationFilter;
+import elegant.children.catchculture.common.security.JwtAuthenticationEntryPoint;
 import elegant.children.catchculture.common.security.JwtTokenProvider;
 import elegant.children.catchculture.common.security.oauth2.CustomOAuth2UserService;
 import elegant.children.catchculture.repository.user.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -51,8 +53,11 @@ public class SecurityConfig {
             oauth2.successHandler(oAuth2LoginSuccessHandler());
             oauth2.failureHandler(oAuth2LoginFailureHandler());
             oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()));
+            });
 
-        });
+        http.exceptionHandling(
+                exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(authenticationEntryPoint())
+        );
 
         return http.build();
     }
@@ -75,6 +80,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationSuccessHandler oAuth2LoginSuccessHandler() {
         return new OAuth2LoginSuccessHandler(jwtTokenProvider, redisUtils);
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new JwtAuthenticationEntryPoint(objectMapper);
     }
 
 
