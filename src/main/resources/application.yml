@@ -13,7 +13,8 @@ spring:
     gcp:
       storage:
         credentials:
-          location: src/main/resources/elegantchildren-57034633fedb.json
+          location: classpath:elegantchildren-57034633fedb.json
+#          location: src/main/resources/elegantchildren-57034633fedb.json
         project-id: elegantchildren
         bucket: elegant-bucket
 logging:
