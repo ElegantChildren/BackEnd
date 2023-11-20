@@ -10,6 +10,6 @@ public class GCSImageDTO {
         private String bucketName;
         private String fileName;
         private MultipartFile file;
-        private String type;
+//        private String type;
         private String contentType;
 }

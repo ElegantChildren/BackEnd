@@ -25,12 +25,13 @@ public class GCSController {
     public ResponseEntity<String> uploadImageToStorage(
 //                                                        @RequestParam("bucketName") String bucketName,
 //                                                       @RequestParam("objectName") String objectName,
-                                                        @RequestParam("type") String type,
+//                                                        @RequestParam("type") String type,
                                                        @RequestParam("file") MultipartFile file) throws IOException {
         String fileName = UUID.randomUUID().toString();
         String bucketName = "elegant-bucket";
         String contentType = file.getContentType();
-        GCSImageDTO dto = new GCSImageDTO(bucketName, fileName, file, type, contentType);
+        GCSImageDTO dto = new GCSImageDTO(bucketName, fileName, file, contentType);
+//        GCSImageDTO dto = new GCSImageDTO(bucketName, fileName, file, type, contentType);
         Blob uploadedFile = gcsService.uploadImageToGCS(dto);
         return ResponseEntity.ok(uploadedFile.toString());
     }
