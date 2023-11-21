@@ -1,4 +1,4 @@
-package elegant.children.catchculture.repository;
+package elegant.children.catchculture.repository.visiatAuth;
 
 import elegant.children.catchculture.entity.visitauth.VisitAuth;
 import org.springframework.data.jpa.repository.JpaRepository;

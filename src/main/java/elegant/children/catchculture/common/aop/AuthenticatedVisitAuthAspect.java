@@ -3,7 +3,7 @@ package elegant.children.catchculture.common.aop;
 import elegant.children.catchculture.common.exception.CustomException;
 import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.entity.user.User;
-import elegant.children.catchculture.repository.VisitAuthRepository;
+import elegant.children.catchculture.repository.visiatAuth.VisitAuthRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;

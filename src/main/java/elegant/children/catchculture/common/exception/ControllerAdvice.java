@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import static elegant.children.catchculture.common.exception.ErrorCode.*;
+
 @RestControllerAdvice
 @Slf4j
 public class ControllerAdvice {
@@ -15,7 +17,7 @@ public class ControllerAdvice {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
         log.info("RuntimeException: {}", e.getMessage());
-        return ResponseEntity.badRequest().body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponseDTO.of(INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(CustomException.class)

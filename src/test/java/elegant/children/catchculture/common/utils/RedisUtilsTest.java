@@ -18,7 +18,6 @@ class RedisUtilsTest {
         final String key = "test1";
         final String value = "백승진";
 
-        redisUtils.setData(key, value, 10L);
 
         final String result = redisUtils.getData(key);
 

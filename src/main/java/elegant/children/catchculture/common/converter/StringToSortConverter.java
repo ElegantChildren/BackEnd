@@ -1,12 +1,12 @@
 package elegant.children.catchculture.common.converter;
 
-import elegant.children.catchculture.repository.culturalEvent.PartitionType;
+import elegant.children.catchculture.common.constant.SortType;
 import org.springframework.core.convert.converter.Converter;
 
-public class StringToSortConverter implements Converter<String, PartitionType> {
+public class StringToSortConverter implements Converter<String, SortType> {
 
     @Override
-    public PartitionType convert(String source) {
-        return PartitionType.of(source.trim().toUpperCase());
+    public SortType convert(String source) {
+        return SortType.of(source.trim().toUpperCase());
     }
 }

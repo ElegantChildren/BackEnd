@@ -7,7 +7,6 @@ import elegant.children.catchculture.common.utils.CookieUtils;
 import elegant.children.catchculture.common.utils.RedisUtils;
 import elegant.children.catchculture.entity.user.Role;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,7 +36,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         final Role role = principal.getRole();
         final String token = jwtTokenProvider.generateToken(email, role);
         jwtTokenProvider.sendJwtTokenCookie(response, token);
-        redisUtils.setData(email, ClientUtils.getRemoteIP(request), (long) (60 * 60 * 24 * 7));
+        redisUtils.setData(email, ClientUtils.getRemoteIP(request));
         response.sendRedirect("http://elegant.kro.kr");
     }
 }
