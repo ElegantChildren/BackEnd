@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.util.SerializationUtils;
 
 import java.util.Base64;
@@ -26,13 +27,23 @@ public class CookieUtils {
 
     public static void addCookie(HttpServletResponse response, String cookieName, String cookieValue, int maxAge) {
         log.info("cookieValue = {}", cookieValue);
-        String serialize = CookieUtils.serialize(cookieValue);
-        Cookie cookie = new Cookie(cookieName, serialize);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(maxAge);
 
-        response.addCookie(cookie);
+        String serialize = CookieUtils.serialize(cookieValue);
+        ResponseCookie cookie = ResponseCookie.from(cookieName, serialize)
+                .path("/")
+                .httpOnly(true)
+                .sameSite("None")
+                .domain("localhost")
+                .secure(true)
+                .maxAge(maxAge)
+                .build();
+        response.setHeader("Set-Cookie", cookie.toString());
+//
+//        Cookie cookie = new Cookie(cookieName, serialize);
+//        cookie.setPath("/");
+//        cookie.setMaxAge(maxAge);
+//        response.addCookie(cookie);
+
 
     }
 

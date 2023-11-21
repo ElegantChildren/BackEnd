@@ -44,7 +44,8 @@ public class CulturalEventController {
     }
 
     @GetMapping("/{culturalEventId}")
-    public ResponseEntity<CulturalEventDetailsResponseDTO> getCulturalEventDetails(final @PathVariable int culturalEventId, final @AuthenticationPrincipal User user) {
+    public ResponseEntity<CulturalEventDetailsResponseDTO> getCulturalEventDetails(final @PathVariable int culturalEventId,
+                                                                                   final @AuthenticationPrincipal User user) {
 
         return ResponseEntity.ok(culturalEventService.getCulturalEventDetails(culturalEventId, user));
     }
