@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: local
+    include: production
     open-in-view: false
     properties:
       hibernate:
@@ -9,6 +9,13 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
     database-platform: org.hibernate.spatial.dialect.mysql.MySQLSpatialDialect
+  cloud:
+    gcp:
+      storage:
+        credentials:
+          location: src/main/resources/elegantchildren-57034633fedb.json
+        project-id: elegantchildren
+        bucket: elegant-bucket
 logging:
   level:
     org.hibernate.sql: debug
