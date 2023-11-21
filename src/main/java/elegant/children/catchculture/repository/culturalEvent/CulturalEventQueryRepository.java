@@ -62,7 +62,7 @@ public class CulturalEventQueryRepository {
                         culturalEvent.likeCount,
                         culturalEvent.viewCount,
                         Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
-                                culturalEvent.culturalEventDetail.endDate,
+                                culturalEvent.culturalEventDetail.startDate,
                                 now).as("remainDay")
                 ))
                 .from(culturalEvent)
@@ -83,7 +83,7 @@ public class CulturalEventQueryRepository {
                         culturalEvent.likeCount,
                         culturalEvent.viewCount,
                         Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
-                                culturalEvent.culturalEventDetail.endDate,
+                                culturalEvent.culturalEventDetail.startDate,
                                 now).as("remainDay")
                 ))
                 .from(culturalEvent)
@@ -127,7 +127,7 @@ public class CulturalEventQueryRepository {
                         culturalEvent.likeCount,
                         culturalEvent.viewCount,
                         Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
-                                culturalEvent.culturalEventDetail.endDate,
+                                culturalEvent.culturalEventDetail.startDate,
                                 now).as("remainDay")
                 ))
                 .from(culturalEvent)
@@ -171,7 +171,7 @@ public class CulturalEventQueryRepository {
                                     culturalEvent.likeCount,
                                     culturalEvent.viewCount,
                                     Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
-                                            culturalEvent.culturalEventDetail.endDate,
+                                            culturalEvent.culturalEventDetail.startDate,
                                             now).as("remainDay")
                             )
                     )
@@ -214,7 +214,7 @@ public class CulturalEventQueryRepository {
                                     culturalEvent.likeCount,
                                     culturalEvent.viewCount,
                                     Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
-                                            culturalEvent.culturalEventDetail.endDate,
+                                            culturalEvent.culturalEventDetail.startDate,
                                             now).as("remainDay")
                             )
                     )
@@ -300,20 +300,18 @@ public class CulturalEventQueryRepository {
     private OrderSpecifier[] getSortTypeWithClassification(final Classification classification) {
 
         List<OrderSpecifier> orderSpecifier = new ArrayList<>();
-//        switch (classification) {
-//            case VISIT_AUTH:
-//                orderSpecifier.add(new OrderSpecifier<>(Order.DESC, visitAuth.createdAt));
-//                startDateASC(orderSpecifier);
-//            case LIKE:
-//                orderSpecifier.add(new OrderSpecifier<>(Order.DESC, culturalEvent.likeCount));
-//                startDateASC(orderSpecifier);
-//            case STAR:
-//                orderSpecifier.add(new OrderSpecifier<>(Order.ASC, culturalEvent.culturalEventDetail.endDate));
-//                startDateASC(orderSpecifier);
-//
-//        }
-        startDateASC(orderSpecifier);
-        orderSpecifier.add(new OrderSpecifier<>(Order.ASC, culturalEvent.culturalEventDetail.endDate));
+        switch (classification) {
+            case VISIT_AUTH:
+                orderSpecifier.add(new OrderSpecifier<>(Order.DESC, visitAuth.createdAt));
+                startDateASC(orderSpecifier);
+            case LIKE:
+                orderSpecifier.add(new OrderSpecifier<>(Order.DESC, interaction.createdAt));
+                startDateASC(orderSpecifier);
+            case STAR:
+                orderSpecifier.add(new OrderSpecifier<>(Order.DESC, interaction.createdAt));
+                startDateASC(orderSpecifier);
+
+        }
         return orderSpecifier.toArray(new OrderSpecifier[orderSpecifier.size()]);
     }
 }

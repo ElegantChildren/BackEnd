@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
@@ -29,6 +31,14 @@ public class Interaction {
 
     @Enumerated(EnumType.STRING)
     private LikeStar likeStar;
+
+
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void createdAt() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     public static Interaction createInteraction(final User user, final CulturalEvent culturalEvent, final LikeStar likeStar) {
         return Interaction.builder()

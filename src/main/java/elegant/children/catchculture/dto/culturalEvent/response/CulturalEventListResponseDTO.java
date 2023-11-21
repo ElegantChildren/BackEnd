@@ -43,6 +43,9 @@ public class CulturalEventListResponseDTO {
         this.storedFileUrl = culturalEventDetail.getStoredFileUrl().get(0);
         this.likeCount = likeCount;
         this.viewCount = viewCount;
-        this.remainDay = remainDay;
+        if(remainDay <= 0)
+            this.remainDay = 0;
+        else
+            this.remainDay = remainDay;
     }
 }
