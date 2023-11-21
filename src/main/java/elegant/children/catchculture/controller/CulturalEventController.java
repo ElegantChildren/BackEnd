@@ -4,7 +4,7 @@ import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventDet
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
 import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
-import elegant.children.catchculture.repository.culturalEvent.PartitionType;
+import elegant.children.catchculture.common.constant.SortType;
 import elegant.children.catchculture.service.culturalEvent.CulturalEventService;
 import elegant.children.catchculture.service.interaction.InteractionService;
 import lombok.RequiredArgsConstructor;
@@ -24,16 +24,22 @@ public class CulturalEventController {
     private final InteractionService interactionService;
 
     @GetMapping
+    public ResponseEntity<List<CulturalEventListResponseDTO>> getCulturalEventMainList() {
+        return ResponseEntity.ok(culturalEventService.getCulturalEventMainList());
+    }
+
+
+    @GetMapping("/list")
     public ResponseEntity<Page<CulturalEventListResponseDTO>> getCulturalEventList(final @RequestParam(required = false) List<Category> category,
                                                                                    final @RequestParam(required = false, defaultValue = "0") int offset,
-                                                                                   final @RequestParam(required = false, defaultValue = "RECENT") PartitionType sortType) {
+                                                                                   final @RequestParam(required = false, defaultValue = "RECENT") SortType sortType) {
         return ResponseEntity.ok(culturalEventService.getCulturalEventList(category, offset, sortType));
     }
 
     @GetMapping("/search")
     public ResponseEntity<Page<CulturalEventListResponseDTO>> searchCulturalEventList(final @RequestParam String keyword,
                                                                                       final @RequestParam(required = false, defaultValue = "0") int offset,
-                                                                                      final @RequestParam(required = false, defaultValue = "RECENT") PartitionType sortType) {
+                                                                                      final @RequestParam(required = false, defaultValue = "RECENT") SortType sortType) {
         return ResponseEntity.ok(culturalEventService.searchCulturalEventListWithCondition(keyword, offset, sortType));
     }
 

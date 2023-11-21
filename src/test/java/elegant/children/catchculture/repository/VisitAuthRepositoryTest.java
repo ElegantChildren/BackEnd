@@ -1,5 +1,6 @@
 package elegant.children.catchculture.repository;
 
+import elegant.children.catchculture.repository.visiatAuth.VisitAuthRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

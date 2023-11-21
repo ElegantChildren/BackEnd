@@ -6,7 +6,7 @@ import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventQueryRepository;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventRepository;
-import elegant.children.catchculture.repository.culturalEvent.PartitionType;
+import elegant.children.catchculture.common.constant.SortType;
 import elegant.children.catchculture.repository.interaction.InteractionQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +27,12 @@ public class CulturalEventService {
     private final CulturalEventRepository culturalEventRepository;
     private final InteractionQueryRepository interactionQueryRepository;
 
+    public List<CulturalEventListResponseDTO> getCulturalEventMainList() {
+
+        return culturalEventQueryRepository.getCulturalEventMainList(culturalEventRepository.getCulturalEventMainIdList());
+
+    }
+
     @Transactional
     public CulturalEventDetailsResponseDTO getCulturalEventDetails(final int culturalEventId, final User user) {
 
@@ -39,16 +45,16 @@ public class CulturalEventService {
         return culturalEventDetails;
     }
 
-    public Page<CulturalEventListResponseDTO> getCulturalEventList(final List<Category> category, final int offset, final PartitionType sortType) {
+    public Page<CulturalEventListResponseDTO> getCulturalEventList(final List<Category> category, final int offset, final SortType sortType) {
         return culturalEventQueryRepository.getCulturalEventList(category, createPageRequest(offset), sortType);
 
     }
 
-    public Page<CulturalEventListResponseDTO> searchCulturalEventListWithCondition(final String keyword, final int offset, final PartitionType sortType) {
+    public Page<CulturalEventListResponseDTO> searchCulturalEventListWithCondition(final String keyword, final int offset, final SortType sortType) {
         return culturalEventQueryRepository.getCulturalEventListWithCondition(keyword, createPageRequest(offset), sortType);
     }
 
-    private static PageRequest createPageRequest(int offset) {
+    public static PageRequest createPageRequest(int offset) {
         return PageRequest.of(offset, 8);
     }
 }
