@@ -19,7 +19,7 @@ public class GCSService {
 
     private Storage storage;
 
-    @Value("${spring.cloud.gcp.storage.credentials.location}")
+    @Value("${spring.cloud.gcp.storage.credentials.file-path}")
     private String credentialsFilePath;
 
     private Storage getStorage() throws IOException {
