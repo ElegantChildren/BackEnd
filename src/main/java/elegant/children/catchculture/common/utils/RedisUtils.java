@@ -17,7 +17,7 @@ public class RedisUtils {
     private final RedisTemplate<String, Object> redisTemplate;
 
     public void setData(String key, String value) {
-        redisTemplate.opsForValue().set(key, value, tokenExpiration, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, value, tokenExpiration, TimeUnit.MILLISECONDS);
     }
 
     public String getData(String key) {

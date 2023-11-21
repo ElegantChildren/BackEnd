@@ -34,7 +34,7 @@ public class JwtTokenProvider {
         final String cookieValue = PREFIX + token;
         CookieUtils.addCookie(response, header, cookieValue, tokenExpiration);
 
-            response.setHeader("Authorization", cookieValue);
+//        response.setHeader("Authorization", cookieValue);
 
     }
 

@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagementConfigurer ->
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequestsConfigurer ->
-                        authorizeRequestsConfigurer.requestMatchers(OAUTH_BASE_URL, "/set-up/**", SWAGGER).permitAll()
+                        authorizeRequestsConfigurer.requestMatchers(OAUTH_BASE_URL, SWAGGER).permitAll()
                 )
                 .authorizeHttpRequests(authorizeRequestsConfigurer ->
                         authorizeRequestsConfigurer.anyRequest().permitAll()
