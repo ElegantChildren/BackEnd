@@ -16,7 +16,9 @@ public enum ErrorCode {
     INVALID_EVENT_ID("존재하지 않는 문화 행사 Id 입니다.", HttpStatus.NOT_FOUND),
 
     NOT_AUTHENTICATED("방문 인증이 되어 있지 않습니다.", HttpStatus.UNAUTHORIZED),
-    INVALID_ACCESS("관리자만 접근 가능합니다.", HttpStatus.FORBIDDEN);
+    INVALID_ACCESS("관리자만 접근 가능합니다.", HttpStatus.FORBIDDEN),
+
+    INTERNAL_SERVER_ERROR("서버 내부 에러입니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
 
 

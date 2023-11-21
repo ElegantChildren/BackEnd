@@ -27,10 +27,11 @@ public class CookieUtils {
     public static void addCookie(HttpServletResponse response, String cookieName, String cookieValue, int maxAge) {
         log.info("cookieValue = {}", cookieValue);
         String serialize = CookieUtils.serialize(cookieValue);
-        Cookie cookie = new Cookie(cookieName, serialize);;
+        Cookie cookie = new Cookie(cookieName, serialize);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
+
         response.addCookie(cookie);
 
     }

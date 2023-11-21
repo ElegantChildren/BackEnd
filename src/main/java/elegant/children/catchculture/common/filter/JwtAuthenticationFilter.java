@@ -39,33 +39,39 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         log.info("JwtAuthenticationFilter");
         final Optional<Cookie> authorization = CookieUtils.getCookie(request, "Authorization");
-        if (authorization.isPresent()) {
-            try {
-                String token = CookieUtils.deserialize(authorization.get().getValue(), String.class);
-                token = resolveToken(token);
-                if (jwtTokenProvider.validateToken(token)) {
-                    final String email = jwtTokenProvider.getEmail(token);
-                    final Role role = jwtTokenProvider.getRole(token);
-                    final String ip = ClientUtils.getRemoteIP(request);
-                    if (!ip.equals(redisUtils.getData(email))) {
+        try {
+            authorization.ifPresentOrElse(
+                    cookie -> {
+                        String token = CookieUtils.deserialize(cookie.getValue(), String.class);
+                        token = resolveToken(token);
+                        if(!jwtTokenProvider.validateToken(token))
+                            throw new RuntimeException();
+                        final String email = jwtTokenProvider.getEmail(token);
+                        final Role role = jwtTokenProvider.getRole(token);
+                        final String ip = ClientUtils.getRemoteIP(request);
+                        if (!ip.equals(redisUtils.getData(email))) {
+                            throw new RuntimeException();
+                        }
+                        final ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+                        simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role.name()));
+                        userRepository.findByEmail(email)
+                                .ifPresentOrElse(user -> {
+                                    final RememberMeAuthenticationToken rememberMeAuthenticationToken = new RememberMeAuthenticationToken(user.getEmail(), user, simpleGrantedAuthorities);
+                                    SecurityContextHolder.getContext().setAuthentication(rememberMeAuthenticationToken);
+                                    },
+                                        () -> {
+                                        throw new RuntimeException();
+                                    });
+
+                    },
+                    () -> {
                         throw new RuntimeException();
                     }
-                    final ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
-                    simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role.name()));
-                    userRepository.findByEmail(email)
-                            .ifPresentOrElse(user -> {
-                                final RememberMeAuthenticationToken rememberMeAuthenticationToken = new RememberMeAuthenticationToken(user.getEmail(), user, simpleGrantedAuthorities);
-                                SecurityContextHolder.getContext().setAuthentication(rememberMeAuthenticationToken);
-                            }, () -> {
-                                throw new RuntimeException();
-                            });
-
-                }
-            } catch (RuntimeException e) {
-                log.info("다시 로그인해주세요.");
-                CustomException.sendError(objectMapper, response, ErrorCode.LOGIN_FAIL);
-                return;
-            }
+            );
+        } catch (RuntimeException e) {
+            log.info("다시 로그인해주세요.");
+            CustomException.sendError(objectMapper, response, ErrorCode.LOGIN_FAIL);
+            return;
         }
         filterChain.doFilter(request, response);
 

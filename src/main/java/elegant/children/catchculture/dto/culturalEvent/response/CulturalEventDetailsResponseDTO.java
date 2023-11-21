@@ -19,6 +19,9 @@ public class CulturalEventDetailsResponseDTO implements Serializable {
     private boolean isLiked;
     private boolean isBookmarked;
 
+    private int likeCount;
+    private int viewCount;
+
     public void setLikeAndBookmark(final boolean isLiked, final boolean isBookmarked) {
         this.isLiked = isLiked;
         this.isBookmarked = isBookmarked;

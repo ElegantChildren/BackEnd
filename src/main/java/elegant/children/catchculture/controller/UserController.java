@@ -1,13 +1,14 @@
 package elegant.children.catchculture.controller;
 
+import elegant.children.catchculture.common.constant.Classification;
+import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
 import elegant.children.catchculture.dto.user.UserProfileResponseDTO;
 import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
-import elegant.children.catchculture.repository.culturalEvent.PartitionType;
-import elegant.children.catchculture.service.culturalEvent.CulturalEventService;
 import elegant.children.catchculture.service.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final CulturalEventService culturalEventService;
     @GetMapping
     public ResponseEntity<User> userTest(@AuthenticationPrincipal User user) {
         if(user == null) {
@@ -41,12 +41,12 @@ public class UserController {
     }
 
     @GetMapping("/cultural-event")
-    public ResponseEntity<Void> getCulturalEventList(final @AuthenticationPrincipal User user,
-                                                     final @RequestParam(required = false) List<Category> category,
-                                                     final @RequestParam(required = false, defaultValue = "0") int offset,
-                                                     final @RequestParam(required = false, defaultValue = "LIKE") PartitionType sortType) {
+    public ResponseEntity<Page<CulturalEventListResponseDTO>> getCulturalEventList(final @AuthenticationPrincipal User user,
+                                                                                   final @RequestParam(required = false) List<Category> category,
+                                                                                   final @RequestParam(required = false, defaultValue = "0") int offset,
+                                                                                   final @RequestParam(required = false, defaultValue = "LIKE") Classification classification) {
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(userService.getCulturalEventListWithUser(user, offset, category, classification));
     }
 
 
