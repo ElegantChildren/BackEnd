@@ -25,22 +25,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addConverter(new StringToCategoryConverter());
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry
-                .addMapping("/**")
-                .allowedOrigins("localhost:5173")
-                .allowedMethods(
-                        "GET",
-                        "POST",
-                        "PUT",
-                        "DELETE",
-                        "PATCH",
-                        "OPTIONS"
-                )
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry
+//                .addMapping("/**")
+//                .allowedOrigins("localhost:5173")
+//                .allowedMethods(
+//                        "GET",
+//                        "POST",
+//                        "PUT",
+//                        "DELETE",
+//                        "PATCH",
+//                        "OPTIONS"
+//                )
+//                .allowedHeaders("*")
+//                .allowCredentials(true)
+//                .maxAge(3600);
+//    }
 
 }
