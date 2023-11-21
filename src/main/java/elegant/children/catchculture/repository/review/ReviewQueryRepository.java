@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static elegant.children.catchculture.entity.review.QReview.*;
+import static elegant.children.catchculture.entity.user.QUser.*;
 
 @Repository
 @Slf4j
@@ -57,27 +58,43 @@ public class ReviewQueryRepository {
         return reviewRatingResponseDTO;
     }
 
-    private BooleanExpression culturalEventIdEq(final int culturalEventId) {
-        return review.culturalEvent.id.eq(culturalEventId);
-    }
+    public List<ReviewResponseDTO> getReviewList(final int culturalEventId, final int userId, final int lastId) {
 
-    public List<ReviewResponseDTO> getReviewList(final int culturalEventId) {
         return queryFactory.select(Projections.fields(ReviewResponseDTO.class,
                 review.id,
                 review.rating,
                 review.description,
                 review.createdAt,
-                review.user.id,
                 review.user.nickname,
                 review.storedFileURL.as("userProfileUrl")
         ))
-                .leftJoin(review.user)
                 .from(review)
+                .innerJoin(user).on(review.user.id.eq(user.id))
                 .where(
-                        culturalEventIdEq(culturalEventId)
+                        culturalEventIdEq(culturalEventId),
+                        reviewUserIdNe(userId),
+                        reviewIdLt(lastId)
+
                 )
-                .orderBy(review.createdAt.desc())
+                .orderBy(review.id.desc())
+                .limit(10)
                 .fetch();
 
+    }
+
+    private BooleanExpression culturalEventIdEq(final int culturalEventId) {
+        return review.culturalEvent.id.eq(culturalEventId);
+    }
+
+    private BooleanExpression reviewIdLt(final int lastId) {
+        if(lastId == 0) {
+            return null;
+        }
+
+        return review.id.lt(lastId);
+    }
+    private BooleanExpression reviewUserIdNe(final int userId) {
+
+        return review.user.id.ne(userId);
     }
 }
