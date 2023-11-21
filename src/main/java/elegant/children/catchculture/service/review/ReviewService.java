@@ -37,7 +37,7 @@ public class ReviewService {
     }
 
 
-    public List<ReviewResponseDTO> getReviewList(final int culturalEventId) {
-        return reviewQueryRepository.getReviewList(culturalEventId);
+    public List<ReviewResponseDTO> getReviewList(final int culturalEventId, final User user, final int lastId) {
+        return reviewQueryRepository.getReviewList(culturalEventId, user.getId(), lastId);
     }
 }
