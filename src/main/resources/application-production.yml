@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size: 128MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://elegant.kro.kr:3306/elegantChildren?useSSL=false&serverTimezone=Asia/Seoul
@@ -51,3 +55,6 @@ server:
     key-store-password: 1q2w3e4r
     key-store-type: PKCS12
     enabled: true
+  tomcat:
+     max-http-form-post-size: 128MB
+
