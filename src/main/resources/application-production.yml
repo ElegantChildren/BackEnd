@@ -47,7 +47,7 @@ spring:
 
 server:
   ssl:
-    key-store: BOOT-INF/classes/keystore.p12
+    key-store: classpath:BOOT-INF/classes/keystore.p12
     key-store-password: 1q2w3e4r
     key-store-type: PKCS12
     enabled: true
