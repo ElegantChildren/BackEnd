@@ -32,5 +32,11 @@ jwt:
 openapi:
   key: 426e594f5673737338366a70714f68
 
-
-
+server:
+  ssl:
+    key-store: classpath:BOOT-INF/classes/keystore.p12
+    key-store-password: 1q2w3e4r
+    key-store-type: PKCS12
+    enabled: true
+  tomcat:
+    max-http-form-post-size: 128MB
