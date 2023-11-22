@@ -13,8 +13,8 @@ spring:
     gcp:
       storage:
         credentials:
-          file-path: classpath:BOOT-INF/classes/elegantchildren-57034633fedb.json
-#          location: classpath:elegantchildren-57034633fedb.json
+          location: classpath:BOOT-INF/classes/elegantchildren-57034633fedb.json
+        #          location: classpath:elegantchildren-57034633fedb.json
 #          location: src/main/resources/elegantchildren-57034633fedb.json
         project-id: elegantchildren
         bucket: elegant-bucket
