@@ -34,6 +34,15 @@ public class CulturalEventQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
+    public boolean existById(final int culturalEventId) {
+        return queryFactory.selectOne()
+                .from(culturalEvent)
+                .where(
+                        culturalEvent.id.eq(culturalEventId)
+                )
+                .fetchOne() != null;
+    }
+
     public CulturalEventDetailsResponseDTO getCulturalEventDetails(final int culturalEventId, final int userId) {
         return queryFactory.select(Projections.fields(CulturalEventDetailsResponseDTO.class,
                         culturalEvent.culturalEventDetail,
