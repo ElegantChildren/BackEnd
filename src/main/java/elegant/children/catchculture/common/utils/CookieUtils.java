@@ -29,14 +29,15 @@ public class CookieUtils {
         log.info("cookieValue = {}", cookieValue);
 
         String serialize = CookieUtils.serialize(cookieValue);
+
         ResponseCookie cookie = ResponseCookie.from(cookieName, serialize)
                 .path("/")
                 .httpOnly(true)
-                .sameSite("None")
-                .domain("localhost")
+                .sameSite("none")
                 .secure(true)
                 .maxAge(maxAge)
                 .build();
+
         response.setHeader("Set-Cookie", cookie.toString());
 //
 //        Cookie cookie = new Cookie(cookieName, serialize);

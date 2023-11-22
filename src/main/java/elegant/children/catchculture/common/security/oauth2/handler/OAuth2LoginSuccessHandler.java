@@ -20,7 +20,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private static final String REDIRECT_URL = "redirect_url";
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisUtils redisUtils;
 
@@ -28,7 +27,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        String redirectUrl = "";
         log.info("OAuth2LoginSuccessHandler");
         log.info("authentication: {}", authentication);
         final CustomOAuth2User principal = (CustomOAuth2User) authentication.getPrincipal();
