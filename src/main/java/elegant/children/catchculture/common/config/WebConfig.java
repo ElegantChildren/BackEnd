@@ -1,4 +1,4 @@
-package elegant.children.catchculture.controller;
+package elegant.children.catchculture.common.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
