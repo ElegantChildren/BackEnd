@@ -1,16 +1,19 @@
 package elegant.children.catchculture.repository.culturalEvent;
 
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import elegant.children.catchculture.common.constant.Classification;
 import elegant.children.catchculture.common.constant.SortType;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventDetailsResponseDTO;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
 import elegant.children.catchculture.entity.culturalevent.Category;
+import elegant.children.catchculture.entity.culturalevent.QCulturalEvent;
 import elegant.children.catchculture.entity.interaction.LikeStar;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.querydsl.core.types.ExpressionUtils.count;
 import static elegant.children.catchculture.entity.culturalevent.QCulturalEvent.*;
 import static elegant.children.catchculture.entity.interaction.QInteraction.*;
 import static elegant.children.catchculture.entity.visitauth.QVisitAuth.*;
@@ -34,22 +38,48 @@ public class CulturalEventQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
+    public boolean existById(final int culturalEventId) {
+        return queryFactory.selectOne()
+                .from(culturalEvent)
+                .where(
+                        culturalEventIdEq(culturalEventId)
+                )
+                .fetchOne() != null;
+    }
+
     public CulturalEventDetailsResponseDTO getCulturalEventDetails(final int culturalEventId, final int userId) {
         return queryFactory.select(Projections.fields(CulturalEventDetailsResponseDTO.class,
                         culturalEvent.culturalEventDetail,
                         visitAuth.isAuthenticated.as("isAuthenticated"),
                         culturalEvent.likeCount,
-                        culturalEvent.viewCount)
+                        ExpressionUtils.as(
+                                JPAExpressions.select(count(interaction))
+                                        .from(interaction)
+                                        .where(
+                                                interactionLikeStarEq(LikeStar.STAR),
+                                                interaction.culturalEvent.id.eq(culturalEventId)
+                                        )
+                                , "bookmarkCount")
+                        )
                 )
                 .from(culturalEvent)
                 .leftJoin(visitAuth)
                 .on(
                         culturalEvent.id.eq(visitAuth.culturalEvent.id),
-                        visitAuth.user.id.eq(userId))
+                        visitAuth.user.id.eq(userId)
+                )
                 .where(
-                        culturalEvent.id.eq(culturalEventId)
+                        culturalEventIdEq(culturalEventId)
                 )
                 .fetchOne();
+    }
+
+    private static BooleanExpression interactionLikeStarEq(final LikeStar likeStar) {
+        return interaction.likeStar.eq(likeStar);
+    }
+
+    private BooleanExpression culturalEventIdEq(final int culturalEventId) {
+        return culturalEvent.id.eq(culturalEventId);
     }
 
     public List<CulturalEventListResponseDTO> getCulturalEventMainList(final List<Integer> culturalEventIdList) {

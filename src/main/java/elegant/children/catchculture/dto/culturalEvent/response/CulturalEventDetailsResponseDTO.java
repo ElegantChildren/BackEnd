@@ -20,7 +20,7 @@ public class CulturalEventDetailsResponseDTO implements Serializable {
     private boolean isBookmarked;
 
     private int likeCount;
-    private int viewCount;
+    private long bookmarkCount;
 
     public void setLikeAndBookmark(final boolean isLiked, final boolean isBookmarked) {
         this.isLiked = isLiked;

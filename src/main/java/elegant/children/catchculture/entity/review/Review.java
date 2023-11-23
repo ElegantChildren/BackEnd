@@ -24,8 +24,7 @@ public class Review {
     private int id;
 
     @Column(columnDefinition = "TEXT")
-    @Convert(converter = StoredFileUrlConverter.class)
-    private List<String> storedFileURL;
+    private String storedFileURL;
 
     @Column(columnDefinition = "TEXT")
     private String description;

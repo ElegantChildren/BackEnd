@@ -18,7 +18,7 @@ public class ReviewResponseDTO {
     private int id;
     private String nickname;
     private String description;
-    private List<String> storedFileUrl;
+    private String storedFileUrl;
     private int rating;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdAt;

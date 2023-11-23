@@ -26,7 +26,7 @@ jwt:
   secretKey: as2189d1o2mocqem31x1c3o34m3c4owlkf13orm134oirmt134oitm341i1io34tm43i1om12o4fim059gk0259g4m
   token:
     # 3 hours
-    expiration: 10800000
+    expiration: 10800
     header: Authorization
 
 openapi:
