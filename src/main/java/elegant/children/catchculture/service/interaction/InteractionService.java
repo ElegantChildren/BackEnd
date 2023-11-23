@@ -50,9 +50,13 @@ public class InteractionService {
         final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_EVENT_ID));
 
+
         interactionRepository.findByUserIdAndCulturalEventIdAndLikeStar(user.getId(), culturalEventId, LikeStar.LIKE)
-                .ifPresent(interaction -> {
+                .ifPresentOrElse(interaction -> {
                     interactionRepository.delete(interaction);
+                },
+                        () -> {
+                            throw new CustomException(ErrorCode.NOT_LIKE);
                 });
         culturalEvent.minusLikeCount();
     }
@@ -62,8 +66,10 @@ public class InteractionService {
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_EVENT_ID));
 
         interactionRepository.findByUserIdAndCulturalEventIdAndLikeStar(user.getId(), culturalEventId, LikeStar.STAR)
-                .ifPresent(interaction -> {
+                .ifPresentOrElse(interaction -> {
                     interactionRepository.delete(interaction);
+                }, () -> {
+                    throw new CustomException(ErrorCode.NOT_STAR);
                 });
     }
 }
