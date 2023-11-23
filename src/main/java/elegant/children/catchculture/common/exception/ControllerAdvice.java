@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import static elegant.children.catchculture.common.exception.ErrorCode.*;
 
@@ -15,10 +16,17 @@ public class ControllerAdvice {
 
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
+    public ResponseEntity<ErrorResponseDTO> handleRuntimeException(RuntimeException e) {
         log.info("RuntimeException: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponseDTO.of(INTERNAL_SERVER_ERROR));
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponseDTO> handleTypeMismatchException(RuntimeException e) {
+        log.info("RuntimeException: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDTO.of(INVALID_CATEGORY));
+    }
+
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponseDTO> handleCustomException(CustomException e) {
