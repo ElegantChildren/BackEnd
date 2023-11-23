@@ -32,11 +32,7 @@ public class JwtTokenProvider {
 
     public void sendJwtTokenCookie(HttpServletResponse response, final String token) {
         final String cookieValue = PREFIX + token;
-        CookieUtils.addCookie(response, header, cookieValue, tokenExpiration);
-
-//        response.setHeader("Authorization", cookieValue);
-
-    }
+        CookieUtils.addCookie(response, header, cookieValue, tokenExpiration);}
 
     public String generateToken(final String email, final Role role) {
         return Jwts.builder()
