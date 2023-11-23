@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size: 128MB
   profiles:
     include: production
     open-in-view: false
@@ -9,15 +13,7 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
     database-platform: org.hibernate.spatial.dialect.mysql.MySQLSpatialDialect
-#  cloud:
-#    gcp:
-#      storage:
-#        credentials:
-#          location: elegantchildren-57034633fedb.json
-#        #          location: classpath:elegantchildren-57034633fedb.json
-##          location: src/main/resources/elegantchildren-57034633fedb.json
-#        project-id: elegantchildren
-#        bucket: elegant-bucket
+
 logging:
   level:
     org.hibernate.sql: debug
@@ -31,12 +27,3 @@ jwt:
 
 openapi:
   key: 426e594f5673737338366a70714f68
-
-server:
-  ssl:
-    key-store: classpath:BOOT-INF/classes/keystore.p12
-    key-store-password: 1q2w3e4r
-    key-store-type: PKCS12
-    enabled: true
-  tomcat:
-    max-http-form-post-size: 128MB
