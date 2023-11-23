@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/elegantChildren?useSSL=false&serverTimezone=Asia/Seoul
     username: root
-    password: 
+    password:
   jpa:
     hibernate:
       ddl-auto: update
@@ -47,9 +47,18 @@ spring:
     gcp:
       storage:
         credentials:
-          location: classpath:elegantchildren-57034633fedb.json
+          location: src/main/resources/elegantchildren-57034633fedb.json
         #          location: classpath:elegantchildren-57034633fedb.json
         #          location: src/main/resources/elegantchildren-57034633fedb.json
         project-id: elegantchildren
         bucket: elegant-bucket
 
+server:
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: 1q2w3e4r
+    key-store-type: PKCS12
+    enabled: true
+    port: 8080
+  tomcat:
+    max-http-form-post-size: 128MB
