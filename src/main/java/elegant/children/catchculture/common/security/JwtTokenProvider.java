@@ -39,7 +39,7 @@ public class JwtTokenProvider {
                 .setSubject("AccessToken")
                 .claim(EMAIL, email)
                 .claim(ROLE, role)
-                .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
+                .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration*1000))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
