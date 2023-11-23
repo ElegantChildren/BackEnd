@@ -26,11 +26,9 @@ public class CookieUtils {
     }
 
     public static void addCookie(HttpServletResponse response, String cookieName, String cookieValue, int maxAge) {
-        log.info("cookieValue = {}", cookieValue);
 
-        String serialize = CookieUtils.serialize(cookieValue);
-
-        ResponseCookie cookie = ResponseCookie.from(cookieName, serialize)
+        final String serialize = CookieUtils.serialize(cookieValue);
+        final ResponseCookie cookie = ResponseCookie.from(cookieName, serialize)
                 .path("/")
                 .httpOnly(true)
                 .sameSite("none")

@@ -9,15 +9,15 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
     database-platform: org.hibernate.spatial.dialect.mysql.MySQLSpatialDialect
-  cloud:
-    gcp:
-      storage:
-        credentials:
-          location: elegantchildren-57034633fedb.json
-        #          location: classpath:elegantchildren-57034633fedb.json
-#          location: src/main/resources/elegantchildren-57034633fedb.json
-        project-id: elegantchildren
-        bucket: elegant-bucket
+#  cloud:
+#    gcp:
+#      storage:
+#        credentials:
+#          location: elegantchildren-57034633fedb.json
+#        #          location: classpath:elegantchildren-57034633fedb.json
+##          location: src/main/resources/elegantchildren-57034633fedb.json
+#        project-id: elegantchildren
+#        bucket: elegant-bucket
 logging:
   level:
     org.hibernate.sql: debug
@@ -26,7 +26,7 @@ jwt:
   secretKey: as2189d1o2mocqem31x1c3o34m3c4owlkf13orm134oirmt134oitm341i1io34tm43i1om12o4fim059gk0259g4m
   token:
     # 3 hours
-    expiration: 10800000
+    expiration: 10800
     header: Authorization
 
 openapi:

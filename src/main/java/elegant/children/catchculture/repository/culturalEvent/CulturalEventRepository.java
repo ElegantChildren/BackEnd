@@ -1,7 +1,5 @@
 package elegant.children.catchculture.repository.culturalEvent;
 
-import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventDetailsResponseDTO;
-import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
 import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,11 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public interface CulturalEventRepository extends JpaRepository<CulturalEvent, Integer> {
 
+
+    Optional<CulturalEvent> findById(final int culturalEventId);
 
     @Modifying(clearAutomatically = true)
     @Query("update CulturalEvent ce set ce.viewCount = ce.viewCount + 1 where ce.id = :culturalEventId")

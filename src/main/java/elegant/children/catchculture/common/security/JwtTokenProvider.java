@@ -32,18 +32,14 @@ public class JwtTokenProvider {
 
     public void sendJwtTokenCookie(HttpServletResponse response, final String token) {
         final String cookieValue = PREFIX + token;
-        CookieUtils.addCookie(response, header, cookieValue, tokenExpiration);
-
-//        response.setHeader("Authorization", cookieValue);
-
-    }
+        CookieUtils.addCookie(response, header, cookieValue, tokenExpiration);}
 
     public String generateToken(final String email, final Role role) {
         return Jwts.builder()
                 .setSubject("AccessToken")
                 .claim(EMAIL, email)
                 .claim(ROLE, role)
-                .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
+                .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration*1000))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
