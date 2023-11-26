@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 
 @Service
@@ -21,6 +22,13 @@ public class GCSService {
 
     @Value("${spring.cloud.gcp.storage.credentials.location}")
     private String credentialsFilePath;
+
+    @Value("${spring.cloud.gcp.storage.bucket}")
+    private String bucketName;
+
+    private final String BASE_URL = "https://storage.googleapis.com/elegant-bucket/";
+
+
 
     private Storage getStorage() throws IOException {
         if (storage == null) {
@@ -39,6 +47,30 @@ public class GCSService {
                 dto.getFile().getInputStream()
         );
         return blob;
+    }
+
+    public String uploadImage(final MultipartFile multipartFile ) {
+
+        final Storage storage;
+        try {
+            storage = getStorage();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        final String uuid = UUID.randomUUID().toString();
+        final String fileName = getFileName(multipartFile.getOriginalFilename(), uuid);
+        final Blob blob = storage.create(BlobInfo.newBuilder(bucketName, fileName)
+                .setContentType(multipartFile.getContentType())
+                .build());
+
+        return BASE_URL + blob.getName();
+    }
+
+    private static String getFileName(final String originalFileName, final String uuid) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(uuid).append("_").append(originalFileName);
+        final String fileName = sb.toString();
+        return fileName;
     }
 
 
