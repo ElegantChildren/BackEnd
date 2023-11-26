@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
-    @Query("select r from Review as r where r.id = :culturalEventId and r.user.id = :userId")
+    @Query("select r from Review as r where r.culturalEvent.id = :culturalEventId and r.user.id = :userId")
     Optional<Review> findByCulturalEventIdAndUserId(@Param("culturalEventId") int culturalEventId, @Param("userId") int userId);
 
 
