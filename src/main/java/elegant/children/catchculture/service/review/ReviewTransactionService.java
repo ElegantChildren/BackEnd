@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class ReviewTransactionService {
 
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    @Transactional
     public void updateReviewDescription(final int reviewId, final String description) {
         reviewRepository.findById(reviewId)
                 .ifPresentOrElse(review -> {
@@ -33,7 +33,6 @@ public class ReviewTransactionService {
                 });
     }
 
-    @Transactional
     public void deleteReview(final int reviewId) {
         reviewRepository.findById(reviewId)
                 .ifPresentOrElse(review -> {
@@ -43,12 +42,10 @@ public class ReviewTransactionService {
                 });
     }
 
-    @Transactional
     public void createReview(final Review review, final User user) {
 
         reviewRepository.save(review);
         final PointChange pointChange = PointChange.REVIEW;
-//        user.updatePoint(pointChange.getPoint());
         userRepository.updateUserPoint(user.getId(), pointChange.getPoint());
         applicationEventPublisher.publishEvent(new CreateReviewEvent(pointChange, user));
 
