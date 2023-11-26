@@ -16,7 +16,7 @@ public class ControllerAdvice {
 
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
+    public ResponseEntity<ErrorResponseDTO> handleRuntimeException(RuntimeException e) {
         log.info("RuntimeException: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponseDTO.of(INTERNAL_SERVER_ERROR));
     }
