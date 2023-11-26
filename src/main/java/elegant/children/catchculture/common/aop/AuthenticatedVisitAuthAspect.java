@@ -20,10 +20,11 @@ public class AuthenticatedVisitAuthAspect {
     private final CulturalEventQueryRepository culturalEventQueryRepository;
     private final VisitAuthRepository visitAuthRepository;
 
-    @Before("@annotation(elegant.children.catchculture.common.annotation.AuthenticatedVisitAuth) && args(culturalEventId, user)")
+    @Before("@annotation(elegant.children.catchculture.common.annotation.AuthenticatedVisitAuth) && args(culturalEventId, user, ..)")
     public void isCulturalEventAuthenticated(final int culturalEventId, final User user ) {
+        log.info("isCulturalEventAuthenticated");
         if (culturalEventQueryRepository.existById(culturalEventId)) {
-
+            log.info("existById");
             visitAuthRepository.isAuthenticated(user.getId(), culturalEventId)
                     .ifPresentOrElse(
                             isAuthenticated -> {
@@ -36,9 +37,8 @@ public class AuthenticatedVisitAuthAspect {
                     );
 
         } else {
+            log.info("not existById");
             throw new CustomException(ErrorCode.INVALID_EVENT_ID);
         }
-
-
     }
 }
