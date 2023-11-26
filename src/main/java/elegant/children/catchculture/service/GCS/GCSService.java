@@ -52,16 +52,18 @@ public class GCSService {
     public String uploadImage(final MultipartFile multipartFile ) {
 
         final Storage storage;
+        final Blob blob;
+        final String uuid = UUID.randomUUID().toString();
+        final String fileName = getFileName(multipartFile.getOriginalFilename(), uuid);
         try {
             storage = getStorage();
+            blob = storage.create(BlobInfo.newBuilder(bucketName, fileName)
+                    .setContentType(multipartFile.getContentType())
+                    .build(),multipartFile.getInputStream());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        final String uuid = UUID.randomUUID().toString();
-        final String fileName = getFileName(multipartFile.getOriginalFilename(), uuid);
-        final Blob blob = storage.create(BlobInfo.newBuilder(bucketName, fileName)
-                .setContentType(multipartFile.getContentType())
-                .build());
+
 
         return BASE_URL + blob.getName();
     }
