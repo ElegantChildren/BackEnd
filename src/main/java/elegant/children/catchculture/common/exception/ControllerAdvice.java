@@ -21,6 +21,11 @@ public class ControllerAdvice {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponseDTO.of(INTERNAL_SERVER_ERROR));
     }
 
+    @ExceptionHandler(Exception.class)
+    public String handleException(Exception e) {
+        return e.getMessage();
+    }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponseDTO> handleTypeMismatchException(RuntimeException e) {
         log.info("RuntimeException: {}", e.getMessage());

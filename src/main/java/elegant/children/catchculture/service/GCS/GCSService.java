@@ -24,7 +24,7 @@ public class GCSService {
     private String credentialsFilePath;
 
     @Value("${spring.cloud.gcp.storage.bucket}")
-    private String bucketName;
+    private String bucketName = "elegant-bucket";
 
     private final String BASE_URL = "https://storage.googleapis.com/elegant-bucket/";
 
@@ -49,6 +49,17 @@ public class GCSService {
         return blob;
     }
 
+    public String uploadImageToGCS(GCSImageDTO dto) throws IOException {
+        Storage storage = getStorage();
+        Blob blob = storage.create(
+                BlobInfo.newBuilder(dto.getBucketName(), dto.getFileName())
+                        .setContentType(dto.getContentType())
+                        .build(),
+                dto.getFile().getInputStream()
+        );
+        return BASE_URL + blob.getName();
+    }
+
     public String uploadImage(final MultipartFile multipartFile ) {
 
         final Storage storage;
@@ -57,9 +68,11 @@ public class GCSService {
         final String fileName = getFileName(multipartFile.getOriginalFilename(), uuid);
         try {
             storage = getStorage();
-            blob = storage.create(BlobInfo.newBuilder(bucketName, fileName)
+            blob = storage.create(
+                    BlobInfo.newBuilder(bucketName, fileName)
                     .setContentType(multipartFile.getContentType())
-                    .build(),multipartFile.getInputStream());
+                    .build(),
+                    multipartFile.getInputStream());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -71,8 +84,7 @@ public class GCSService {
     private static String getFileName(final String originalFileName, final String uuid) {
         final StringBuilder sb = new StringBuilder();
         sb.append(uuid).append("_").append(originalFileName);
-        final String fileName = sb.toString();
-        return fileName;
+        return sb.toString();
     }
 
 
