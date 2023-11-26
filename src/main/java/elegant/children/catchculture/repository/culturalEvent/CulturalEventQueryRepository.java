@@ -10,10 +10,11 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import elegant.children.catchculture.common.constant.Classification;
 import elegant.children.catchculture.common.constant.SortType;
+import elegant.children.catchculture.common.exception.CustomException;
+import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventDetailsResponseDTO;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
 import elegant.children.catchculture.entity.culturalevent.Category;
-import elegant.children.catchculture.entity.culturalevent.QCulturalEvent;
 import elegant.children.catchculture.entity.interaction.LikeStar;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +49,11 @@ public class CulturalEventQueryRepository {
     }
 
     public CulturalEventDetailsResponseDTO getCulturalEventDetails(final int culturalEventId, final int userId) {
+
+        if(!existById(culturalEventId)) {
+            throw new CustomException(ErrorCode.INVALID_EVENT_ID);
+        }
+
         return queryFactory.select(Projections.fields(CulturalEventDetailsResponseDTO.class,
                         culturalEvent.culturalEventDetail,
                         visitAuth.isAuthenticated.as("isAuthenticated"),
@@ -150,7 +156,7 @@ public class CulturalEventQueryRepository {
 
         final LocalDateTime now = LocalDateTime.now();
 
-        final List<CulturalEventListResponseDTO> content = queryFactory.select(Projections.fields(
+        final List<CulturalEventListResponseDTO> content = queryFactory.select(Projections.constructor(
                         CulturalEventListResponseDTO.class,
                         culturalEvent.id,
                         culturalEvent.culturalEventDetail,
