@@ -24,7 +24,7 @@ public class GCSService {
     private String credentialsFilePath;
 
     @Value("${spring.cloud.gcp.storage.bucket}")
-    private String bucketName = "elegant-bucket";
+    private String bucketName;
 
     private final String BASE_URL = "https://storage.googleapis.com/elegant-bucket/";
 
