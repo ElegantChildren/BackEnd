@@ -23,7 +23,6 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class ReviewService {
 
     private final ReviewQueryRepository reviewQueryRepository;
@@ -31,6 +30,7 @@ public class ReviewService {
     private final CulturalEventRepository culturalEventRepository;
     private final ReviewTransactionService reviewTransactionService;
     private final GCSService gcsService;
+
 
     public ReviewResponseDTO getUserReview(final int culturalEventId, final User user) {
         final Optional<Review> reviewOptional = reviewRepository.findByCulturalEventIdAndUserId(culturalEventId, user.getId());
@@ -47,7 +47,6 @@ public class ReviewService {
         return reviewQueryRepository.getReviewRating(culturalEventId);
     }
 
-
     public List<ReviewResponseDTO> getReviewList(final int culturalEventId, final User user, final int lastId) {
         return reviewQueryRepository.getReviewList(culturalEventId, user.getId(), lastId);
     }
@@ -56,6 +55,7 @@ public class ReviewService {
         reviewTransactionService.updateReviewDescription(reviewId, description);
     }
 
+
     public void deleteReview(final int reviewId) {
         reviewTransactionService.deleteReview(reviewId);
     }
@@ -63,9 +63,14 @@ public class ReviewService {
     public void createReview(final int culturalEventId, final User user, final MultipartFile multipartFile,
                              final String description, final int rating) {
 
-        final String storedImageUrl = gcsService.uploadImage(multipartFile);
-        final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId).get();
 
+        final String storedImageUrl = gcsService.uploadImage(multipartFile);
+        reviewRepository.findByCulturalEventIdAndUserId(culturalEventId, user.getId())
+                .ifPresent(review -> {
+                    throw new CustomException(ErrorCode.ALREADY_REVIEW);
+                });
+
+        final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId).get();
         final Review review = Review.builder()
                 .culturalEvent(culturalEvent)
                 .user(user)

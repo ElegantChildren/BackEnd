@@ -18,6 +18,7 @@ public enum ErrorCode {
     INVALID_EVENT_ID("존재하지 않는 문화 행사 Id 입니다.", HttpStatus.BAD_REQUEST),
     INVALID_REVIEW_ID("존재하지 않는 리뷰 Id 입니다.", HttpStatus.BAD_REQUEST),
     INVALID_CATEGORY("존재하지 않는 카테고리 입니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_REVIEW("이미 리뷰를 작성한 문화 행사입니다.", HttpStatus.BAD_REQUEST),
 
 
     NOT_AUTHENTICATED("방문 인증이 되어 있지 않습니다.", HttpStatus.UNAUTHORIZED),
