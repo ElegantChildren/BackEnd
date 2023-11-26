@@ -37,13 +37,6 @@ public class CookieUtils {
                 .build();
 
         response.setHeader("Set-Cookie", cookie.toString());
-//
-//        Cookie cookie = new Cookie(cookieName, serialize);
-//        cookie.setPath("/");
-//        cookie.setMaxAge(maxAge);
-//        response.addCookie(cookie);
-
-
     }
 
 
