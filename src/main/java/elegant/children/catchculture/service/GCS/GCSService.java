@@ -30,7 +30,7 @@ public class GCSService {
         return storage;
     }
 
-    public Blob uploadImageToGCS(GCSImageDTO dto) throws IOException {
+    public Blob uploadImageToGCS2(GCSImageDTO dto) throws IOException {
         Storage storage = getStorage();
         Blob blob = storage.create(
                 BlobInfo.newBuilder(dto.getBucketName(), dto.getFileName())
@@ -39,6 +39,17 @@ public class GCSService {
                 dto.getFile().getInputStream()
         );
         return blob;
+    }
+
+    public String uploadImageToGCS(GCSImageDTO dto) throws IOException {
+        Storage storage = getStorage();
+        Blob blob = storage.create(
+                BlobInfo.newBuilder(dto.getBucketName(), dto.getFileName())
+                        .setContentType(dto.getContentType())
+                        .build(),
+                dto.getFile().getInputStream()
+        );
+        return "https://storage.googleapis.com/elegant-bucket/" + blob.getName();
     }
 
 

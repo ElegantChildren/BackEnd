@@ -32,7 +32,7 @@ public class GCSController {
         String contentType = file.getContentType();
         GCSImageDTO dto = new GCSImageDTO(bucketName, fileName, file, contentType);
 //        GCSImageDTO dto = new GCSImageDTO(bucketName, fileName, file, type, contentType);
-        Blob uploadedFile = gcsService.uploadImageToGCS(dto);
-        return ResponseEntity.ok(uploadedFile.toString());
+        Blob uploadedFile = gcsService.uploadImageToGCS2(dto);
+        return ResponseEntity.ok("https://storage.googleapis.com/elegant-bucket/" + uploadedFile.getName());
     }
 }
