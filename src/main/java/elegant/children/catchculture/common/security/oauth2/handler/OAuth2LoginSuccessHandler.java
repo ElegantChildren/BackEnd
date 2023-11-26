@@ -35,6 +35,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         final String token = jwtTokenProvider.generateToken(email, role);
         jwtTokenProvider.sendJwtTokenCookie(response, token);
         redisUtils.setData(email, ClientUtils.getRemoteIP(request));
-        response.sendRedirect("http://localhost:5173");
+        response.sendRedirect("http://localhost:5173/main");
     }
 }

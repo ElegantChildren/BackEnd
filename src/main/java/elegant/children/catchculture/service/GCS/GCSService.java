@@ -38,7 +38,7 @@ public class GCSService {
         return storage;
     }
 
-    public Blob uploadImageToGCS(GCSImageDTO dto) throws IOException {
+    public Blob uploadImageToGCS2(GCSImageDTO dto) throws IOException {
         Storage storage = getStorage();
         Blob blob = storage.create(
                 BlobInfo.newBuilder(dto.getBucketName(), dto.getFileName())
