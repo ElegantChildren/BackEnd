@@ -7,6 +7,7 @@ import elegant.children.catchculture.entity.review.Review;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.event.review.CreateReviewEvent;
 import elegant.children.catchculture.repository.review.ReviewRepository;
+import elegant.children.catchculture.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewTransactionService {
 
     private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
@@ -46,8 +48,8 @@ public class ReviewTransactionService {
 
         reviewRepository.save(review);
         final PointChange pointChange = PointChange.REVIEW;
-        user.updatePoint(pointChange.getPoint());
-//        userRepository.updateUserPoint(user.getId(), user.getPoint() + 50);
+//        user.updatePoint(pointChange.getPoint());
+        userRepository.updateUserPoint(user.getId(), pointChange.getPoint());
         applicationEventPublisher.publishEvent(new CreateReviewEvent(pointChange, user));
 
     }
