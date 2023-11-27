@@ -45,6 +45,16 @@ public class CulturalEventService {
         return culturalEventDetails;
     }
 
+
+    public String getCulturalEventTitle(final int culturalEventId, final User user) {
+
+        final CulturalEventDetailsResponseDTO culturalEventDetails = culturalEventQueryRepository.getCulturalEventDetails(culturalEventId, user.getId());
+//        log.info("culturalEventDetails = {}", culturalEventDetails);
+
+        return culturalEventDetails.getCulturalEventDetail().getTitle();
+    }
+
+
     public Page<CulturalEventListResponseDTO> getCulturalEventList(final List<Category> category, final int offset, final SortType sortType) {
         return culturalEventQueryRepository.getCulturalEventList(category, createPageRequest(offset), sortType);
 
