@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -79,6 +81,33 @@ public class GCSService {
 
 
         return BASE_URL + blob.getName();
+    }
+
+
+    public List<String> uploadImages(final List<MultipartFile> multipartFiles ) {
+
+        final Storage storage;
+        List<String> URL_list = new ArrayList<>();
+
+        try {
+            storage = getStorage();
+            for (MultipartFile multipartFile : multipartFiles) {
+                Blob blob;
+                String uuid = UUID.randomUUID().toString();
+                String fileName = getFileName(multipartFile.getOriginalFilename(), uuid);
+                blob = storage.create(
+                        BlobInfo.newBuilder(bucketName, fileName)
+                                .setContentType(multipartFile.getContentType())
+                                .build(),
+                        multipartFile.getInputStream());
+                URL_list.add(BASE_URL + blob.getName());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return URL_list;
     }
 
     private static String getFileName(final String originalFileName, final String uuid) {
