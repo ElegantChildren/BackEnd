@@ -38,7 +38,7 @@ public class UserService {
     @Transactional
     @EventListener
     public void handleCreatePointHistoryEvent(final CreatePointHistoryEvent createPointHistoryEvent) {
-        log.info("handleCreateCulturalEvent");
+        log.info("handleCreatePointHistoryEvent");
         updateUserPoint(createPointHistoryEvent.getUser(), createPointHistoryEvent.getPointChange().getPoint());
     }
 
@@ -58,7 +58,7 @@ public class UserService {
 
 
     private void updateUserPoint(final User user, final int point) {
-        userRepository.updateUserPoint(point, user.getId());
+        userRepository.updateUserPoint(user.getId(), user.getPoint() + point);
     }
 
 
