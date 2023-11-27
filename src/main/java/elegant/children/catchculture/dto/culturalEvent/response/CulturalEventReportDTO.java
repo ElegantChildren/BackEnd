@@ -13,15 +13,20 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class CulturalEventReportDTO implements Serializable {
-    private Category category;
-    private String reservationLink;
+//    private Category category;
+//    private String reservationLink;
+    @NonNull
     private String eventName;
+    @NonNull
     private String eventLocation;
+    @NonNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+    @NonNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     private boolean isFree;
+    @NonNull
     private String description;
     private String snsAddress;
     private String phoneNumber;

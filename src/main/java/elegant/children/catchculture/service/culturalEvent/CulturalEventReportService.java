@@ -24,8 +24,8 @@ public class CulturalEventReportService {
 
     public String createEventReport(CulturalEventReportDTO culturalEventReportDTO, List<MultipartFile> fileList, User user) throws IOException {
         CulturalEventDetail culturalEventDetail = CulturalEventDetail.builder()
-                .category(culturalEventReportDTO.getCategory())
-                .reservationLink(culturalEventReportDTO.getReservationLink())
+//                .category(culturalEventReportDTO.getCategory())
+//                .reservationLink(culturalEventReportDTO.getReservationLink())
                 .title(culturalEventReportDTO.getEventName())
                 .place(culturalEventReportDTO.getEventLocation())
                 .startDate(culturalEventReportDTO.getStartDate().atStartOfDay())
