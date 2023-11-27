@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,7 +25,7 @@ public class VisitAuth {
 
     @Column(columnDefinition = "TEXT")
     @Convert(converter = StoredFileUrlConverter.class)
-    private String storedFileUrl;
+    private List<String> storedFileUrl;
 
     private Boolean isAuthenticated;
 
@@ -40,5 +41,9 @@ public class VisitAuth {
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void authenticate() {
+        this.isAuthenticated = true;
     }
 }
