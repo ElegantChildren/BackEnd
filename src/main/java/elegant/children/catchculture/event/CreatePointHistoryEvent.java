@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class AuthenticateVisitAuthEvent {
+public class CreatePointHistoryEvent {
 
     private PointChange pointChange;
     private User user;

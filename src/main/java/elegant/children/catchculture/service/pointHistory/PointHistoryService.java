@@ -3,7 +3,7 @@ package elegant.children.catchculture.service.pointHistory;
 import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.pointhistory.PointHistory;
 import elegant.children.catchculture.entity.user.User;
-import elegant.children.catchculture.event.AuthenticateVisitAuthEvent;
+import elegant.children.catchculture.event.CreatePointHistoryEvent;
 import elegant.children.catchculture.event.CreateCulturalEvent;
 import elegant.children.catchculture.repository.pointHistory.PointHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class PointHistoryService {
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleAuthenticateVisitAuthEvent(final AuthenticateVisitAuthEvent authenticateVisitAuthEvent) {
+    public void handleAuthenticateVisitAuthEvent(final CreatePointHistoryEvent authenticateVisitAuthEvent) {
         log.info("Async THREAD NAME : {}", Thread.currentThread().getName());
         log.info("handleCreateReviewEvent");
         savePointHistory(authenticateVisitAuthEvent.getUser(), authenticateVisitAuthEvent.getPointChange());

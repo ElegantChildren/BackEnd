@@ -4,7 +4,7 @@ import elegant.children.catchculture.common.constant.Classification;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
 import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
-import elegant.children.catchculture.event.AuthenticateVisitAuthEvent;
+import elegant.children.catchculture.event.CreatePointHistoryEvent;
 import elegant.children.catchculture.event.CreateCulturalEvent;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventQueryRepository;
 import elegant.children.catchculture.repository.user.UserRepository;
@@ -37,9 +37,9 @@ public class UserService {
 
     @Transactional
     @EventListener
-    public void handleCreateCulturalEvent(final AuthenticateVisitAuthEvent authenticateVisitAuthEvent) {
+    public void handleCreatePointHistoryEvent(final CreatePointHistoryEvent createPointHistoryEvent) {
         log.info("handleCreateCulturalEvent");
-        updateUserPoint(authenticateVisitAuthEvent.getUser(), authenticateVisitAuthEvent.getPointChange().getPoint());
+        updateUserPoint(createPointHistoryEvent.getUser(), createPointHistoryEvent.getPointChange().getPoint());
     }
 
 

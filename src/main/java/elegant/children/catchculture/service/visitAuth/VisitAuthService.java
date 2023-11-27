@@ -5,7 +5,7 @@ import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.dto.admin.response.AdminVisitAuthListResponseDTO;
 import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.visitauth.VisitAuth;
-import elegant.children.catchculture.event.AuthenticateVisitAuthEvent;
+import elegant.children.catchculture.event.CreatePointHistoryEvent;
 import elegant.children.catchculture.repository.visiatAuth.VisitAuthQueryRepository;
 import elegant.children.catchculture.repository.visiatAuth.VisitAuthRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +35,6 @@ public class VisitAuthService {
         final VisitAuth visitAuth = visitAuthRepository.findByIdWithUserAAndCulturalEvent(visitAuthId, userId, culturalEventId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_VISIT_AUTH_ID));
         visitAuth.authenticate();
-        applicationEventPublisher.publishEvent(new AuthenticateVisitAuthEvent(PointChange.VISIT_AUTH, visitAuth.getUser()));
+        applicationEventPublisher.publishEvent(new CreatePointHistoryEvent(PointChange.VISIT_AUTH, visitAuth.getUser()));
     }
 }
