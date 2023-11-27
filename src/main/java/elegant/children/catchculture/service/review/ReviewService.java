@@ -13,11 +13,10 @@ import elegant.children.catchculture.repository.review.ReviewRepository;
 import elegant.children.catchculture.service.GCS.GCSService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,7 +46,7 @@ public class ReviewService {
         return reviewQueryRepository.getReviewRating(culturalEventId);
     }
 
-    public List<ReviewResponseDTO> getReviewList(final int culturalEventId, final User user, final int lastId) {
+    public Slice<ReviewResponseDTO> getReviewList(final int culturalEventId, final User user, final int lastId) {
         return reviewQueryRepository.getReviewList(culturalEventId, user.getId(), lastId);
     }
 
@@ -69,6 +68,10 @@ public class ReviewService {
                 .ifPresent(review -> {
                     throw new CustomException(ErrorCode.ALREADY_REVIEW);
                 });
+
+        if(rating < 1 || rating > 5) {
+            throw new CustomException(ErrorCode.INVALID_REVIEW_RATING);
+        }
 
         final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId).get();
         final Review review = Review.builder()
