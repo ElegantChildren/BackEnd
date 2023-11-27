@@ -5,7 +5,7 @@ import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.review.Review;
 import elegant.children.catchculture.entity.user.User;
-import elegant.children.catchculture.event.review.CreateReviewEvent;
+import elegant.children.catchculture.event.CreatePointHistoryEvent;
 import elegant.children.catchculture.repository.review.ReviewRepository;
 import elegant.children.catchculture.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,11 +43,7 @@ public class ReviewTransactionService {
     }
 
     public void createReview(final Review review, final User user) {
-
         reviewRepository.save(review);
-        final PointChange pointChange = PointChange.REVIEW;
-        userRepository.updateUserPoint(user.getId(), pointChange.getPoint());
-        applicationEventPublisher.publishEvent(new CreateReviewEvent(pointChange, user));
-
+        applicationEventPublisher.publishEvent(new CreatePointHistoryEvent(PointChange.REVIEW, user));
     }
 }
