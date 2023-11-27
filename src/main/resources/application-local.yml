@@ -54,11 +54,11 @@ spring:
         bucket: elegant-bucket
 
 server:
-  ssl:
-    key-store: classpath:keystore.p12
-    key-store-password: 1q2w3e4r
-    key-store-type: PKCS12
-    enabled: true
-    port: 8080
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-password: 1q2w3e4r
+#    key-store-type: PKCS12
+#    enabled: true
+#    port: 8080
   tomcat:
     max-http-form-post-size: 128MB
