@@ -76,7 +76,7 @@ public class ReviewQueryRepository {
                         reviewIdLt(lastId)
 
                 )
-                .orderBy(review.id.desc())
+                .orderBy(review.id.asc())
                 .limit(10)
                 .fetch();
 
