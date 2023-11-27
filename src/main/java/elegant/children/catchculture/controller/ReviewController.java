@@ -10,13 +10,13 @@ import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.service.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 @RequestMapping("/review")
 @RequiredArgsConstructor
@@ -39,9 +39,9 @@ public class ReviewController {
     }
 
     @GetMapping("/{culturalEventId}/list")
-    public ResponseEntity<List<ReviewResponseDTO>> getReviewList(final @AuthenticationPrincipal User user,
-                                                                 final @PathVariable  int culturalEventId,
-                                                                 final @RequestParam(required = false, defaultValue = "0") int lastId) {
+    public ResponseEntity<Slice<ReviewResponseDTO>> getReviewList(final @AuthenticationPrincipal User user,
+                                                                  final @PathVariable  int culturalEventId,
+                                                                  final @RequestParam(required = false, defaultValue = "0") int lastId) {
         return ResponseEntity.ok(reviewService.getReviewList(culturalEventId, user, lastId));
     }
 
