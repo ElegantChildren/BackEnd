@@ -25,6 +25,7 @@ public class ReviewResponseDTO {
 
     public static ReviewResponseDTO of(final Review review, final User user) {
         return ReviewResponseDTO.builder()
+                .id(user.getId())
                 .nickname(user.getNickname())
                 .description(review.getDescription())
                 .storedFileUrl(review.getStoredFileURL())
