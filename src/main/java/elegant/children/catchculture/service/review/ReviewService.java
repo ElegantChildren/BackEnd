@@ -62,16 +62,16 @@ public class ReviewService {
     public void createReview(final int culturalEventId, final User user, final MultipartFile multipartFile,
                              final String description, final int rating) {
 
+        if(rating < 1 || rating > 5) {
+            throw new CustomException(ErrorCode.INVALID_REVIEW_RATING);
+        }
 
-        final String storedImageUrl = gcsService.uploadImage(multipartFile);
         reviewRepository.findByCulturalEventIdAndUserId(culturalEventId, user.getId())
                 .ifPresent(review -> {
                     throw new CustomException(ErrorCode.ALREADY_REVIEW);
                 });
 
-        if(rating < 1 || rating > 5) {
-            throw new CustomException(ErrorCode.INVALID_REVIEW_RATING);
-        }
+        final String storedImageUrl = gcsService.uploadImage(multipartFile);
 
         final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId).get();
         final Review review = Review.builder()
