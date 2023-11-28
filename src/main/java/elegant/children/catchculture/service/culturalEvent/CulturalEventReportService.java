@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +24,10 @@ public class CulturalEventReportService {
 
 
     public String createEventReport(CulturalEventReportDTO culturalEventReportDTO, List<MultipartFile> fileList, User user) throws IOException {
+        List<String> storedFileUrl = new ArrayList<>();
+        if (fileList != null && !fileList.isEmpty()) {
+            storedFileUrl = gcsService.uploadImages(fileList);
+        }
         CulturalEventDetail culturalEventDetail = CulturalEventDetail.builder()
 //                .category(culturalEventReportDTO.getCategory())
 //                .reservationLink(culturalEventReportDTO.getReservationLink())
@@ -35,7 +40,7 @@ public class CulturalEventReportService {
                 .sns(culturalEventReportDTO.getSnsAddress())
                 .telephone(culturalEventReportDTO.getPhoneNumber())
                 .wayToCome(culturalEventReportDTO.getWayToCome())
-                .storedFileUrl(gcsService.uploadImages(fileList))
+                .storedFileUrl(storedFileUrl)
                 .build();
         EventReport eventReport = EventReport.builder()
                 .culturalEventDetail(culturalEventDetail)

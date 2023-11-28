@@ -1,11 +1,9 @@
 package elegant.children.catchculture.dto.culturalEvent.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import elegant.children.catchculture.entity.culturalevent.Category;
 import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @ToString
@@ -13,8 +11,6 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class CulturalEventReportDTO implements Serializable {
-//    private Category category;
-//    private String reservationLink;
     @NonNull
     private String eventName;
     @NonNull

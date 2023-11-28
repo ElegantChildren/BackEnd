@@ -23,7 +23,7 @@ public class CulturalEventReportController {
     @PostMapping(value = "/user/report", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> reportEvent(final @AuthenticationPrincipal User user,
                                               final @RequestPart CulturalEventReportDTO culturalEventReportDTO,
-                                              final @RequestPart("fileList") List<MultipartFile> fileList
+                                              final @RequestPart(name = "fileList", required = false) List<MultipartFile> fileList
                                               ) throws IOException {
 
         response = culturalEventReportService.createEventReport(culturalEventReportDTO,fileList,user);
