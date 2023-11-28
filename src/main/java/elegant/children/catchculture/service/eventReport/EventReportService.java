@@ -2,11 +2,11 @@ package elegant.children.catchculture.service.eventReport;
 
 import elegant.children.catchculture.common.exception.CustomException;
 import elegant.children.catchculture.common.exception.ErrorCode;
-import elegant.children.catchculture.dto.admin.response.AdminEventReportResponseDTO;
+import elegant.children.catchculture.dto.admin.response.EventReportResponseDTO;
+import elegant.children.catchculture.dto.admin.response.EventReportResponseListDTO;
 import elegant.children.catchculture.entity.eventreport.EventReport;
 import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.event.CreateCulturalEvent;
-import elegant.children.catchculture.repository.culturalEvent.CulturalEventRepository;
 import elegant.children.catchculture.repository.eventReport.EventReportQueryRepository;
 import elegant.children.catchculture.repository.eventReport.EventReportRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +26,14 @@ public class EventReportService {
     private final EventReportRepository eventReportRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public Slice<AdminEventReportResponseDTO> getEventReportList(final int lastId) {
-
+    public Slice<EventReportResponseListDTO> getEventReportList(final int lastId) {
         return eventReportQueryRepository.getEventReportList(lastId);
+    }
+
+    public EventReportResponseDTO getEventReport(final int eventReportId) {
+
+        return eventReportQueryRepository.getEventReport(eventReportId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_EVENT_REPORT_ID));
 
     }
 

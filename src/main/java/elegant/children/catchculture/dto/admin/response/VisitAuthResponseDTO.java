@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 
-public class AdminVisitAuthListResponseDTO {
+public class VisitAuthResponseDTO {
 
     private int id;
     private int userId;

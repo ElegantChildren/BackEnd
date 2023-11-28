@@ -1,12 +1,16 @@
 package elegant.children.catchculture.dto.admin.response;
 
 import elegant.children.catchculture.entity.culturalevent.CulturalEventDetail;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class AdminEventReportResponseDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class EventReportResponseDTO {
 
     private int id;
     private int userId;

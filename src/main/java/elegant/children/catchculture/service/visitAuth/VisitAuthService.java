@@ -2,7 +2,8 @@ package elegant.children.catchculture.service.visitAuth;
 
 import elegant.children.catchculture.common.exception.CustomException;
 import elegant.children.catchculture.common.exception.ErrorCode;
-import elegant.children.catchculture.dto.admin.response.AdminVisitAuthListResponseDTO;
+import elegant.children.catchculture.dto.admin.response.VisitAuthResponseDTO;
+import elegant.children.catchculture.dto.admin.response.VisitAuthResponseListDTO;
 import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.visitauth.VisitAuth;
 import elegant.children.catchculture.event.CreatePointHistoryEvent;
@@ -25,10 +26,15 @@ public class VisitAuthService {
     private final VisitAuthRepository visitAuthRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public Slice<AdminVisitAuthListResponseDTO> getNotAuthenticatedVisitAuthList(final int lastId) {
+    public Slice<VisitAuthResponseListDTO> getNotAuthenticatedVisitAuthList(final int lastId) {
         return visitAuthQueryRepository.getNotAuthenticatedVisitAuthList(lastId);
     }
 
+
+    public VisitAuthResponseDTO getVisitAuth(final int visitAuthId) {
+        return visitAuthQueryRepository.findById(visitAuthId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_VISIT_AUTH_ID));
+    }
 
     @Transactional
     public void authenticateVisitAuth(final int visitAuthId, final int userId, final int culturalEventId) {

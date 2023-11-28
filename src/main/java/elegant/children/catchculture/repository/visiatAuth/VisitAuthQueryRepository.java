@@ -2,7 +2,8 @@ package elegant.children.catchculture.repository.visiatAuth;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import elegant.children.catchculture.dto.admin.response.AdminVisitAuthListResponseDTO;
+import elegant.children.catchculture.dto.admin.response.VisitAuthResponseDTO;
+import elegant.children.catchculture.dto.admin.response.VisitAuthResponseListDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static elegant.children.catchculture.entity.culturalevent.QCulturalEvent.*;
 import static elegant.children.catchculture.entity.user.QUser.*;
@@ -25,8 +27,8 @@ public class VisitAuthQueryRepository {
 
     private final int PAGE_SIZE = 10;
 
-    public Slice<AdminVisitAuthListResponseDTO> getNotAuthenticatedVisitAuthList(final int lastId) {
-        List<AdminVisitAuthListResponseDTO> content = queryFactory.select(Projections.fields(AdminVisitAuthListResponseDTO.class,
+    public Optional<VisitAuthResponseDTO> findById(final int visitAuthId) {
+        VisitAuthResponseDTO visitAuthResponseDTO = queryFactory.select(Projections.fields(VisitAuthResponseDTO.class,
                         visitAuth.id,
                         user.id.as("userId"),
                         user.nickname,
@@ -34,6 +36,27 @@ public class VisitAuthQueryRepository {
                         culturalEvent.culturalEventDetail.title,
                         culturalEvent.culturalEventDetail.description,
                         visitAuth.storedFileUrl
+                ))
+                .from(visitAuth)
+                .innerJoin(culturalEvent)
+                .on(visitAuth.culturalEvent.id.eq(culturalEvent.id))
+                .innerJoin(user)
+                .on(visitAuth.user.id.eq(user.id))
+                .where(
+                        visitAuth.isAuthenticated.eq(false),
+                        visitAuth.id.eq(visitAuthId)
+                )
+                .fetchOne();
+
+        return Optional.ofNullable(visitAuthResponseDTO);
+    }
+
+    public Slice<VisitAuthResponseListDTO> getNotAuthenticatedVisitAuthList(final int lastId) {
+        List<VisitAuthResponseListDTO> content = queryFactory.select(Projections.fields(VisitAuthResponseListDTO.class,
+                        visitAuth.id,
+                        user.nickname,
+                        culturalEvent.culturalEventDetail.title,
+                        visitAuth.createdAt
                 ))
                 .from(visitAuth)
                 .innerJoin(culturalEvent)

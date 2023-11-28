@@ -2,6 +2,7 @@ package elegant.children.catchculture.controller;
 
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventDetailsResponseDTO;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
+import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventMapResponseDTO;
 import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.common.constant.SortType;
@@ -33,6 +34,7 @@ public class CulturalEventController {
     public ResponseEntity<Page<CulturalEventListResponseDTO>> getCulturalEventList(final @RequestParam(required = false) List<Category> category,
                                                                                    final @RequestParam(required = false, defaultValue = "0") int offset,
                                                                                    final @RequestParam(required = false, defaultValue = "RECENT") SortType sortType) {
+
         return ResponseEntity.ok(culturalEventService.getCulturalEventList(category, offset, sortType));
     }
 
@@ -82,6 +84,12 @@ public class CulturalEventController {
     public ResponseEntity<Void> deleteStarCulturalEvent(final @PathVariable int culturalEventId, final @AuthenticationPrincipal User user) {
         interactionService.deleteStarCulturalEvent(culturalEventId, user);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/map")
+    public ResponseEntity<List<CulturalEventMapResponseDTO>> getCulturalEventMapList() {
+
+        return ResponseEntity.ok(culturalEventService.getCulturalEventMapList());
     }
 
 }
