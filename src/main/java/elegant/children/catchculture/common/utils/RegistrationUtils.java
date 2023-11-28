@@ -102,6 +102,7 @@ public class RegistrationUtils {
     public static CulturalEvent createCulturalEvent(final HashMap<String, Object> event) {
         final CulturalEventDetail culturalEventDetail = CulturalEventDetail.builder()
                 .storedFileUrl(getMainImg(event))
+                .geography(CulturalEventDetail.createGeography(getLat(event), getLot(event)))
                 .startDate(getStartDate(event))
                 .endDate(getEndDate(event))
                 .title(getTitle(event))
@@ -112,7 +113,6 @@ public class RegistrationUtils {
                 .build();
 
         return CulturalEvent.builder()
-                .geography(CulturalEvent.createGeography(getLot(event), getLat(event)))
                 .culturalEventDetail(culturalEventDetail)
                 .build();
     }

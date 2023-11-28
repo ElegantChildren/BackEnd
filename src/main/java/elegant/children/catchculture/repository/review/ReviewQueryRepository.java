@@ -8,6 +8,9 @@ import elegant.children.catchculture.dto.review.response.ReviewRatingResponseDTO
 import elegant.children.catchculture.dto.review.response.ReviewResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,6 +24,8 @@ import static elegant.children.catchculture.entity.user.QUser.*;
 public class ReviewQueryRepository {
 
     private final JPAQueryFactory queryFactory;
+
+    private final int PAGE_SIZE = 10;
 
 
     public ReviewRatingResponseDTO getReviewRating(final int culturalEventId) {
@@ -58,16 +63,16 @@ public class ReviewQueryRepository {
         return reviewRatingResponseDTO;
     }
 
-    public List<ReviewResponseDTO> getReviewList(final int culturalEventId, final int userId, final int lastId) {
+    public Slice<ReviewResponseDTO> getReviewList(final int culturalEventId, final int userId, final int lastId) {
 
-        return queryFactory.select(Projections.fields(ReviewResponseDTO.class,
-                review.id,
-                review.rating,
-                review.description,
-                review.createdAt,
-                review.user.nickname,
-                review.storedFileURL.as("userProfileUrl")
-        ))
+        List<ReviewResponseDTO> content = queryFactory.select(Projections.fields(ReviewResponseDTO.class,
+                        review.id,
+                        review.rating,
+                        review.description,
+                        review.createdAt,
+                        review.user.nickname,
+                        review.storedFileURL.as("userProfileUrl")
+                ))
                 .from(review)
                 .innerJoin(user).on(review.user.id.eq(user.id))
                 .where(
@@ -77,8 +82,18 @@ public class ReviewQueryRepository {
 
                 )
                 .orderBy(review.id.asc())
-                .limit(10)
+                .limit(PAGE_SIZE+1)
                 .fetch();
+
+        boolean hasNext = false;
+
+        if(content.size() == PAGE_SIZE + 1) {
+            content.remove(PAGE_SIZE);
+            hasNext = true;
+        }
+        return new SliceImpl<>(content, PageRequest.ofSize(PAGE_SIZE), hasNext);
+
+
 
     }
 
