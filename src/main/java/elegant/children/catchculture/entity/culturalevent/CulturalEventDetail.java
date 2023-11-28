@@ -68,10 +68,7 @@ public class CulturalEventDetail {
         return point;
     }
 
-    public Double getLatitude() {
-
-        return this.geography == null ? null : this.geography.getY();
-    }
+    public Double getLatitude() { return this.geography == null ? null : this.geography.getX();}
 
     public Double getLongitude() {
         return this.geography == null ? null : this.geography.getY();

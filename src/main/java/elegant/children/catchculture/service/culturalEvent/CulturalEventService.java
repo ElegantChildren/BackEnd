@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,8 +55,6 @@ public class CulturalEventService {
     public String getCulturalEventTitle(final int culturalEventId, final User user) {
 
         final CulturalEventDetailsResponseDTO culturalEventDetails = culturalEventQueryRepository.getCulturalEventDetails(culturalEventId, user.getId());
-//        log.info("culturalEventDetails = {}", culturalEventDetails);
-
         return culturalEventDetails.getCulturalEventDetail().getTitle();
     }
 
@@ -79,16 +78,16 @@ public class CulturalEventService {
         culturalEventRepository.save(culturalEvent);
     }
 
-
+    public List<CulturalEventMapResponseDTO> getCulturalEventMapList() {
+        final List<CulturalEvent> list = culturalEventRepository.findAllByEndDateBefore(LocalDateTime.now());
+        return list.stream().map(CulturalEventMapResponseDTO::new).collect(Collectors.toList());
+    }
 
     public static PageRequest createPageRequest(int offset) {
         return PageRequest.of(offset, 8);
     }
 
-    public List<CulturalEventMapResponseDTO> getCulturalEventMapList() {
-        final List<CulturalEvent> list = culturalEventRepository.findAll();
-        return list.stream().map(CulturalEventMapResponseDTO::new).collect(Collectors.toList());
-    }
+
 
 
 }
