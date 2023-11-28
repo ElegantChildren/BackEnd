@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,9 @@ public interface CulturalEventRepository extends JpaRepository<CulturalEvent, In
 
 
     Optional<CulturalEvent> findById(final int culturalEventId);
+
+    @Query("select * from CulturalEvent ce where ce.culturalEventDetail.endDate <= :now")
+    List<CulturalEvent> findAllByEndDateBefore(final LocalDateTime now);
 
     @Modifying(clearAutomatically = true)
     @Query("update CulturalEvent ce set ce.viewCount = ce.viewCount + 1 where ce.id = :culturalEventId")
