@@ -45,7 +45,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReviewList(culturalEventId, user, lastId));
     }
 
-    @PostMapping(value = "/{culturalEventId}/my-review", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{culturalEventId}/my-review", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @AuthenticatedVisitAuth
     public void createReview(final @PathVariable int culturalEventId, final @AuthenticationPrincipal User user,
                              final @RequestPart("file") MultipartFile multipartFile, final @RequestPart("reviewDetail") CreateReviewRequestDTO createReviewRequestDTO) {
