@@ -45,8 +45,8 @@ public class UserService {
 
 
     @Transactional
-    public void updateUserNickname(final User user) {
-        userRepository.updateNickname(user.getNickname(), user.getId());
+    public void updateUserNickname(final User user, String nickName) {
+        userRepository.updateNickname(nickName, user.getId());
     }
 
     public Page<CulturalEventListResponseDTO> getCulturalEventListWithUser(final User user,

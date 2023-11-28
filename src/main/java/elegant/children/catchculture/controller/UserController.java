@@ -36,8 +36,8 @@ public class UserController {
     }
 
     @PatchMapping("/profile/nickname")
-    public void updateUserProfile(final @AuthenticationPrincipal User user) {
-        userService.updateUserNickname(user);
+    public void updateUserProfile(final @RequestParam User user, @RequestParam String nickName) {
+        userService.updateUserNickname(user, nickName);
     }
 
     @GetMapping("/cultural-event")
