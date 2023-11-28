@@ -17,7 +17,7 @@ public interface CulturalEventRepository extends JpaRepository<CulturalEvent, In
 
     Optional<CulturalEvent> findById(final int culturalEventId);
 
-    @Query("select * from CulturalEvent ce where ce.culturalEventDetail.endDate <= :now")
+    @Query("select ce from CulturalEvent ce where ce.culturalEventDetail.endDate <= :now")
     List<CulturalEvent> findAllByEndDateBefore(final LocalDateTime now);
 
     @Modifying(clearAutomatically = true)
