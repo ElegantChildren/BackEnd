@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @PatchMapping("/profile/nickname")
-    public void updateUserProfile(final @RequestParam User user, @RequestParam String nickName) {
+    public void updateUserProfile(final @AuthenticationPrincipal User user, @RequestParam String nickName) {
         userService.updateUserNickname(user, nickName);
     }
 
