@@ -64,8 +64,8 @@ public class CulturalEventService {
 
     }
 
-    public Page<CulturalEventListResponseDTO> searchCulturalEventListWithCondition(final String keyword, final int offset, final SortType sortType) {
-        return culturalEventQueryRepository.getCulturalEventListWithCondition(keyword, createPageRequest(offset), sortType);
+    public Page<CulturalEventListResponseDTO> searchCulturalEventListWithCondition(final String keyword, final List<Category> categoryList, final int offset, final SortType sortType) {
+        return culturalEventQueryRepository.getCulturalEventListWithCondition(keyword, categoryList, createPageRequest(offset), sortType);
     }
 
     @EventListener
