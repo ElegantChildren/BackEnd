@@ -1,6 +1,7 @@
 package elegant.children.catchculture.repository.eventReport;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import elegant.children.catchculture.dto.admin.response.EventReportResponseDTO;
 import elegant.children.catchculture.dto.admin.response.EventReportResponseListDTO;
@@ -35,7 +36,7 @@ public class EventReportQueryRepository {
                 .innerJoin(user)
                 .on(eventReport.user.id.eq(user.id))
                 .where(
-                        eventReport.id.lt(lastId)
+                        eventReportIdLt(lastId)
                 ).limit(PAGE_SIZE + 1)
                 .fetch();
 
@@ -47,6 +48,10 @@ public class EventReportQueryRepository {
 
         return new SliceImpl<>(content, PageRequest.ofSize(PAGE_SIZE), hasNext);
 
+    }
+
+    private static BooleanExpression eventReportIdLt(int lastId) {
+        return lastId == 0 ? null : eventReport.id.lt(lastId);
     }
 
     public Optional<EventReportResponseDTO> getEventReport(final int eventReportId) {
