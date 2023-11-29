@@ -1,6 +1,7 @@
 package elegant.children.catchculture.repository.visiatAuth;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import elegant.children.catchculture.dto.admin.response.VisitAuthResponseDTO;
 import elegant.children.catchculture.dto.admin.response.VisitAuthResponseListDTO;
@@ -65,7 +66,7 @@ public class VisitAuthQueryRepository {
                 .on(visitAuth.user.id.eq(user.id))
                 .where(
                         visitAuth.isAuthenticated.eq(false),
-                        visitAuth.id.loe(lastId)
+                        visitAuthIdLt(lastId)
                 )
                 .orderBy(visitAuth.id.desc())
                 .limit(PAGE_SIZE + 1)
@@ -79,5 +80,9 @@ public class VisitAuthQueryRepository {
         }
         return new SliceImpl<>(content, PageRequest.ofSize(PAGE_SIZE), hasNext);
 
+    }
+
+    private static BooleanExpression visitAuthIdLt(int lastId) {
+        return lastId == 0 ? null : visitAuth.id.lt(lastId);
     }
 }
