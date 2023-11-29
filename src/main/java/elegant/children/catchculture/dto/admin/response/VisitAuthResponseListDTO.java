@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class VisitAuthResponseListDTO {
 
     private int id;
-    private int nickname;
+    private String nickname;
     private String title;
     private LocalDateTime createdAt;
 }
