@@ -152,9 +152,12 @@ public class CulturalEventQueryRepository {
 
 
 
-    public Page<CulturalEventListResponseDTO> getCulturalEventListWithCondition(final String keyword, final Pageable pageable, final SortType sortType) {
+    public Page<CulturalEventListResponseDTO> getCulturalEventListWithCondition(final String keyword, final List<Category> categoryList,
+                                                                                final Pageable pageable, final SortType sortType) {
 
         final LocalDateTime now = LocalDateTime.now();
+
+
 
         final List<CulturalEventListResponseDTO> content = queryFactory.select(Projections.constructor(
                         CulturalEventListResponseDTO.class,
@@ -169,7 +172,8 @@ public class CulturalEventQueryRepository {
                 .from(culturalEvent)
                 .where(
                         notFinishedCulturalEvent(now),
-                        titleContains(keyword)
+                        titleContains(keyword),
+                        categoryIn(categoryList)
                 ).orderBy(
                         getSortType(sortType)
                 )

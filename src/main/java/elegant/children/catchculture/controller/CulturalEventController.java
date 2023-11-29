@@ -40,9 +40,10 @@ public class CulturalEventController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<CulturalEventListResponseDTO>> searchCulturalEventList(final @RequestParam String keyword,
+                                                                                      final @RequestParam(required = false, name = "category") List<Category> categoryList,
                                                                                       final @RequestParam(required = false, defaultValue = "0") int offset,
                                                                                       final @RequestParam(required = false, defaultValue = "RECENT") SortType sortType) {
-        return ResponseEntity.ok(culturalEventService.searchCulturalEventListWithCondition(keyword, offset, sortType));
+        return ResponseEntity.ok(culturalEventService.searchCulturalEventListWithCondition(keyword, categoryList, offset, sortType));
     }
 
     @GetMapping("/{culturalEventId}")
