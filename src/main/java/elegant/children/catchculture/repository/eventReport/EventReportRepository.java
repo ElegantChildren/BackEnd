@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface EventReportRepository extends JpaRepository<EventReport, Integer> {
 
-    @Query("select er from EventReport er join fetch User as u where er.id = :id and u.id = :userId")
+//    @Query("select er from EventReport er join fetch User as u where er.id = :id and u.id = :userId")
+    @Query("select er from EventReport er join fetch er.user as u where er.id = :id and u.id = :userId")
     Optional<EventReport> findByUserId(final int id, final int userId);
 }
