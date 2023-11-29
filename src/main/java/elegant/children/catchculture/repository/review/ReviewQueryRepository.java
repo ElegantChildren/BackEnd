@@ -71,7 +71,7 @@ public class ReviewQueryRepository {
                         review.description,
                         review.createdAt,
                         review.user.nickname,
-                        review.storedFileURL.as("userProfileUrl")
+                        review.storedFileURL.as("storedFileUrl")
                 ))
                 .from(review)
                 .innerJoin(user).on(review.user.id.eq(user.id))
