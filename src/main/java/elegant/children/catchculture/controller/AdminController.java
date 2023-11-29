@@ -23,7 +23,7 @@ public class AdminController {
 
     @AdminUser
     @GetMapping("/visit-auth/list")
-    public ResponseEntity<Slice<VisitAuthResponseListDTO>> getNotAuthenticatedVisitAuthList(final int lastId) {
+    public ResponseEntity<Slice<VisitAuthResponseListDTO>> getNotAuthenticatedVisitAuthList(final @RequestParam(required = false, defaultValue = "0") int lastId) {
         return ResponseEntity.ok(visitAuthService.getNotAuthenticatedVisitAuthList(lastId));
     }
 
@@ -42,7 +42,7 @@ public class AdminController {
 
     @AdminUser
     @GetMapping("/event-report/list")
-    public ResponseEntity<Slice<EventReportResponseListDTO>> getEventReportList(final int lastId) {
+    public ResponseEntity<Slice<EventReportResponseListDTO>> getEventReportList(final @RequestParam(required = false, defaultValue = "0")int lastId) {
         return ResponseEntity.ok(eventReportService.getEventReportList(lastId));
     }
 
