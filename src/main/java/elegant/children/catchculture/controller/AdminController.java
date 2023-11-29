@@ -42,7 +42,7 @@ public class AdminController {
 
     @AdminUser
     @GetMapping("/event-report/list")
-    public ResponseEntity<Slice<EventReportResponseListDTO>> getEventReportList(final int lastId) {
+    public ResponseEntity<Slice<EventReportResponseListDTO>> getEventReportList(final @RequestParam int lastId) {
         return ResponseEntity.ok(eventReportService.getEventReportList(lastId));
     }
 
