@@ -111,9 +111,7 @@ public class GCSService {
     }
 
     private static String getFileName(final String originalFileName, final String uuid) {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(uuid).append("_").append(originalFileName);
-        return sb.toString();
+        return uuid + "_" + originalFileName;
     }
 
 
