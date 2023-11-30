@@ -71,7 +71,7 @@ public class CulturalEventService {
     @EventListener
     @Transactional
     public void handleCreateCulturalEvent(final CreateCulturalEvent createCulturalEvent) {
-        log.info("createCulturalEventLikeCount");
+        log.info("createCulturalEvent");
         final CulturalEvent culturalEvent = CulturalEvent.builder()
                 .culturalEventDetail(createCulturalEvent.getCulturalEventDetail())
                 .build();
