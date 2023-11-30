@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static elegant.children.catchculture.common.constant.PageSize.PAGE_SIZE;
 import static elegant.children.catchculture.entity.review.QReview.*;
 import static elegant.children.catchculture.entity.user.QUser.*;
 
@@ -24,8 +25,6 @@ import static elegant.children.catchculture.entity.user.QUser.*;
 public class ReviewQueryRepository {
 
     private final JPAQueryFactory queryFactory;
-
-    private final int PAGE_SIZE = 10;
 
 
     public ReviewRatingResponseDTO getReviewRating(final int culturalEventId) {
@@ -42,21 +41,11 @@ public class ReviewQueryRepository {
             int rating = tuple.get(0, Integer.class);
             long count = tuple.get(1, Long.class);
             switch (rating) {
-                case 5:
-                    reviewRatingResponseDTO.setCountFive(count);
-                    break;
-                case 4:
-                    reviewRatingResponseDTO.setCountFour(count);
-                    break;
-                case 3:
-                    reviewRatingResponseDTO.setCountThree(count);
-                    break;
-                case 2:
-                    reviewRatingResponseDTO.setCountTwo(count);
-                    break;
-                case 1:
-                    reviewRatingResponseDTO.setCountOne(count);
-                    break;
+                case 5 -> reviewRatingResponseDTO.setCountFive(count);
+                case 4 -> reviewRatingResponseDTO.setCountFour(count);
+                case 3 -> reviewRatingResponseDTO.setCountThree(count);
+                case 2 -> reviewRatingResponseDTO.setCountTwo(count);
+                case 1 -> reviewRatingResponseDTO.setCountOne(count);
             }
         }
         reviewRatingResponseDTO.setAvgRating();
@@ -64,6 +53,7 @@ public class ReviewQueryRepository {
     }
 
     public Slice<ReviewResponseDTO> getReviewList(final int culturalEventId, final int userId, final int lastId) {
+
 
         List<ReviewResponseDTO> content = queryFactory.select(Projections.fields(ReviewResponseDTO.class,
                         review.id,
@@ -82,7 +72,7 @@ public class ReviewQueryRepository {
 
                 )
                 .orderBy(review.id.desc())
-                .limit(PAGE_SIZE+1)
+                .limit(PAGE_SIZE +1)
                 .fetch();
 
         boolean hasNext = false;

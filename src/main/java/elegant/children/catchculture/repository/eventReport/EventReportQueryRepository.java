@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static elegant.children.catchculture.common.constant.PageSize.*;
 import static elegant.children.catchculture.entity.eventreport.QEventReport.*;
 import static elegant.children.catchculture.entity.user.QUser.*;
 
@@ -22,7 +23,6 @@ import static elegant.children.catchculture.entity.user.QUser.*;
 public class EventReportQueryRepository {
 
     private final JPAQueryFactory queryFactory;
-    private final int PAGE_SIZE = 10;
 
     public Slice<EventReportResponseListDTO> getEventReportList(final int lastId) {
 

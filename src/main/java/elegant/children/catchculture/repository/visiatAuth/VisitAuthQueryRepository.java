@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static elegant.children.catchculture.common.constant.PageSize.*;
 import static elegant.children.catchculture.entity.culturalevent.QCulturalEvent.*;
 import static elegant.children.catchculture.entity.user.QUser.*;
 import static elegant.children.catchculture.entity.visitauth.QVisitAuth.*;
@@ -25,8 +26,6 @@ import static elegant.children.catchculture.entity.visitauth.QVisitAuth.*;
 public class VisitAuthQueryRepository {
 
     private final JPAQueryFactory queryFactory;
-
-    private final int PAGE_SIZE = 10;
 
     public Optional<VisitAuthResponseDTO> findById(final int visitAuthId) {
         VisitAuthResponseDTO visitAuthResponseDTO = queryFactory.select(Projections.fields(VisitAuthResponseDTO.class,
