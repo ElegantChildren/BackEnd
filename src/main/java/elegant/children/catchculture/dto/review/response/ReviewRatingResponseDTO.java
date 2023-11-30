@@ -24,7 +24,7 @@ public class ReviewRatingResponseDTO {
         this.countTwo = countTwo;
         this.countOne = countOne;
 
-        this.avgRating = (countFive * 5 + countFour * 4 + countThree * 3 + countTwo * 2 + countOne) / (countFive + countFour + countThree + countTwo + countOne);
+        this.avgRating = (double) (countFive * 5 + countFour * 4 + countThree * 3 + countTwo * 2 + countOne) / (countFive + countFour + countThree + countTwo + countOne);
     }
 
     public void setAvgRating() {
