@@ -1,5 +1,6 @@
 package elegant.children.catchculture.dto.culturalEvent.response;
 
+import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ public class CulturalEventMapResponseDTO {
     private String title;
     private String place;
     private String storedFileUrl;
+    private Category category;
     private Double latitude;
     private Double longitude;
     private int likeCount;
@@ -29,6 +31,7 @@ public class CulturalEventMapResponseDTO {
         this.storedFileUrl = culturalEvent.getCulturalEventDetail().getStoredFileUrl().get(0);
         this.latitude = culturalEvent.getCulturalEventDetail().getLatitude();
         this.longitude = culturalEvent.getCulturalEventDetail().getLongitude();
+        this.category = culturalEvent.getCulturalEventDetail().getCategory();
         this.likeCount = culturalEvent.getLikeCount();
         this.viewCount = culturalEvent.getViewCount();
     }
