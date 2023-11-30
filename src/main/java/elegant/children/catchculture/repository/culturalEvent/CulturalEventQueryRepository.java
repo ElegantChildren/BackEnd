@@ -309,7 +309,7 @@ public class CulturalEventQueryRepository {
     }
 
     private BooleanExpression notFinishedCulturalEvent(final LocalDateTime now) {
-        return culturalEvent.culturalEventDetail.endDate.after(now);
+        return culturalEvent.culturalEventDetail.endDate.goe(now);
     }
 
 
