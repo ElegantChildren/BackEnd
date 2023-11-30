@@ -38,6 +38,7 @@ public class EventReportQueryRepository {
                 .where(
                         eventReportIdLt(lastId)
                 ).limit(PAGE_SIZE + 1)
+                .orderBy(eventReport.id.desc())
                 .fetch();
 
         boolean hasNext = false;
