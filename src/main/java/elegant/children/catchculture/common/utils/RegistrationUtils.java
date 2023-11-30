@@ -83,12 +83,12 @@ public class RegistrationUtils {
 
     public static Double getLot(final HashMap<String, Object> event) {
         final String lot = (String) event.get(LOT);
-        return lot.isEmpty() ? -200D : Double.valueOf(lot);
+        return lot.isEmpty() ? -200D : Double.parseDouble(lot);
     }
 
     public static Double getLat(final HashMap<String, Object> event) {
         final String lat = (String) event.get(LAT);
-        return lat.isEmpty() ? -200D : Double.valueOf(lat);
+        return lat.isEmpty() ? -200D : Double.parseDouble(lat);
     }
 
     public static List<String> getMainImg(final HashMap<String, Object> event) {
