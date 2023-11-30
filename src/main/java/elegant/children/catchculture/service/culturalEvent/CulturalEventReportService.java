@@ -29,7 +29,7 @@ public class CulturalEventReportService {
             storedFileUrl = gcsService.uploadImages(fileList);
         }
         CulturalEventDetail culturalEventDetail = CulturalEventDetail.builder()
-//                .category(culturalEventReportDTO.getCategory())
+                .category(culturalEventReportDTO.getCategory())
 //                .reservationLink(culturalEventReportDTO.getReservationLink())
                 .title(culturalEventReportDTO.getEventName())
                 .place(culturalEventReportDTO.getEventLocation())
