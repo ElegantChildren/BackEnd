@@ -21,7 +21,7 @@ public class CulturalEventReportDTO implements Serializable {
     @NonNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
-    private boolean isFree;
+    private Boolean isFree;
     @NonNull
     private String description;
     private String snsAddress;

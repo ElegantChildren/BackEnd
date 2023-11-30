@@ -35,7 +35,7 @@ public class CulturalEventReportService {
                 .place(culturalEventReportDTO.getEventLocation())
                 .startDate(culturalEventReportDTO.getStartDate().atStartOfDay())
                 .endDate(culturalEventReportDTO.getEndDate().atStartOfDay())
-                .isFree(culturalEventReportDTO.isFree())
+                .isFree(culturalEventReportDTO.getIsFree())
                 .description(culturalEventReportDTO.getDescription())
                 .sns(culturalEventReportDTO.getSnsAddress())
                 .telephone(culturalEventReportDTO.getPhoneNumber())
