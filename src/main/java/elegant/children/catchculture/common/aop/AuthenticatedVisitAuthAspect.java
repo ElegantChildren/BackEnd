@@ -20,7 +20,7 @@ public class AuthenticatedVisitAuthAspect {
     private final CulturalEventQueryRepository culturalEventQueryRepository;
     private final VisitAuthRepository visitAuthRepository;
 
-    @Before("@annotation(elegant.children.catchculture.common.annotation.AuthenticatedVisitAuth) && args(culturalEventId, user, ..)")
+    @Before(value = "@annotation(elegant.children.catchculture.common.annotation.AuthenticatedVisitAuth) && args(culturalEventId, user, ..)", argNames = "culturalEventId,user")
     public void isCulturalEventAuthenticated(final int culturalEventId, final User user ) {
         log.info("isCulturalEventAuthenticated");
         if (culturalEventQueryRepository.existById(culturalEventId)) {
