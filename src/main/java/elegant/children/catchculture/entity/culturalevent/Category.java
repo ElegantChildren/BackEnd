@@ -1,5 +1,7 @@
 package elegant.children.catchculture.entity.culturalevent;
 
+import elegant.children.catchculture.common.exception.CustomException;
+import elegant.children.catchculture.common.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -19,7 +21,7 @@ public enum Category {
     EXHIBITION_ART("전시/미술"),
     ETC("기타");
 
-    private String code;
+    private final String code;
 
     Category(String code) {
         this.code = code;
@@ -32,9 +34,7 @@ public enum Category {
         return Arrays.stream(Category.values())
                 .filter(category -> category.getCode().contains(code))
                 .findFirst()
-                .orElseThrow(() -> {
-                    throw new IllegalArgumentException("존재하지 않는 카테고리입니다.");
-                });
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CATEGORY));
     }
 
 
