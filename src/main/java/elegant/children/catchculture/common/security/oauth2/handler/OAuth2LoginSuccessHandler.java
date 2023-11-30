@@ -3,10 +3,8 @@ package elegant.children.catchculture.common.security.oauth2.handler;
 import elegant.children.catchculture.common.security.JwtTokenProvider;
 import elegant.children.catchculture.common.security.oauth2.CustomOAuth2User;
 import elegant.children.catchculture.common.utils.ClientUtils;
-import elegant.children.catchculture.common.utils.CookieUtils;
 import elegant.children.catchculture.common.utils.RedisUtils;
 import elegant.children.catchculture.entity.user.Role;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +23,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
         log.info("OAuth2LoginSuccessHandler");
         log.info("authentication: {}", authentication);

@@ -6,7 +6,6 @@ import elegant.children.catchculture.entity.user.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor

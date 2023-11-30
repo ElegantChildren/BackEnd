@@ -1,6 +1,5 @@
 package elegant.children.catchculture.entity.review;
 
-import elegant.children.catchculture.common.converter.StoredFileUrlConverter;
 import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
 import elegant.children.catchculture.entity.user.User;
 import jakarta.persistence.*;
@@ -10,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
