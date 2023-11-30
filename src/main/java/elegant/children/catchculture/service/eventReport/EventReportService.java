@@ -42,7 +42,7 @@ public class EventReportService {
         final EventReport eventReport = eventReportRepository.findByUserId(eventReportId, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_EVENT_REPORT_ID));
         eventReportRepository.delete(eventReport);
-
+        eventReportRepository.flush();
         applicationEventPublisher.publishEvent(new CreateCulturalEvent(eventReport.getCulturalEventDetail(), eventReport.getUser()
                                                                         , PointChange.CREATE_CULTURAL_EVENT));
     }
