@@ -34,11 +34,7 @@ public class ReviewService {
     public ReviewResponseDTO getUserReview(final int culturalEventId, final User user) {
         final Optional<Review> reviewOptional = reviewRepository.findByCulturalEventIdAndUserId(culturalEventId, user.getId());
         final ReviewResponseDTO userReviewResponseDTO;
-        if(reviewOptional.isPresent()) {
-            userReviewResponseDTO = ReviewResponseDTO.of(reviewOptional.get(), user);
-        } else {
-            userReviewResponseDTO = null;
-        }
+        userReviewResponseDTO = reviewOptional.map(review -> ReviewResponseDTO.of(review, user)).orElse(null);
         return userReviewResponseDTO;
     }
 
