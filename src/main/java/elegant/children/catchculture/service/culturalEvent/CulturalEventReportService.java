@@ -1,12 +1,16 @@
 package elegant.children.catchculture.service.culturalEvent;
 
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventReportDTO;
+import elegant.children.catchculture.dto.review.response.ReviewDTO;
 import elegant.children.catchculture.entity.culturalevent.CulturalEventDetail;
 import elegant.children.catchculture.entity.eventreport.EventReport;
+import elegant.children.catchculture.entity.review.Review;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventReportRepository;
 import elegant.children.catchculture.service.GCS.GCSService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,6 +53,26 @@ public class CulturalEventReportService {
         culturalEventReportRepository.save(eventReport);
 
         return eventReport.getCulturalEventDetail().toString();
+    }
+
+    public Page<CulturalEventReportDTO> getMyEventReports(User user, Pageable pageable) {
+        Page<EventReport> reports = culturalEventReportRepository.findByUserId(user.getId(), pageable);
+        return reports.map(this::convertToReportDTO);
+    }
+
+    public CulturalEventReportDTO convertToReportDTO(EventReport report) {
+        return new CulturalEventReportDTO(
+                report.getCulturalEventDetail().getTitle(),
+                report.getCulturalEventDetail().getPlace(),
+                report.getCulturalEventDetail().getStartDate().toLocalDate(),
+                report.getCulturalEventDetail().getEndDate().toLocalDate(),
+                report.getCulturalEventDetail().getIsFree(),
+                report.getCulturalEventDetail().getCategory(),
+                report.getCulturalEventDetail().getDescription(),
+                report.getCulturalEventDetail().getSns(),
+                report.getCulturalEventDetail().getTelephone(),
+                report.getCulturalEventDetail().getWayToCome()
+        );
     }
 
 }

@@ -6,6 +6,7 @@ import elegant.children.catchculture.entity.user.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -17,7 +18,7 @@ public class ReviewResponseDTO {
     private int id;
     private String nickname;
     private String description;
-    private String storedFileUrl;
+    private List<String> storedFileUrl;
     private int rating;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdAt;

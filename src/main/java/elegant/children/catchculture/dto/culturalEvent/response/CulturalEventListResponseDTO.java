@@ -41,6 +41,8 @@ public class CulturalEventListResponseDTO {
         this.endDate = culturalEventDetail.getEndDate();
         this.place = culturalEventDetail.getPlace();
         this.storedFileUrl = culturalEventDetail.getStoredFileUrl().get(0);
+
+//        this.storedFileUrl = culturalEventDetail.getStoredFileUrl();
         this.likeCount = likeCount;
         this.viewCount = viewCount;
         if(remainDay <= 0)

@@ -50,7 +50,7 @@ public class PointHistoryService {
         pointHistoryRepository.save(pointHistory);
     }
 
-    public Page<PointHistoryResponseDTO> getPointHistoryForUser(User user, Pageable pageable) {
+    public Page<PointHistoryResponseDTO> getPointHistoryForUser(final User user, final Pageable pageable) {
         return pointHistoryRepository.findHistories(user.getId(), pageable);
     }
 }
