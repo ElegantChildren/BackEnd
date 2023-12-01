@@ -26,18 +26,14 @@ public class ReviewTransactionService {
 
     public void updateReviewDescription(final int reviewId, final String description) {
         reviewRepository.findById(reviewId)
-                .ifPresentOrElse(review -> {
-                    reviewRepository.updateReviewDescription(reviewId, description);
-                }, () -> {
+                .ifPresentOrElse(review -> reviewRepository.updateReviewDescription(reviewId, description), () -> {
                     throw new CustomException(ErrorCode.INVALID_REVIEW_ID);
                 });
     }
 
     public void deleteReview(final int reviewId) {
         reviewRepository.findById(reviewId)
-                .ifPresentOrElse(review -> {
-                    reviewRepository.deleteReviewById(reviewId);
-                }, () -> {
+                .ifPresentOrElse(review -> reviewRepository.deleteReviewById(reviewId), () -> {
                     throw new CustomException(ErrorCode.INVALID_REVIEW_ID);
                 });
     }

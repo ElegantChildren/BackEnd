@@ -187,7 +187,8 @@ public class CulturalEventQueryRepository {
                 .from(culturalEvent)
                 .where(
                         notFinishedCulturalEvent(now),
-                        titleContains(keyword)
+                        titleContains(keyword),
+                        categoryIn(categoryList)
                 )
                 .fetchOne();
 
@@ -334,7 +335,7 @@ public class CulturalEventQueryRepository {
                 orderSpecifier.add(new OrderSpecifier<>(Order.ASC, culturalEvent.culturalEventDetail.endDate));
 
         }
-        return orderSpecifier.toArray(new OrderSpecifier[orderSpecifier.size()]);
+        return orderSpecifier.toArray(new OrderSpecifier[0]);
     }
 
     private OrderSpecifier[] getSortTypeWithClassification(final Classification classification) {
@@ -352,6 +353,6 @@ public class CulturalEventQueryRepository {
                 startDateASC(orderSpecifier);
 
         }
-        return orderSpecifier.toArray(new OrderSpecifier[orderSpecifier.size()]);
+        return orderSpecifier.toArray(new OrderSpecifier[0]);
     }
 }

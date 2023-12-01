@@ -52,9 +52,7 @@ public class InteractionService {
 
 
         interactionRepository.findByUserIdAndCulturalEventIdAndLikeStar(user.getId(), culturalEventId, LikeStar.LIKE)
-                .ifPresentOrElse(interaction -> {
-                    interactionRepository.delete(interaction);
-                },
+                .ifPresentOrElse(interactionRepository::delete,
                         () -> {
                             throw new CustomException(ErrorCode.NOT_LIKE);
                 });
@@ -66,9 +64,7 @@ public class InteractionService {
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_EVENT_ID));
 
         interactionRepository.findByUserIdAndCulturalEventIdAndLikeStar(user.getId(), culturalEventId, LikeStar.STAR)
-                .ifPresentOrElse(interaction -> {
-                    interactionRepository.delete(interaction);
-                }, () -> {
+                .ifPresentOrElse(interactionRepository::delete, () -> {
                     throw new CustomException(ErrorCode.NOT_STAR);
                 });
     }
