@@ -2,7 +2,6 @@ package elegant.children.catchculture.service.review;
 
 import elegant.children.catchculture.common.exception.CustomException;
 import elegant.children.catchculture.common.exception.ErrorCode;
-import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
 import elegant.children.catchculture.dto.review.response.ReviewDTO;
 import elegant.children.catchculture.dto.review.response.ReviewRatingResponseDTO;
 import elegant.children.catchculture.dto.review.response.ReviewResponseDTO;

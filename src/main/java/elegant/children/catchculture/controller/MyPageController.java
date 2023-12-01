@@ -3,9 +3,11 @@ package elegant.children.catchculture.controller;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventReportDTO;
 import elegant.children.catchculture.dto.review.response.ReviewDTO;
 import elegant.children.catchculture.dto.user.PointHistoryResponseDTO;
+import elegant.children.catchculture.dto.user.PointUsageResponseDTO;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.service.culturalEvent.CulturalEventReportService;
 import elegant.children.catchculture.service.pointHistory.PointHistoryService;
+import elegant.children.catchculture.service.pointHistory.PointUsageService;
 import elegant.children.catchculture.service.review.ReviewService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 @Tag(name = "로그인 후 사용가능한 페이지", description = "마이 페이지")
 @RequestMapping("/user")
@@ -32,6 +36,9 @@ public class MyPageController {
 
     @Autowired
     private CulturalEventReportService culturalEventReportService;
+
+    @Autowired
+    private PointUsageService pointUsageService;
 
     @GetMapping("/point-history")
     public ResponseEntity<Page<PointHistoryResponseDTO>> viewPointHistory(
@@ -69,6 +76,13 @@ public class MyPageController {
         Page<CulturalEventReportDTO> reportList = culturalEventReportService.getMyEventReports(user, pageable);
         return ResponseEntity.ok(reportList);
 
+    }
+
+    @GetMapping("/point-usage")
+    public ResponseEntity<List<PointUsageResponseDTO>> viewPointUsage(){
+
+
+        return ResponseEntity.ok(pointUsageService.findPointUsage());
     }
 
 }
