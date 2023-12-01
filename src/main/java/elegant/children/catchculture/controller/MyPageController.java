@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+@Tag(name = "로그인 후 사용가능한 페이지", description = "마이 페이지")
 @RequestMapping("/user")
 @RestController
 public class MyPageController {
@@ -22,7 +23,6 @@ public class MyPageController {
     @Autowired
     private PointHistoryService pointHistoryService;
 
-//    @Tag(name = "포인트 기록")
     @GetMapping("/point-history")
     public ResponseEntity<Page<PointHistoryResponseDTO>> viewPointHistory(
             @AuthenticationPrincipal User user,
@@ -33,7 +33,6 @@ public class MyPageController {
         return ResponseEntity.ok(pointHistories);
     }
 
-//    @Tag(name = "현재 포인트")
     @GetMapping("/point")
     public ResponseEntity<Integer> viewCurrentPoint(
             @AuthenticationPrincipal User user) {
