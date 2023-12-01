@@ -1,14 +1,13 @@
 package elegant.children.catchculture.service.culturalEvent;
 
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventReportDTO;
-import elegant.children.catchculture.dto.review.response.ReviewDTO;
 import elegant.children.catchculture.entity.culturalevent.CulturalEventDetail;
 import elegant.children.catchculture.entity.eventreport.EventReport;
-import elegant.children.catchculture.entity.review.Review;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventReportRepository;
 import elegant.children.catchculture.service.GCS.GCSService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CulturalEventReportService {
 
 
