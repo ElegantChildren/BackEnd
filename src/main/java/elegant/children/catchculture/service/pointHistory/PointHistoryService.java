@@ -1,5 +1,6 @@
 package elegant.children.catchculture.service.pointHistory;
 
+import elegant.children.catchculture.dto.user.PointHistoryResponseDTO;
 import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.pointhistory.PointHistory;
 import elegant.children.catchculture.entity.user.User;
@@ -12,6 +13,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -44,5 +49,9 @@ public class PointHistoryService {
                 .pointChange(pointChange.getPoint())
                 .build();
         pointHistoryRepository.save(pointHistory);
+    }
+
+    public Page<PointHistoryResponseDTO> getPointHistoryForUser(User user, Pageable pageable) {
+        return pointHistoryRepository.findHistories(user.getId(), pageable);
     }
 }
