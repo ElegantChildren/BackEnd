@@ -1,8 +1,12 @@
 package elegant.children.catchculture.controller;
 
+import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventReportDTO;
+import elegant.children.catchculture.dto.review.response.ReviewDTO;
 import elegant.children.catchculture.dto.user.PointHistoryResponseDTO;
 import elegant.children.catchculture.entity.user.User;
+import elegant.children.catchculture.service.culturalEvent.CulturalEventReportService;
 import elegant.children.catchculture.service.pointHistory.PointHistoryService;
+import elegant.children.catchculture.service.review.ReviewService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -23,11 +27,17 @@ public class MyPageController {
     @Autowired
     private PointHistoryService pointHistoryService;
 
+    @Autowired
+    private ReviewService reviewService;
+
+    @Autowired
+    private CulturalEventReportService culturalEventReportService;
+
     @GetMapping("/point-history")
     public ResponseEntity<Page<PointHistoryResponseDTO>> viewPointHistory(
-            @AuthenticationPrincipal User user,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "7") int size) {
+            final @AuthenticationPrincipal User user,
+            final @RequestParam(defaultValue = "0") int page,
+            final @RequestParam(defaultValue = "7") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<PointHistoryResponseDTO> pointHistories = pointHistoryService.getPointHistoryForUser(user, pageable);
         return ResponseEntity.ok(pointHistories);
@@ -37,6 +47,28 @@ public class MyPageController {
     public ResponseEntity<Integer> viewCurrentPoint(
             @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(user.getPoint());
+    }
+
+    @GetMapping("/my-reviews")
+    public ResponseEntity<Page<ReviewDTO>> viewMyReview(
+            final @AuthenticationPrincipal User user,
+            final @RequestParam(defaultValue = "0") int page,
+            final @RequestParam(defaultValue = "7") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReviewDTO> reviewList = reviewService.getMyReviews(user, pageable);
+        return ResponseEntity.ok(reviewList);
+
+    }
+
+    @GetMapping("/my-reports")
+    public ResponseEntity<Page<CulturalEventReportDTO>> viewMyReport(
+            final @AuthenticationPrincipal User user,
+            final @RequestParam(defaultValue = "0") int page,
+            final @RequestParam(defaultValue = "7") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CulturalEventReportDTO> reportList = culturalEventReportService.getMyEventReports(user, pageable);
+        return ResponseEntity.ok(reportList);
+
     }
 
 }

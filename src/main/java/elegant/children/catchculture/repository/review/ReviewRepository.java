@@ -1,6 +1,9 @@
 package elegant.children.catchculture.repository.review;
 
+import elegant.children.catchculture.dto.review.response.ReviewDTO;
 import elegant.children.catchculture.entity.review.Review;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +25,10 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     @Modifying(clearAutomatically = true)
     void deleteReviewById(int id);
+
+
+//    @Query("select new elegant.children.catchculture.dto.review.response.ReviewDTO(r.id, r.user.nickname, r.createdAt, r.description, r.storedFileURL,r.rating, d.title, d.storedFileUrl) from Review r join r.culturalEvent.culturalEventDetail d where r.user.id = :user_id order by r.createdAt desc")
+//    Page<ReviewDTO> getMyList(int user_id, Pageable pageable);
+    Page<Review> findByUserId(int userId, Pageable pageable);
+
 }
