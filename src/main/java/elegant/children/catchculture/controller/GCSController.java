@@ -4,9 +4,7 @@ import elegant.children.catchculture.service.GCS.GCSService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -32,4 +30,45 @@ public class GCSController {
         List<String> uploadedFile = gcsService.uploadImages(fileList);
         return ResponseEntity.ok(uploadedFile);
     }
+
+    @DeleteMapping(value = "gcs/deleteImageByUrl")
+    public ResponseEntity<String> deleteImageByUrl(@RequestParam("fileUrl") String fileUrl) {
+        try {
+            gcsService.deleteFileFromGCSByUrl(fileUrl);
+            return ResponseEntity.ok("파일 삭제 성공");
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage() + "파일 삭제 실패");
+        }
+    }
+
+    @DeleteMapping(value = "gcs/deleteImagesByUrlList")
+    public ResponseEntity<String> deleteImagesByUrlList(@RequestBody List<String> fileUrlList) {
+        try {
+            gcsService.deleteFileFromGCSByUrlList(fileUrlList);
+            return ResponseEntity.ok("파일 삭제 성공");
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage() + "파일 삭제 실패");
+        }
+    }
+
+    @DeleteMapping(value = "gcs/deleteImageByName")
+    public ResponseEntity<String> deleteImageByName(@RequestParam("fileName") String fileName) {
+        try {
+            gcsService.deleteFileFromGCSByName(fileName);
+            return ResponseEntity.ok("파일 삭제 성공");
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage() + "파일 삭제 실패");
+        }
+    }
+
+    @DeleteMapping(value = "gcs/deleteImagesByNameList")
+    public ResponseEntity<String> deleteImagesByNameList(@RequestBody List<String> fileNameList) {
+        try {
+            gcsService.deleteFileFromGCSByNameList(fileNameList);
+            return ResponseEntity.ok("파일 삭제 성공");
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage() + "파일 삭제 실패");
+        }
+    }
+
 }
