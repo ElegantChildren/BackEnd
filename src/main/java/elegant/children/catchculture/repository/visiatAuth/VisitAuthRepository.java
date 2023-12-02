@@ -16,4 +16,10 @@ public interface VisitAuthRepository extends JpaRepository<VisitAuth, Integer> {
     @Query("select va from VisitAuth as va join fetch User as u join fetch CulturalEvent as ce " +
             "where va.id = :id and u.id = :userId and va.culturalEvent.id = :culturalEventId")
     Optional<VisitAuth> findByIdWithUserAAndCulturalEvent(final int id, final int userId, final int culturalEventId);
+
+    @Query("select va from VisitAuth as va " +
+            "join fetch va.user as u " +
+            "join fetch va.culturalEvent as ce " +
+            "where u.id = :userId and ce.id = :culturalEventId")
+    Optional<VisitAuth> findByUserAndCulturalEvent(final int userId, final int culturalEventId);
 }
