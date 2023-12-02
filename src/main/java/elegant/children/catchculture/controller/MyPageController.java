@@ -9,17 +9,14 @@ import elegant.children.catchculture.service.culturalEvent.CulturalEventReportSe
 import elegant.children.catchculture.service.pointHistory.PointHistoryService;
 import elegant.children.catchculture.service.pointHistory.PointUsageService;
 import elegant.children.catchculture.service.review.ReviewService;
-import elegant.children.catchculture.service.visitAuth.VisitAuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,21 +24,14 @@ import java.util.List;
 @RequestMapping("/user")
 @RestController
 public class MyPageController {
-
     @Autowired
     private PointHistoryService pointHistoryService;
-
     @Autowired
     private ReviewService reviewService;
-
     @Autowired
     private CulturalEventReportService culturalEventReportService;
-
     @Autowired
     private PointUsageService pointUsageService;
-
-    @Autowired
-    private VisitAuthService visitAuthService;
 
     @GetMapping("/point-history")
     public ResponseEntity<Page<PointHistoryResponseDTO>> viewPointHistory(
@@ -84,14 +74,6 @@ public class MyPageController {
     @GetMapping("/point-usage")
     public ResponseEntity<List<PointUsageResponseDTO>> viewPointUsage(){
         return ResponseEntity.ok(pointUsageService.findPointUsage());
-    }
-
-    @PostMapping(value = "/visit-auth", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void createVisitAuth(
-            final @AuthenticationPrincipal User user,
-            final @RequestPart int eventId,
-            final @RequestPart("fileList") List<MultipartFile> fileList) {
-        visitAuthService.createVisitAuth(user,eventId,fileList);
     }
 
 }
