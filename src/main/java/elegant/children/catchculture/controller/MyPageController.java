@@ -4,6 +4,7 @@ import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventRep
 import elegant.children.catchculture.dto.review.response.ReviewDTO;
 import elegant.children.catchculture.dto.user.PointHistoryResponseDTO;
 import elegant.children.catchculture.dto.user.PointUsageResponseDTO;
+import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.service.culturalEvent.CulturalEventReportService;
 import elegant.children.catchculture.service.pointHistory.PointHistoryService;
@@ -74,6 +75,13 @@ public class MyPageController {
     @GetMapping("/point-usage")
     public ResponseEntity<List<PointUsageResponseDTO>> viewPointUsage(){
         return ResponseEntity.ok(pointUsageService.findPointUsage());
+    }
+
+    @PostMapping("/purchase-reward")
+    public ResponseEntity<String> purchaseReward(
+            final @AuthenticationPrincipal User user,
+            final @RequestParam PointChange pointChange){
+        return ResponseEntity.ok(pointHistoryService.purchaseReward(user,pointChange));
     }
 
 }
