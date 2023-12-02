@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,13 +21,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class CulturalEventReportService {
 
 
     private final CulturalEventReportRepository culturalEventReportRepository;
     private final GCSService gcsService;
 
-
+    @Transactional
     public String createEventReport(CulturalEventReportDTO culturalEventReportDTO, List<MultipartFile> fileList, User user) throws IOException {
         List<String> storedFileUrl = new ArrayList<>();
         if (fileList != null && !fileList.isEmpty()) {
@@ -62,6 +64,7 @@ public class CulturalEventReportService {
 
     public CulturalEventReportDTO convertToReportDTO(EventReport report) {
         return new CulturalEventReportDTO(
+                report.getId(),
                 report.getCulturalEventDetail().getTitle(),
                 report.getCulturalEventDetail().getPlace(),
                 report.getCulturalEventDetail().getStartDate().toLocalDate(),

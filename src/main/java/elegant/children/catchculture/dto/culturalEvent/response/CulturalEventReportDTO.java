@@ -2,6 +2,7 @@ package elegant.children.catchculture.dto.culturalEvent.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import elegant.children.catchculture.entity.culturalevent.Category;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -12,19 +13,21 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 public class CulturalEventReportDTO implements Serializable {
-    @NonNull
+    @NotNull
+    private int reportId;
+    @NotNull
     private String eventName;
-    @NonNull
+    @NotNull
     private String eventLocation;
-    @NonNull
+    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
-    @NonNull
+    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     private Boolean isFree;
     private Category category;
-    @NonNull
+    @NotNull
     private String description;
     private String snsAddress;
     private String phoneNumber;
