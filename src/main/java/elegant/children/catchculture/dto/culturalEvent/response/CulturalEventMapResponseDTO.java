@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
@@ -51,7 +52,7 @@ public class CulturalEventMapResponseDTO {
         this.endDate = culturalEvent.getCulturalEventDetail().getEndDate();
 
         final LocalDateTime now = LocalDateTime.now();
-        remainDay = (int) ChronoUnit.DAYS.between(now,startDate) + 1;
+        remainDay = (int) ChronoUnit.DAYS.between(now.toLocalDate(),startDate.toLocalDate()) + 1;
 
         if(remainDay <= 0)
             this.remainDay = 0;
