@@ -52,7 +52,7 @@ public class CulturalEventMapResponseDTO {
         this.endDate = culturalEvent.getCulturalEventDetail().getEndDate();
 
         final LocalDateTime now = LocalDateTime.now();
-        remainDay = (int) ChronoUnit.DAYS.between(now.toLocalDate(),startDate.toLocalDate()) + 1;
+        remainDay = (int) ChronoUnit.DAYS.between(now.toLocalDate(),startDate.toLocalDate());
 
         if(remainDay <= 0)
             this.remainDay = 0;
