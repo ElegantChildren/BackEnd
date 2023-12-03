@@ -93,7 +93,7 @@ public class ReviewService {
 //
 //    }
     public Page<ReviewDTO> getMyReviews(User user, Pageable pageable) {
-        Page<Review> reviews = reviewRepository.findByUserId(user.getId(), pageable);
+        Page<Review> reviews = reviewRepository.findByUserIdOrderByCreatedAtDesc(user.getId(), pageable);
         return reviews.map(this::convertToReviewDTO);
     }
 

@@ -58,7 +58,7 @@ public class CulturalEventReportService {
     }
 
     public Page<CulturalEventReportDTO> getMyEventReports(User user, Pageable pageable) {
-        Page<EventReport> reports = culturalEventReportRepository.findByUserId(user.getId(), pageable);
+        Page<EventReport> reports = culturalEventReportRepository.findByUserIdOrderByCreatedAtDesc(user.getId(), pageable);
         return reports.map(this::convertToReportDTO);
     }
 
