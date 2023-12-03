@@ -29,6 +29,6 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
 //    @Query("select new elegant.children.catchculture.dto.review.response.ReviewDTO(r.id, r.user.nickname, r.createdAt, r.description, r.storedFileURL,r.rating, d.title, d.storedFileUrl) from Review r join r.culturalEvent.culturalEventDetail d where r.user.id = :user_id order by r.createdAt desc")
 //    Page<ReviewDTO> getMyList(int user_id, Pageable pageable);
-    Page<Review> findByUserId(int userId, Pageable pageable);
+    Page<Review> findByUserIdOrderByCreatedAtDesc(int userId, Pageable pageable);
 
 }

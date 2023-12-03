@@ -67,7 +67,7 @@ public class VisitAuthQueryRepository {
                         visitAuth.isAuthenticated.eq(false),
                         visitAuthIdLt(lastId)
                 )
-                .orderBy(visitAuth.id.desc())
+                .orderBy(visitAuth.id.asc())
                 .limit(PAGE_SIZE + 1)
                 .fetch();
 

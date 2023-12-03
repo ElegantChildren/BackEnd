@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CulturalEventReportRepository extends JpaRepository<EventReport, Long> {
 
-    Page<EventReport> findByUserId(int userId, Pageable pageable);
+    Page<EventReport> findByUserIdOrderByCreatedAtDesc(int userId, Pageable pageable);
 
 }
