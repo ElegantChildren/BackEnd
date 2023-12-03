@@ -51,7 +51,7 @@ public class CulturalEventMapResponseDTO {
         this.endDate = culturalEvent.getCulturalEventDetail().getEndDate();
 
         final LocalDateTime now = LocalDateTime.now();
-        remainDay = (int) ChronoUnit.DAYS.between(now,startDate);
+        remainDay = (int) ChronoUnit.DAYS.between(now,startDate) + 1;
 
         if(remainDay <= 0)
             this.remainDay = 0;
