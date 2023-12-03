@@ -30,6 +30,9 @@ public class CulturalEventMapResponseDTO {
     private Double longitude;
     private int likeCount;
     private int viewCount;
+
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private int remainDay;
 
 
@@ -44,9 +47,11 @@ public class CulturalEventMapResponseDTO {
         this.category = culturalEvent.getCulturalEventDetail().getCategory();
         this.likeCount = culturalEvent.getLikeCount();
         this.viewCount = culturalEvent.getViewCount();
+        this.startDate = culturalEvent.getCulturalEventDetail().getStartDate();
+        this.endDate = culturalEvent.getCulturalEventDetail().getEndDate();
 
         final LocalDateTime now = LocalDateTime.now();
-        remainDay = (int) ChronoUnit.DAYS.between(now,culturalEvent.getCulturalEventDetail().getStartDate());
+        remainDay = (int) ChronoUnit.DAYS.between(now,startDate);
 
         if(remainDay <= 0)
             this.remainDay = 0;
