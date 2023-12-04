@@ -69,8 +69,11 @@ public class UserService {
 
     @Transactional
     @CachePut(value = "user", key = "#user.email")
-    public void updateUserNickname(final User user, final String nickName) {
+    public User updateUserNickname(final User user, final String nickName) {
+
         userRepository.updateNickname(nickName, user.getId());
+        user.updateNickname(nickName);
+        return user;
     }
 
     public Page<CulturalEventListResponseDTO> getCulturalEventListWithUser(final User user,

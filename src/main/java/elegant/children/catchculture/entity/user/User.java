@@ -37,4 +37,10 @@ public class User {
         this.point = 0;
     }
 
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+
+
 }
