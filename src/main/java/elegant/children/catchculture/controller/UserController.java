@@ -7,6 +7,8 @@ import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.service.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +49,11 @@ public class UserController {
                                                                                    final @RequestParam(required = false, defaultValue = "LIKE") Classification classification) {
 
         return ResponseEntity.ok(userService.getCulturalEventListWithUser(user, offset, category, classification));
+    }
+
+    @GetMapping("/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response, final @AuthenticationPrincipal User user) {
+        userService.logout(request, response, user);
     }
 
 

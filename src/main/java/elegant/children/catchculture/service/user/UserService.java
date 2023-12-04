@@ -1,6 +1,8 @@
 package elegant.children.catchculture.service.user;
 
 import elegant.children.catchculture.common.constant.Classification;
+import elegant.children.catchculture.common.utils.CookieUtils;
+import elegant.children.catchculture.common.utils.RedisUtils;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
 import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
@@ -8,8 +10,11 @@ import elegant.children.catchculture.event.CreatePointHistoryEvent;
 import elegant.children.catchculture.event.CreateCulturalEvent;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventQueryRepository;
 import elegant.children.catchculture.repository.user.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -25,8 +30,12 @@ import static elegant.children.catchculture.service.culturalEvent.CulturalEventS
 @Transactional(readOnly = true)
 public class UserService {
 
+    @Value("${jwt.token.header}")
+    private String cookieName;
+
     private final UserRepository userRepository;
     private final CulturalEventQueryRepository culturalEventQueryRepository;
+    private final RedisUtils redisUtils;
 
     @Transactional
     @EventListener
@@ -62,6 +71,8 @@ public class UserService {
     }
 
 
-
-
+    public void logout(HttpServletRequest request, HttpServletResponse response, final User user) {
+        CookieUtils.deleteCookie(request, response, cookieName);
+        redisUtils.deleteData(user.getEmail());
+    }
 }
