@@ -23,6 +23,9 @@ public enum ErrorCode {
     INVALID_VISIT_AUTH_ID("존재하지 않는 방문 인증 Id 입니다.", HttpStatus.BAD_REQUEST),
     INVALID_EVENT_REPORT_ID("존재하지 않는 이벤트 신고 Id 입니다.", HttpStatus.BAD_REQUEST),
 
+    ALREADY_VISIT_AUTH_SUBMITTED("이미 방문 인증을 제출하셨습니다.", HttpStatus.BAD_REQUEST),
+
+
 
     NOT_AUTHENTICATED("방문 인증이 되어 있지 않습니다.", HttpStatus.UNAUTHORIZED),
     INVALID_ACCESS("관리자만 접근 가능합니다.", HttpStatus.FORBIDDEN),

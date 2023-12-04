@@ -8,11 +8,14 @@ import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.common.constant.SortType;
 import elegant.children.catchculture.service.culturalEvent.CulturalEventService;
 import elegant.children.catchculture.service.interaction.InteractionService;
+import elegant.children.catchculture.service.visitAuth.VisitAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class CulturalEventController {
 
     private final CulturalEventService culturalEventService;
     private final InteractionService interactionService;
+    private final VisitAuthService visitAuthService;
 
     @GetMapping
     public ResponseEntity<List<CulturalEventListResponseDTO>> getCulturalEventMainList() {
@@ -91,6 +95,14 @@ public class CulturalEventController {
     public ResponseEntity<List<CulturalEventMapResponseDTO>> getCulturalEventMapList() {
 
         return ResponseEntity.ok(culturalEventService.getCulturalEventMapList());
+    }
+
+    @PostMapping(value = "/visit-auth", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void createVisitAuth(
+            final @AuthenticationPrincipal User user,
+            final @RequestPart int eventId,
+            final @RequestPart("fileList") List<MultipartFile> fileList) {
+        visitAuthService.createVisitAuth(user,eventId,fileList);
     }
 
 }

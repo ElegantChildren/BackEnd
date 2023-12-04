@@ -11,7 +11,7 @@ public class StoredFileUrlConverter implements AttributeConverter<List<String>, 
     private final String Delimiter = ", ";
     @Override
     public String convertToDatabaseColumn(final List<String> attribute) {
-        return String.join(Delimiter, attribute);
+        return attribute.stream().collect(Collectors.joining(Delimiter));
     }
 
     @Override

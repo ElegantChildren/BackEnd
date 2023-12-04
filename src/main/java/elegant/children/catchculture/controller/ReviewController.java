@@ -17,6 +17,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 
 @RequestMapping("/review")
 @RequiredArgsConstructor
@@ -48,8 +50,8 @@ public class ReviewController {
     @PostMapping(value = "/{culturalEventId}/my-review", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @AuthenticatedVisitAuth
     public void createReview(final @PathVariable int culturalEventId, final @AuthenticationPrincipal User user,
-                             final @RequestPart("file") MultipartFile multipartFile, final @RequestPart("reviewDetail") CreateReviewRequestDTO createReviewRequestDTO) {
-        reviewService.createReview(culturalEventId, user, multipartFile, createReviewRequestDTO.getDescription(), createReviewRequestDTO.getRating());
+                             final @RequestPart("fileList") List<MultipartFile> multipartFileList, final @RequestPart("reviewDetail") CreateReviewRequestDTO createReviewRequestDTO) {
+        reviewService.createReview(culturalEventId, user, multipartFileList, createReviewRequestDTO.getDescription(), createReviewRequestDTO.getRating());
     }
     /***
      * Event 가 있어야 되고 인증이 되있어야 함.

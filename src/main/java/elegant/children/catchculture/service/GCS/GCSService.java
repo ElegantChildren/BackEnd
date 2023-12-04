@@ -114,5 +114,35 @@ public class GCSService {
         return uuid + "_" + originalFileName;
     }
 
+    public void deleteFileFromGCSByName(String fileName) throws IOException {
+        Storage storage = getStorage();
+        storage.delete(bucketName, fileName);
+    }
+
+    public void deleteFileFromGCSByNameList(List<String> fileNameList) throws IOException {
+        Storage storage = getStorage();
+        for (String fileName : fileNameList) {
+            storage.delete(bucketName, fileName);
+        }
+
+    }
+
+    public void deleteFileFromGCSByUrl(String fileUrl) throws IOException {
+        String fileName = extractFileNameFromUrl(fileUrl);
+        Storage storage = getStorage();
+        storage.delete(bucketName, fileName);
+    }
+
+    public void deleteFileFromGCSByUrlList(List<String> fileUrlList) throws IOException {
+        Storage storage = getStorage();
+        for (String fileUrl : fileUrlList) {
+            String fileName = extractFileNameFromUrl(fileUrl);
+            storage.delete(bucketName, fileName);
+        }
+    }
+
+    private String extractFileNameFromUrl(String fileUrl) {
+        return fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+    }
 
 }
