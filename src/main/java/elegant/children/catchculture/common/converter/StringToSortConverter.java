@@ -7,6 +7,6 @@ public class StringToSortConverter implements Converter<String, SortType> {
 
     @Override
     public SortType convert(String source) {
-        return SortType.of(source.trim().toUpperCase());
+        return SortType.of(source);
     }
 }
