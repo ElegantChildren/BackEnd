@@ -217,7 +217,7 @@ public class CulturalEventQueryRepository {
                             )
                     )
                     .from(culturalEvent)
-                    .leftJoin(interaction)
+                    .innerJoin(interaction)
                     .on(
                             culturalEvent.id.eq(interaction.culturalEvent.id),
                             interaction.user.id.eq(userId),
@@ -234,7 +234,7 @@ public class CulturalEventQueryRepository {
             count = queryFactory
                     .select(culturalEvent.count())
                     .from(culturalEvent)
-                    .leftJoin(interaction)
+                    .innerJoin(interaction)
                     .on(
                             culturalEvent.id.eq(interaction.culturalEvent.id),
                             interaction.user.id.eq(userId),
