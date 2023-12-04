@@ -3,7 +3,7 @@ package elegant.children.catchculture.common.security.oauth2;
 import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.entity.user.SocialType;
 import elegant.children.catchculture.entity.user.User;
-import elegant.children.catchculture.repository.user.UserRepository;
+import elegant.children.catchculture.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +23,7 @@ import static elegant.children.catchculture.common.exception.CustomException.*;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -75,7 +75,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
      */
     private User getUser(OAuthAttributes attributes, SocialType socialType) {
         final String email = attributes.getOAuth2UserInfo().getEmail();
-        final User user = userRepository.findByEmail(email).orElse(null);
+        final User user = userService.findByEmail(email).orElse(null);
         log.info("user: {}", user);
 
         if(user != null) {
@@ -96,6 +96,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     @Transactional
     public User saveUser(OAuthAttributes attributes, SocialType socialType) {
         final User user = attributes.toEntity(socialType, attributes.getOAuth2UserInfo());
-        return userRepository.save(user);
+        return userService.saveUser(user);
     }
 }

@@ -5,10 +5,10 @@ import elegant.children.catchculture.common.filter.JwtAuthenticationFilter;
 import elegant.children.catchculture.common.security.JwtAuthenticationEntryPoint;
 import elegant.children.catchculture.common.security.JwtTokenProvider;
 import elegant.children.catchculture.common.security.oauth2.CustomOAuth2UserService;
-import elegant.children.catchculture.repository.user.UserRepository;
 import elegant.children.catchculture.common.security.oauth2.handler.OAuth2LoginFailureHandler;
 import elegant.children.catchculture.common.security.oauth2.handler.OAuth2LoginSuccessHandler;
 import elegant.children.catchculture.common.utils.RedisUtils;
+import elegant.children.catchculture.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisUtils redisUtils;
     private final ObjectMapper objectMapper;
@@ -85,12 +85,12 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtTokenProvider, userRepository, redisUtils, objectMapper);
+        return new JwtAuthenticationFilter(jwtTokenProvider, userService, redisUtils, objectMapper);
     }
 
     @Bean
     public CustomOAuth2UserService customOAuth2UserService() {
-        return new CustomOAuth2UserService(userRepository);
+        return new CustomOAuth2UserService(userService);
     }
 
     @Bean

@@ -5,10 +5,10 @@ import elegant.children.catchculture.common.exception.CustomException;
 import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.common.security.JwtTokenProvider;
 import elegant.children.catchculture.entity.user.Role;
-import elegant.children.catchculture.repository.user.UserRepository;
 import elegant.children.catchculture.common.utils.ClientUtils;
 import elegant.children.catchculture.common.utils.CookieUtils;
 import elegant.children.catchculture.common.utils.RedisUtils;
+import elegant.children.catchculture.service.user.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -30,7 +30,7 @@ import java.util.Optional;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final RedisUtils redisUtils;
     private final ObjectMapper objectMapper;
 
@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         }
                         final ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
                         simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role.name()));
-                        userRepository.findByEmail(email)
+                        userService.findByEmail(email)
                                 .ifPresentOrElse(user -> {
                                     final RememberMeAuthenticationToken rememberMeAuthenticationToken = new RememberMeAuthenticationToken(user.getEmail(), user, simpleGrantedAuthorities);
                                     SecurityContextHolder.getContext().setAuthentication(rememberMeAuthenticationToken);

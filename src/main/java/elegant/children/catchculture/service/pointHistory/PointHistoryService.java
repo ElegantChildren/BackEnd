@@ -9,6 +9,7 @@ import elegant.children.catchculture.event.CreateCulturalEvent;
 import elegant.children.catchculture.repository.pointHistory.PointHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,7 @@ public class PointHistoryService {
     }
 
     @Transactional
+    @CachePut(value = "user", key = "#user.email")
     public String purchaseReward(final User user, final PointChange pointChange) {
         if(user.getPoint() + pointChange.getPoint()<0){
             return "포인트가 부족합니다.";

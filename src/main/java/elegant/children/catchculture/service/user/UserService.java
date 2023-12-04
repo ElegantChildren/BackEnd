@@ -15,12 +15,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static elegant.children.catchculture.service.culturalEvent.CulturalEventService.createPageRequest;
 
@@ -52,9 +56,20 @@ public class UserService {
     }
 
 
+    @Cacheable(value = "user", key = "#email")
+    public Optional<User> findByEmail(final String email) {
+        return userRepository.findByEmail(email);
+    }
 
     @Transactional
-    public void updateUserNickname(final User user, String nickName) {
+    public User saveUser(final User user) {
+        return userRepository.save(user);
+    }
+
+
+    @Transactional
+    @CachePut(value = "user", key = "#user.email")
+    public void updateUserNickname(final User user, final String nickName) {
         userRepository.updateNickname(nickName, user.getId());
     }
 
@@ -71,6 +86,7 @@ public class UserService {
     }
 
 
+    @CacheEvict(value = "user", key = "#user.email")
     public void logout(HttpServletRequest request, HttpServletResponse response, final User user) {
         CookieUtils.deleteCookie(request, response, cookieName);
         redisUtils.deleteData(user.getEmail());
