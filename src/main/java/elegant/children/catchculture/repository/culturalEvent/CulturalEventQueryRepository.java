@@ -260,13 +260,14 @@ public class CulturalEventQueryRepository {
                             )
                     )
                     .from(culturalEvent)
-                    .leftJoin(visitAuth)
+                    .innerJoin(visitAuth)
                     .on(
                             culturalEvent.id.eq(visitAuth.culturalEvent.id),
                             visitAuth.user.id.eq(userId)
                     )
                     .where(
                             notFinishedCulturalEvent(now),
+                            visitAuth.isAuthenticated.eq(true),
                             categoryIn(categoryList),
                             userIdEqWithVisitAuth(userId)
                     ).orderBy(
@@ -276,7 +277,7 @@ public class CulturalEventQueryRepository {
             count = queryFactory
                     .select(culturalEvent.count())
                     .from(culturalEvent)
-                    .leftJoin(visitAuth)
+                    .innerJoin(visitAuth)
                     .on(
                             culturalEvent.id.eq(visitAuth.culturalEvent.id),
                             visitAuth.user.id.eq(userId)
@@ -324,15 +325,21 @@ public class CulturalEventQueryRepository {
 
         List<OrderSpecifier> orderSpecifier = new ArrayList<>();
         switch (sortType) {
-            case VIEW_COUNT:
+            case VIEW_COUNT -> {
                 orderSpecifier.add(new OrderSpecifier<>(Order.DESC, culturalEvent.viewCount));
                 startDateASC(orderSpecifier);
-            case LIKE:
+                break;
+            }
+            case LIKE -> {
                 orderSpecifier.add(new OrderSpecifier<>(Order.DESC, culturalEvent.likeCount));
                 startDateASC(orderSpecifier);
-            case RECENT:
+                break;
+            }
+            case RECENT -> {
                 startDateASC(orderSpecifier);
                 orderSpecifier.add(new OrderSpecifier<>(Order.ASC, culturalEvent.culturalEventDetail.endDate));
+                break;
+            }
 
         }
         return orderSpecifier.toArray(new OrderSpecifier[0]);
@@ -340,19 +347,19 @@ public class CulturalEventQueryRepository {
 
     private OrderSpecifier[] getSortTypeWithClassification(final Classification classification) {
 
-        List<OrderSpecifier> orderSpecifier = new ArrayList<>();
+        final List<OrderSpecifier> orderSpecifier = new ArrayList<>();
         switch (classification) {
-            case VISIT_AUTH:
+            case VISIT_AUTH -> {
                 orderSpecifier.add(new OrderSpecifier<>(Order.DESC, visitAuth.createdAt));
-                startDateASC(orderSpecifier);
-            case LIKE:
+                break;
+            }
+            case LIKE , STAR -> {
                 orderSpecifier.add(new OrderSpecifier<>(Order.DESC, interaction.createdAt));
-                startDateASC(orderSpecifier);
-            case STAR:
-                orderSpecifier.add(new OrderSpecifier<>(Order.DESC, interaction.createdAt));
-                startDateASC(orderSpecifier);
-
+                break;
+            }
         }
+        startDateASC(orderSpecifier);
+
         return orderSpecifier.toArray(new OrderSpecifier[0]);
     }
 }
