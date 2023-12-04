@@ -11,11 +11,11 @@ public class StoredFileUrlConverter implements AttributeConverter<List<String>, 
     private final String Delimiter = ", ";
     @Override
     public String convertToDatabaseColumn(final List<String> attribute) {
-        return attribute.stream().collect(Collectors.joining(Delimiter));
+        return attribute == null? null : attribute.stream().collect(Collectors.joining(Delimiter));
     }
 
     @Override
     public List<String> convertToEntityAttribute(final String dbData) {
-        return Arrays.asList(dbData.split(Delimiter));
+        return dbData == null? null : Arrays.asList(dbData.split(Delimiter));
     }
 }
