@@ -17,16 +17,6 @@ public class ReviewRatingResponseDTO {
     private long countTwo = 0;
     private long countOne = 0;
 
-    public ReviewRatingResponseDTO(final Long countFive, final Long countFour, final Long countThree, final Long countTwo, final Long countOne) {
-        this.countFive = countFive;
-        this.countFour = countFour;
-        this.countThree = countThree;
-        this.countTwo = countTwo;
-        this.countOne = countOne;
-
-        this.avgRating = (double) (countFive * 5 + countFour * 4 + countThree * 3 + countTwo * 2 + countOne) / (countFive + countFour + countThree + countTwo + countOne);
-    }
-
     public void setAvgRating() {
         if(countFive + countFour + countThree + countTwo + countOne == 0) {
             return;
