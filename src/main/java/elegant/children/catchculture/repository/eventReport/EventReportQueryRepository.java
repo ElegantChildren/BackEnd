@@ -36,7 +36,7 @@ public class EventReportQueryRepository {
                 .innerJoin(user)
                 .on(eventReport.user.id.eq(user.id))
                 .where(
-                        eventReportIdLt(lastId)
+                        eventReportIdGt(lastId)
                 ).limit(PAGE_SIZE + 1)
                 .orderBy(eventReport.id.asc())
                 .fetch();
@@ -51,8 +51,8 @@ public class EventReportQueryRepository {
 
     }
 
-    private static BooleanExpression eventReportIdLt(int lastId) {
-        return lastId == 0 ? null : eventReport.id.lt(lastId);
+    private static BooleanExpression eventReportIdGt(int lastId) {
+        return lastId == 0 ? null : eventReport.id.gt(lastId);
     }
 
     public Optional<EventReportResponseDTO> getEventReport(final int eventReportId) {

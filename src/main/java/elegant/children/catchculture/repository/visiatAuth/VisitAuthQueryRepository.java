@@ -65,7 +65,7 @@ public class VisitAuthQueryRepository {
                 .on(visitAuth.user.id.eq(user.id))
                 .where(
                         visitAuth.isAuthenticated.eq(false),
-                        visitAuthIdLt(lastId)
+                        visitAuthIdGt(lastId)
                 )
                 .orderBy(visitAuth.id.asc())
                 .limit(PAGE_SIZE + 1)
@@ -81,7 +81,7 @@ public class VisitAuthQueryRepository {
 
     }
 
-    private static BooleanExpression visitAuthIdLt(int lastId) {
-        return lastId == 0 ? null : visitAuth.id.lt(lastId);
+    private static BooleanExpression visitAuthIdGt(int lastId) {
+        return lastId == 0 ? null : visitAuth.id.gt(lastId);
     }
 }
