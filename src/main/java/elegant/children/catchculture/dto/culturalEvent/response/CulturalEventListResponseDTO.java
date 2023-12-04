@@ -2,10 +2,7 @@ package elegant.children.catchculture.dto.culturalEvent.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import elegant.children.catchculture.entity.culturalevent.CulturalEventDetail;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @ToString
+@Builder
 public class CulturalEventListResponseDTO {
 
     private int culturalEventId;
