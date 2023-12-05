@@ -30,11 +30,6 @@ class ReviewTransactionServiceTest {
     private ReviewRepository reviewRepository;
 
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     private Optional<Review> getReview() {
         return Optional.of(Review.builder()
                 .description("test")
