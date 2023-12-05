@@ -6,10 +6,12 @@ import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.review.Review;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.event.CreatePointHistoryEvent;
+import elegant.children.catchculture.event.SignOutEvent;
 import elegant.children.catchculture.repository.review.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,5 +41,11 @@ public class ReviewTransactionService {
     public void createReview(final Review review, final User user) {
         reviewRepository.save(review);
         applicationEventPublisher.publishEvent(new CreatePointHistoryEvent(PointChange.REVIEW, user));
+    }
+
+    @EventListener
+    public void handleSighOutEvent(final SignOutEvent signOutEvent) {
+        log.info("handleSighOutEvent");
+        reviewRepository.deleteByUserId(signOutEvent.getUserId());
     }
 }

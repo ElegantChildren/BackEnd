@@ -2,6 +2,7 @@ package elegant.children.catchculture.repository.visiatAuth;
 
 import elegant.children.catchculture.entity.visitauth.VisitAuth;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -22,4 +23,8 @@ public interface VisitAuthRepository extends JpaRepository<VisitAuth, Integer> {
             "join fetch va.culturalEvent as ce " +
             "where u.id = :userId and ce.id = :culturalEventId")
     Optional<VisitAuth> findByUserAndCulturalEvent(final int userId, final int culturalEventId);
+
+    @Modifying(clearAutomatically = true)
+    @Query("delete from VisitAuth va where va.user.id = :userId")
+    void deleteByUserId(int userId);
 }

@@ -8,6 +8,7 @@ import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.event.CreatePointHistoryEvent;
 import elegant.children.catchculture.event.CreateCulturalEvent;
+import elegant.children.catchculture.event.SignOutEvent;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventQueryRepository;
 import elegant.children.catchculture.repository.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final CulturalEventQueryRepository culturalEventQueryRepository;
     private final RedisUtils redisUtils;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
     @EventListener
@@ -93,5 +97,13 @@ public class UserService {
     public void logout(HttpServletRequest request, HttpServletResponse response, final User user) {
         CookieUtils.deleteCookie(request, response, cookieName);
         redisUtils.deleteData(user.getEmail());
+    }
+
+    @Transactional
+    @CacheEvict(value = "user", key = "#user.email")
+    public void singOut(HttpServletRequest request, HttpServletResponse response, final User user) {
+        applicationEventPublisher.publishEvent(new SignOutEvent(user.getId()));
+        logout(request, response, user);
+        userRepository.deleteById(user.getId());
     }
 }

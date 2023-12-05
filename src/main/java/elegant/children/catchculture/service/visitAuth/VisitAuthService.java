@@ -9,6 +9,7 @@ import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.entity.visitauth.VisitAuth;
 import elegant.children.catchculture.event.CreatePointHistoryEvent;
+import elegant.children.catchculture.event.SignOutEvent;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventRepository;
 import elegant.children.catchculture.repository.visiatAuth.VisitAuthQueryRepository;
 import elegant.children.catchculture.repository.visiatAuth.VisitAuthRepository;
@@ -16,6 +17,7 @@ import elegant.children.catchculture.service.GCS.GCSService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,6 +73,13 @@ public class VisitAuthService {
                 .build();
         visitAuthRepository.save(visitAuth);
 
+    }
+
+    @Transactional
+    @EventListener
+    public void handleSignOutEvent(final SignOutEvent signOutEvent) {
+        log.info("handleSignOutEvent");
+        visitAuthRepository.deleteByUserId(signOutEvent.getUserId());
     }
 
 }
