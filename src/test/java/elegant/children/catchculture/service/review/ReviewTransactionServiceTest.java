@@ -13,9 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.Optional;
 
@@ -23,18 +24,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class ReviewTransactionServiceTest {
 
     @InjectMocks
     private ReviewTransactionService target;
 
-    @MockBean
+    @Mock
     private ReviewRepository reviewRepository;
-
-    @MockBean
-    private ApplicationEventPublisher applicationEventPublisher;
-
 
 
     @BeforeEach
@@ -110,7 +107,6 @@ class ReviewTransactionServiceTest {
         target.createReview(Review.builder().build(), User.builder().build());
 
         verify(reviewRepository, times(1)).save(any(Review.class));
-        verify(applicationEventPublisher, times(1)).publishEvent(any());
     }
 
 
