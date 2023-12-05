@@ -20,7 +20,7 @@ public class RedisConfig {
     @Bean
     public RedisCacheConfiguration redisCacheConfigurationr() {
         return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofSeconds(60))
+                .entryTtl(Duration.ofMinutes(10L))
                 .disableCachingNullValues()
                 .serializeKeysWith(
                         RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
