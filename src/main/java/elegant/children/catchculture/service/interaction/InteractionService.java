@@ -6,9 +6,11 @@ import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
 import elegant.children.catchculture.entity.interaction.Interaction;
 import elegant.children.catchculture.entity.interaction.LikeStar;
 import elegant.children.catchculture.entity.user.User;
+import elegant.children.catchculture.event.SignOutEvent;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventRepository;
 import elegant.children.catchculture.repository.interaction.InteractionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +48,7 @@ public class InteractionService {
         interactionRepository.save(Interaction.createInteraction(user, culturalEvent, LikeStar.STAR));
     }
 
-    public void deleteLikeCulturalEvent(int culturalEventId, User user) {
+    public void deleteLikeCulturalEvent(final int culturalEventId, final User user) {
         final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_EVENT_ID));
 
@@ -59,7 +61,7 @@ public class InteractionService {
         culturalEvent.minusLikeCount();
     }
 
-    public void deleteStarCulturalEvent(int culturalEventId, User user) {
+    public void deleteStarCulturalEvent(final int culturalEventId, final User user) {
         final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_EVENT_ID));
 
@@ -68,4 +70,11 @@ public class InteractionService {
                     throw new CustomException(ErrorCode.NOT_STAR);
                 });
     }
+
+    @EventListener
+    public void handleSignOutEvent(final SignOutEvent signOutEvent) {
+        interactionRepository.deleteByUserId(signOutEvent.getUserId());
+    }
+
+
 }

@@ -31,4 +31,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 //    Page<ReviewDTO> getMyList(int user_id, Pageable pageable);
     Page<Review> findByUserIdOrderByCreatedAtDesc(int userId, Pageable pageable);
 
+    @Modifying(clearAutomatically = true)
+    @Query("delete from Review r where r.user.id = :userId")
+    void deleteByUserId(int userId);
 }

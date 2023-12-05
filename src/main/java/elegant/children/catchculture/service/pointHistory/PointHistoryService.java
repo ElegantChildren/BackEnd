@@ -6,11 +6,13 @@ import elegant.children.catchculture.entity.pointhistory.PointHistory;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.event.CreatePointHistoryEvent;
 import elegant.children.catchculture.event.CreateCulturalEvent;
+import elegant.children.catchculture.event.SignOutEvent;
 import elegant.children.catchculture.repository.pointHistory.PointHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +71,13 @@ public class PointHistoryService {
         }
         applicationEventPublisher.publishEvent(new CreatePointHistoryEvent(pointChange, user));
         return pointChange.getDescription() + "성공";
+    }
+
+    @Transactional
+    @EventListener
+    public void handleSignOutEvent(final SignOutEvent signOutEvent) {
+        log.info("handleSignOutEvent");
+        pointHistoryRepository.deleteByUserId(signOutEvent.getUserId());
     }
 
 }
