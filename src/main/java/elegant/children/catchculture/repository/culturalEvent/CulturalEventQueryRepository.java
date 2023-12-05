@@ -62,7 +62,7 @@ public class CulturalEventQueryRepository {
                                 JPAExpressions.select(count(interaction))
                                         .from(interaction)
                                         .where(
-                                                interactionLikeStarEq(LikeStar.STAR),
+                                                interactionLikeStarEq(),
                                                 interaction.culturalEvent.id.eq(culturalEventId)
                                         )
                                 , "bookmarkCount")
@@ -80,8 +80,8 @@ public class CulturalEventQueryRepository {
                 .fetchOne();
     }
 
-    private static BooleanExpression interactionLikeStarEq(final LikeStar likeStar) {
-        return interaction.likeStar.eq(likeStar);
+    private static BooleanExpression interactionLikeStarEq() {
+        return interaction.likeStar.eq(LikeStar.STAR);
     }
 
     private BooleanExpression culturalEventIdEq(final int culturalEventId) {
@@ -256,7 +256,8 @@ public class CulturalEventQueryRepository {
                                     culturalEvent.viewCount,
                                     Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
                                             culturalEvent.culturalEventDetail.startDate,
-                                            now).as("remainDay")
+                                            now).as("remainDay"),
+                                    visitAuth.isAuthenticated
                             )
                     )
                     .from(culturalEvent)
@@ -267,7 +268,6 @@ public class CulturalEventQueryRepository {
                     )
                     .where(
                             notFinishedCulturalEvent(now),
-                            visitAuth.isAuthenticated.eq(true),
                             categoryIn(categoryList),
                             userIdEqWithVisitAuth(userId)
                     ).orderBy(

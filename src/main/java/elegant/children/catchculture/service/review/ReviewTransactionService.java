@@ -2,6 +2,7 @@ package elegant.children.catchculture.service.review;
 
 import elegant.children.catchculture.common.exception.CustomException;
 import elegant.children.catchculture.common.exception.ErrorCode;
+import elegant.children.catchculture.entity.fileEvent.FileEvent;
 import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.review.Review;
 import elegant.children.catchculture.entity.user.User;
@@ -14,6 +15,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -46,6 +50,14 @@ public class ReviewTransactionService {
     @EventListener
     public void handleSighOutEvent(final SignOutEvent signOutEvent) {
         log.info("handleSighOutEvent");
+
+        final List<FileEvent> fileEvents = reviewRepository.findByUserId(signOutEvent.getUserId())
+                .stream().map(Review::getStoredFileURL)
+                .flatMap(list -> list.stream())
+                .map(fileUrl -> FileEvent.builder().fileName(fileUrl).build())
+                .collect(Collectors.toList());
+
+        applicationEventPublisher.publishEvent(fileEvents);
         reviewRepository.deleteByUserId(signOutEvent.getUserId());
     }
 }

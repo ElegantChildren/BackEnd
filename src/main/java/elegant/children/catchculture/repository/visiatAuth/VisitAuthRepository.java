@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -27,4 +28,7 @@ public interface VisitAuthRepository extends JpaRepository<VisitAuth, Integer> {
     @Modifying(clearAutomatically = true)
     @Query("delete from VisitAuth va where va.user.id = :userId")
     void deleteByUserId(int userId);
+
+    @Query("select va from VisitAuth va where va.user.id = :userId")
+    List<VisitAuth> findByUserId(int userId);
 }

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,4 +19,7 @@ public interface EventReportRepository extends JpaRepository<EventReport, Intege
     @Modifying(clearAutomatically = true)
     @Query("delete from EventReport er where er.user.id = :id")
     void deleteByUserId(int id);
+
+    @Query("select er from EventReport er where er.user.id = :userId")
+    List<EventReport> findByUserId(int userId);
 }

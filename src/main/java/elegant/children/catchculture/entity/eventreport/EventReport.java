@@ -29,11 +29,19 @@ public class EventReport {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column
+    private boolean isReported;
+
     private LocalDateTime createdAt;
 
     @PrePersist
     public void createdAt() {
         this.createdAt = LocalDateTime.now();
+        this.isReported = false;
+    }
+
+    public void updateReported() {
+        this.isReported = true;
     }
 
 

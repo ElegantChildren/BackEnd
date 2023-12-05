@@ -39,14 +39,14 @@ public class CulturalEventService {
 
     }
 
+
     @Transactional
     public CulturalEventDetailsResponseDTO getCulturalEventDetails(final int culturalEventId, final User user) {
 
         final CulturalEventDetailsResponseDTO culturalEventDetails = culturalEventQueryRepository.getCulturalEventDetails(culturalEventId, user.getId());
+        culturalEventRepository.updateViewCount(culturalEventId);
         culturalEventDetails.setLikeAndBookmark(interactionQueryRepository.existByLikeAndUserIdAndCulturalEventId(user.getId(), culturalEventId),
                                                 interactionQueryRepository.existByStarAndUserIdAndCulturalEventId(user.getId(), culturalEventId));
-        culturalEventRepository.updateViewCount(culturalEventId);
-        log.info("culturalEventDetails = {}", culturalEventDetails);
 
         return culturalEventDetails;
     }

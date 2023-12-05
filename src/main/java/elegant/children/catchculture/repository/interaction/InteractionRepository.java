@@ -18,4 +18,5 @@ public interface InteractionRepository extends JpaRepository<Interaction, Intege
     @Modifying(clearAutomatically = true)
     @Query("delete from Interaction i where i.user.id = :userId")
     void deleteByUserId(int userId);
+
 }

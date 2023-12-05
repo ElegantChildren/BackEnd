@@ -5,6 +5,7 @@ import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.dto.admin.response.EventReportResponseDTO;
 import elegant.children.catchculture.dto.admin.response.EventReportResponseListDTO;
 import elegant.children.catchculture.entity.eventreport.EventReport;
+import elegant.children.catchculture.entity.fileEvent.FileEvent;
 import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.event.CreateCulturalEvent;
 import elegant.children.catchculture.event.SignOutEvent;
@@ -17,6 +18,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +48,8 @@ public class EventReportService {
     public void createCulturalEvent(final int eventReportId, final int userId) {
         final EventReport eventReport = eventReportRepository.findByUserId(eventReportId, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_EVENT_REPORT_ID));
-        eventReportRepository.delete(eventReport);
+        eventReport.updateReported();
+
         eventReportRepository.flush();
         applicationEventPublisher.publishEvent(new CreateCulturalEvent(eventReport.getCulturalEventDetail(), eventReport.getUser()
                                                                         , PointChange.CREATE_CULTURAL_EVENT));
@@ -52,6 +58,18 @@ public class EventReportService {
     @EventListener
     @Transactional
     public void handleSighOutEvent(final SignOutEvent signOutEvent) {
+
+
+        final List<FileEvent> fileEvents = eventReportRepository.findByUserId(signOutEvent.getUserId())
+                .stream()
+                .map(eventReport -> eventReport.getCulturalEventDetail().getStoredFileUrl())
+                .flatMap(Collection::stream)
+                .map(fileName -> FileEvent.builder()
+                        .fileName(fileName)
+                        .build())
+                .collect(Collectors.toList());
+        applicationEventPublisher.publishEvent(fileEvents);
         eventReportRepository.deleteByUserId(signOutEvent.getUserId());
+
     }
 }

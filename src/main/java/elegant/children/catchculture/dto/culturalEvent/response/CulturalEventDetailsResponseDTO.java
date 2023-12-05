@@ -10,7 +10,6 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class CulturalEventDetailsResponseDTO implements Serializable {
 
     private CulturalEventDetail culturalEventDetail;

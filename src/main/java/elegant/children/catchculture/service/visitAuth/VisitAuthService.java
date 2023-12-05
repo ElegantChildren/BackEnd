@@ -5,6 +5,7 @@ import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.dto.admin.response.VisitAuthResponseDTO;
 import elegant.children.catchculture.dto.admin.response.VisitAuthResponseListDTO;
 import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
+import elegant.children.catchculture.entity.fileEvent.FileEvent;
 import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.entity.visitauth.VisitAuth;
@@ -24,7 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -79,6 +82,13 @@ public class VisitAuthService {
     @EventListener
     public void handleSignOutEvent(final SignOutEvent signOutEvent) {
         log.info("handleSignOutEvent");
+        final List<FileEvent> fileEvents = visitAuthRepository.findByUserId(signOutEvent.getUserId())
+                .stream().map(VisitAuth::getStoredFileUrl)
+                .flatMap(Collection::stream)
+                .map(fileUrl -> FileEvent.builder().fileName(fileUrl).build())
+                .collect(Collectors.toList());
+
+        applicationEventPublisher.publishEvent(fileEvents);
         visitAuthRepository.deleteByUserId(signOutEvent.getUserId());
     }
 
