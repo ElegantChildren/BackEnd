@@ -36,7 +36,8 @@ public class EventReportQueryRepository {
                 .innerJoin(user)
                 .on(eventReport.user.id.eq(user.id))
                 .where(
-                        eventReportIdGt(lastId)
+                        eventReportIdGt(lastId),
+                        eventReport.isReported.eq(false)
                 ).limit(PAGE_SIZE + 1)
                 .orderBy(eventReport.id.asc())
                 .fetch();
