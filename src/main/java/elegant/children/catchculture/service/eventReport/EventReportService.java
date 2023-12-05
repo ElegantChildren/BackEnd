@@ -8,6 +8,7 @@ import elegant.children.catchculture.entity.eventreport.EventReport;
 import elegant.children.catchculture.entity.fileEvent.FileEvent;
 import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.event.CreateCulturalEvent;
+import elegant.children.catchculture.event.DeleteFileEvent;
 import elegant.children.catchculture.event.SignOutEvent;
 import elegant.children.catchculture.repository.eventReport.EventReportQueryRepository;
 import elegant.children.catchculture.repository.eventReport.EventReportRepository;
@@ -68,7 +69,12 @@ public class EventReportService {
                         .fileName(fileName)
                         .build())
                 .collect(Collectors.toList());
-        applicationEventPublisher.publishEvent(fileEvents);
+
+        if(fileEvents.isEmpty()){
+            return;
+        }
+
+        applicationEventPublisher.publishEvent(new DeleteFileEvent(fileEvents));
         eventReportRepository.deleteByUserId(signOutEvent.getUserId());
 
     }

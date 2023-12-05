@@ -7,6 +7,7 @@ import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.review.Review;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.event.CreatePointHistoryEvent;
+import elegant.children.catchculture.event.DeleteFileEvent;
 import elegant.children.catchculture.event.SignOutEvent;
 import elegant.children.catchculture.repository.review.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +58,11 @@ public class ReviewTransactionService {
                 .map(fileUrl -> FileEvent.builder().fileName(fileUrl).build())
                 .collect(Collectors.toList());
 
-        applicationEventPublisher.publishEvent(fileEvents);
+        if(fileEvents.isEmpty()){
+            return;
+        }
+
+        applicationEventPublisher.publishEvent(new DeleteFileEvent(fileEvents));
         reviewRepository.deleteByUserId(signOutEvent.getUserId());
     }
 }
