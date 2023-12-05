@@ -31,4 +31,7 @@ public interface VisitAuthRepository extends JpaRepository<VisitAuth, Integer> {
 
     @Query("select va from VisitAuth va where va.user.id = :userId")
     List<VisitAuth> findByUserId(int userId);
+
+    @Query("select va from VisitAuth va where va.id = :visitAuthId")
+    VisitAuth findById(int visitAuthId);
 }

@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -95,7 +96,9 @@ public class VisitAuthService {
     }
 
     @Transactional
-    public void deleteVisitAuth(final int visitAuthId){
+    public void deleteVisitAuth(final int visitAuthId) throws IOException {
+        List<String> UrlList = visitAuthRepository.findById(visitAuthId).getStoredFileUrl();
+        gcsService.deleteFileFromGCSByUrlList(UrlList);
         visitAuthRepository.deleteById(visitAuthId);
     }
 

@@ -12,6 +12,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
@@ -42,8 +44,9 @@ public class AdminController {
 
     @AdminUser
     @DeleteMapping("/visit-auth/{visitAuthId}")
-    public void DeleteVisitAuth(final @PathVariable int visitAuthId) {
+    public void DeleteVisitAuth(final @PathVariable int visitAuthId) throws IOException {
         visitAuthService.deleteVisitAuth(visitAuthId);
+
     }
 
     @AdminUser
