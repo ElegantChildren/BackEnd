@@ -59,6 +59,7 @@ public class VisitAuthService {
         final VisitAuth visitAuth = visitAuthRepository.findByIdWithUserAAndCulturalEvent(visitAuthId, userId, culturalEventId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_VISIT_AUTH_ID));
         visitAuth.authenticate();
+        visitAuthRepository.flush();
         applicationEventPublisher.publishEvent(new CreatePointHistoryEvent(PointChange.VISIT_AUTH, visitAuth.getUser()));
     }
 
@@ -78,7 +79,6 @@ public class VisitAuthService {
                 .storedFileUrl(storedFileUrl)
                 .build();
         visitAuthRepository.save(visitAuth);
-
     }
 
 
