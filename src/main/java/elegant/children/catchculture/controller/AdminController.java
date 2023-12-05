@@ -41,6 +41,12 @@ public class AdminController {
     }
 
     @AdminUser
+    @DeleteMapping("/visit-auth/{visitAuthId}")
+    public void DeleteVisitAuth(final @PathVariable int visitAuthId) {
+        visitAuthService.deleteVisitAuth(visitAuthId);
+    }
+
+    @AdminUser
     @GetMapping("/event-report/list")
     public ResponseEntity<Slice<EventReportResponseListDTO>> getEventReportList(final @RequestParam(required = false, defaultValue = "0")int lastId) {
         return ResponseEntity.ok(eventReportService.getEventReportList(lastId));

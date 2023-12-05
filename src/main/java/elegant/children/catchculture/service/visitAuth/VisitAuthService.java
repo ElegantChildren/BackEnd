@@ -1,5 +1,6 @@
 package elegant.children.catchculture.service.visitAuth;
 
+import elegant.children.catchculture.common.annotation.AdminUser;
 import elegant.children.catchculture.common.exception.CustomException;
 import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.dto.admin.response.VisitAuthResponseDTO;
@@ -78,6 +79,7 @@ public class VisitAuthService {
 
     }
 
+
     @Transactional
     @EventListener
     public void handleSignOutEvent(final SignOutEvent signOutEvent) {
@@ -90,6 +92,11 @@ public class VisitAuthService {
 
         applicationEventPublisher.publishEvent(fileEvents);
         visitAuthRepository.deleteByUserId(signOutEvent.getUserId());
+    }
+
+    @Transactional
+    public void deleteVisitAuth(final int visitAuthId){
+        visitAuthRepository.deleteById(visitAuthId);
     }
 
 }
