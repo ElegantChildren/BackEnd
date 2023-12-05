@@ -30,8 +30,11 @@ public class FileEventService {
     @Transactional
     @Scheduled(fixedRate = 1000 * 60 * 60) //1시간마다
     public void deleteFileEvent() throws IOException {
-
-        gcsService.deleteFileFromGCSByUrlList(fileEventRepository.findAll().stream().map(FileEvent::getFileName).collect(Collectors.toList()));
+        final List<FileEvent> result = fileEventRepository.findAll();
+        if(result.isEmpty()) {
+            return;
+        }
+        gcsService.deleteFileFromGCSByUrlList(result.stream().map(FileEvent::getFileName).collect(Collectors.toList()));
         fileEventRepository.deleteAll();
     }
 
