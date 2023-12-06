@@ -11,11 +11,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -60,11 +58,6 @@ public class UserController {
     @GetMapping("sign-out")
     public void singOut(HttpServletRequest request, HttpServletResponse response, final @AuthenticationPrincipal User user) {
         userService.singOut(request, response, user);
-    }
-
-    @PatchMapping(value = "/profile/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void updateUserProfileImage(final @AuthenticationPrincipal User user, final @RequestParam MultipartFile file) {
-        userService.updateUserProfileImage(user, file);
     }
 
 

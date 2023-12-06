@@ -11,12 +11,10 @@ import elegant.children.catchculture.event.CreateCulturalEvent;
 import elegant.children.catchculture.event.SignOutEvent;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventQueryRepository;
 import elegant.children.catchculture.repository.user.UserRepository;
-import elegant.children.catchculture.service.GCS.GCSService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -26,7 +24,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,8 +44,6 @@ public class UserService {
     private final RedisUtils redisUtils;
 
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    private final GCSService gcsService;
 
     @Transactional
     @EventListener
@@ -82,16 +77,6 @@ public class UserService {
 
         userRepository.updateNickname(nickName, user.getId());
         user.updateNickname(nickName);
-        return user;
-    }
-
-    @Transactional
-    @CachePut(value = "user", key = "#user.email")
-    public User updateUserProfileImage(final User user, final MultipartFile file) {
-        String storedFileUrl = gcsService.uploadImage(file);
-        userRepository.updateProfileImage(storedFileUrl, user.getId());
-        user.updateProfileImage(storedFileUrl);
-        userRepository.flush();
         return user;
     }
 

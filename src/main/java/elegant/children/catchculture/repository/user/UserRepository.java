@@ -23,8 +23,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying(clearAutomatically = true)
     @Query("update User u set u.point = :point where u.id = :userId")
     void updateUserPoint(@Param("userId") int userId, @Param("point") int point);
-
-    @Modifying(clearAutomatically = true)
-    @Query("update User u set u.storedFileUrl = :storedFileUrl where u.id = :userId")
-    void updateProfileImage(String storedFileUrl, int userId);
 }
