@@ -34,5 +34,6 @@ public class CulturalEventReportDTO implements Serializable {
 //    private List<MultipartFile> fileList;
 //    private List<String> storedFileUrl;
     private String wayToCome;
+    private Boolean isReported;
 
 }

@@ -80,7 +80,8 @@ public class CulturalEventReportService {
                 report.getCulturalEventDetail().getDescription(),
                 report.getCulturalEventDetail().getSns(),
                 report.getCulturalEventDetail().getTelephone(),
-                report.getCulturalEventDetail().getWayToCome()
+                report.getCulturalEventDetail().getWayToCome(),
+                report.isReported()
         );
     }
 
