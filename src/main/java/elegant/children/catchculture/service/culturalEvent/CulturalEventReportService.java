@@ -6,6 +6,7 @@ import elegant.children.catchculture.entity.eventreport.EventReport;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.repository.culturalEvent.CulturalEventReportRepository;
 import elegant.children.catchculture.service.GCS.GCSService;
+import elegant.children.catchculture.service.GeoCode.GeoCodeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -27,9 +29,12 @@ public class CulturalEventReportService {
 
     private final CulturalEventReportRepository culturalEventReportRepository;
     private final GCSService gcsService;
+    private final GeoCodeService geoCodeService;
 
     @Transactional
     public String createEventReport(CulturalEventReportDTO culturalEventReportDTO, List<MultipartFile> fileList, User user) throws IOException {
+        Double latitude = Arrays.stream(geoCodeService.geocoder(culturalEventReportDTO.getEventLocation()).getResults()).map(result -> result.getGeometry().getLocation().getLat()).findFirst().orElseThrow();
+        Double longitude = Arrays.stream(geoCodeService.geocoder(culturalEventReportDTO.getEventLocation()).getResults()).map(result -> result.getGeometry().getLocation().getLng()).findFirst().orElseThrow();
         List<String> storedFileUrl = new ArrayList<>();
         if (fileList != null && !fileList.isEmpty()) {
             storedFileUrl = gcsService.uploadImages(fileList);
@@ -39,6 +44,7 @@ public class CulturalEventReportService {
 //                .reservationLink(culturalEventReportDTO.getReservationLink())
                 .title(culturalEventReportDTO.getEventName())
                 .place(culturalEventReportDTO.getEventLocation())
+                .geography(CulturalEventDetail.createGeography(latitude,longitude))
                 .startDate(culturalEventReportDTO.getStartDate().atStartOfDay())
                 .endDate(culturalEventReportDTO.getEndDate().atStartOfDay())
                 .isFree(culturalEventReportDTO.getIsFree())
