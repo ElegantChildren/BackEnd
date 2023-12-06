@@ -27,11 +27,20 @@ public class CulturalEventRegistrationController {
     private String openApiKey;
 
 
-    @GetMapping("/0-999")
-    public void registration0to1000() {
+    @GetMapping("/0-179")
+    public void registration0to180() {
         final RestTemplate restTemplate = new RestTemplate();
         final List<CulturalEvent> culturalEventList = new ArrayList<>();
-        final HashMap<String, Object> result = restTemplate.getForObject(RegistrationUtils.getOpenApiUrl(openApiKey, 0, 999), HashMap.class);
+        final HashMap<String, Object> result = restTemplate.getForObject(RegistrationUtils.getOpenApiUrl(openApiKey, 0, 179), HashMap.class);
+        addCulturalEventToList(culturalEventList, result);
+        culturalEventRepository.saveAll(culturalEventList);
+    }
+
+    @GetMapping("/181-999")
+    public void registration181to1000() {
+        final RestTemplate restTemplate = new RestTemplate();
+        final List<CulturalEvent> culturalEventList = new ArrayList<>();
+        final HashMap<String, Object> result = restTemplate.getForObject(RegistrationUtils.getOpenApiUrl(openApiKey, 181, 999), HashMap.class);
         addCulturalEventToList(culturalEventList, result);
         culturalEventRepository.saveAll(culturalEventList);
     }
