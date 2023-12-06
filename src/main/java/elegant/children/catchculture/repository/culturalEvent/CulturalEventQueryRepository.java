@@ -224,7 +224,7 @@ public class CulturalEventQueryRepository {
                             interaction.likeStar.eq(likeStar)
                     )
                     .where(
-                            notFinishedCulturalEvent(now),
+//                            notFinishedCulturalEvent(now),
                             categoryIn(categoryList),
                             userIdEqWithInteraction(userId)
                     ).orderBy(
@@ -241,7 +241,7 @@ public class CulturalEventQueryRepository {
                             interaction.likeStar.eq(likeStar)
                     )
                     .where(
-                            notFinishedCulturalEvent(now),
+//                            notFinishedCulturalEvent(now),
                             categoryIn(categoryList),
                             userIdEqWithInteraction(userId)
                     ).fetchOne();
@@ -267,7 +267,7 @@ public class CulturalEventQueryRepository {
                             visitAuth.user.id.eq(userId)
                     )
                     .where(
-                            notFinishedCulturalEvent(now),
+//                            notFinishedCulturalEvent(now),
                             categoryIn(categoryList),
                             userIdEqWithVisitAuth(userId)
                     ).orderBy(
@@ -283,7 +283,7 @@ public class CulturalEventQueryRepository {
                             visitAuth.user.id.eq(userId)
                     )
                     .where(
-                            notFinishedCulturalEvent(now),
+//                            notFinishedCulturalEvent(now),
                             categoryIn(categoryList),
                             userIdEqWithVisitAuth(userId)
                     ).fetchOne();
