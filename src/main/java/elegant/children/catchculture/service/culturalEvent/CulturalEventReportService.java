@@ -33,8 +33,8 @@ public class CulturalEventReportService {
 
     @Transactional
     public String createEventReport(CulturalEventReportDTO culturalEventReportDTO, List<MultipartFile> fileList, User user) throws IOException {
-        Double latitude = Arrays.stream(geoCodeService.geocoder(culturalEventReportDTO.getEventLocation()).getResults()).map(result -> result.getGeometry().getLocation().getLat()).findFirst().orElseThrow();
-        Double longitude = Arrays.stream(geoCodeService.geocoder(culturalEventReportDTO.getEventLocation()).getResults()).map(result -> result.getGeometry().getLocation().getLng()).findFirst().orElseThrow();
+        Double latitude = Arrays.stream(geoCodeService.geocoder(culturalEventReportDTO.getEventLocation()).getResults()).map(result -> result.getGeometry().getLocation().getLng()).findFirst().orElseThrow();
+        Double longitude = Arrays.stream(geoCodeService.geocoder(culturalEventReportDTO.getEventLocation()).getResults()).map(result -> result.getGeometry().getLocation().getLat()).findFirst().orElseThrow();
         List<String> storedFileUrl = new ArrayList<>();
         if (fileList != null && !fileList.isEmpty()) {
             storedFileUrl = gcsService.uploadImages(fileList);
