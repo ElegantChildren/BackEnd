@@ -86,14 +86,16 @@ public class VisitAuthService {
     @EventListener
     public void handleSignOutEvent(final SignOutEvent signOutEvent) {
         log.info("handleSignOutEvent");
-        final List<FileEvent> fileEvents = visitAuthRepository.findByUserId(signOutEvent.getUserId())
-                .stream().map(VisitAuth::getStoredFileUrl)
+        final List<VisitAuth> visitAuths = visitAuthRepository.findByUserId(signOutEvent.getUserId());
+        if(visitAuths.isEmpty()){
+            return;
+        }
+
+        final List<FileEvent> fileEvents = visitAuths.stream().map(VisitAuth::getStoredFileUrl)
                 .flatMap(Collection::stream)
                 .map(fileUrl -> FileEvent.builder().fileName(fileUrl).build())
                 .collect(Collectors.toList());
-        if(fileEvents.isEmpty()){
-            return;
-        }
+
         applicationEventPublisher.publishEvent(new DeleteFileEvent(fileEvents));
         visitAuthRepository.deleteByUserId(signOutEvent.getUserId());
     }

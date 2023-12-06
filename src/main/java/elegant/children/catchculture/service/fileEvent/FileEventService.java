@@ -32,10 +32,11 @@ public class FileEventService {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 1000 * 60 * 60) //1시간마다
+    @Scheduled(fixedRate = 1000 * 60 * 60 * 3) //3시간마다
     public void deleteFileEvent() throws IOException {
         log.info("deleteFileEvent");
         final List<FileEvent> result = fileEventRepository.findAll();
+
         log.info("result: {}", result);
         if(result.isEmpty()) {
             return;

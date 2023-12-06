@@ -59,6 +59,7 @@ public class ReviewService {
         reviewTransactionService.deleteReview(reviewId);
     }
 
+
     public void createReview(final int culturalEventId, final User user, final List<MultipartFile> multipartFile,
                              final String description, final int rating) {
 
@@ -81,17 +82,9 @@ public class ReviewService {
                 .rating(rating)
                 .storedFileURL(storedImageUrl)
                 .build();
-
         reviewTransactionService.createReview(review, user);
-
-
     }
 
-//    public Page<ReviewDTO> getMyReviewList(final User user, final Pageable pageable){
-//        return reviewRepository.getMyList(user.getId(), pageable);
-//
-//
-//    }
     public Page<ReviewDTO> getMyReviews(User user, Pageable pageable) {
         Page<Review> reviews = reviewRepository.findByUserIdOrderByCreatedAtDesc(user.getId(), pageable);
         return reviews.map(this::convertToReviewDTO);

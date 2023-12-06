@@ -61,8 +61,12 @@ public class EventReportService {
     public void handleSighOutEvent(final SignOutEvent signOutEvent) {
 
 
-        final List<FileEvent> fileEvents = eventReportRepository.findByUserId(signOutEvent.getUserId())
-                .stream()
+        final List<EventReport> eventReports = eventReportRepository.findByUserId(signOutEvent.getUserId());
+
+        if(eventReports.isEmpty()){
+            return;
+        }
+        final List<FileEvent> fileEvents = eventReports.stream()
                 .map(eventReport -> eventReport.getCulturalEventDetail().getStoredFileUrl())
                 .flatMap(Collection::stream)
                 .map(fileName -> FileEvent.builder()
@@ -70,9 +74,9 @@ public class EventReportService {
                         .build())
                 .collect(Collectors.toList());
 
-        if(fileEvents.isEmpty()){
-            return;
-        }
+
+
+
 
         applicationEventPublisher.publishEvent(new DeleteFileEvent(fileEvents));
         eventReportRepository.deleteByUserId(signOutEvent.getUserId());

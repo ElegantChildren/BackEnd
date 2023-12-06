@@ -17,6 +17,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,15 +53,16 @@ public class ReviewTransactionService {
     public void handleSighOutEvent(final SignOutEvent signOutEvent) {
         log.info("handleSighOutEvent");
 
-        final List<FileEvent> fileEvents = reviewRepository.findByUserId(signOutEvent.getUserId())
-                .stream().map(Review::getStoredFileURL)
-                .flatMap(list -> list.stream())
+        final List<Review> reviews = reviewRepository.findByUserId(signOutEvent.getUserId());
+        if(reviews.isEmpty()) {
+            return;
+        }
+
+        final List<FileEvent> fileEvents = reviews.stream().map(Review::getStoredFileURL)
+                .flatMap(Collection::stream)
                 .map(fileUrl -> FileEvent.builder().fileName(fileUrl).build())
                 .collect(Collectors.toList());
 
-        if(fileEvents.isEmpty()){
-            return;
-        }
 
         applicationEventPublisher.publishEvent(new DeleteFileEvent(fileEvents));
         reviewRepository.deleteByUserId(signOutEvent.getUserId());
