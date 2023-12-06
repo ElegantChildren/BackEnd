@@ -41,6 +41,10 @@ public class User {
         this.nickname = nickname;
     }
 
+    public void updateProfileImage(String storedFileUrl) {
+        this.storedFileUrl = storedFileUrl;
+    }
+
 
 
 }
