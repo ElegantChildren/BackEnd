@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Repository
 public interface PointHistoryRepository extends JpaRepository<PointHistory, Integer> {
@@ -19,4 +22,7 @@ public interface PointHistoryRepository extends JpaRepository<PointHistory, Inte
     @Modifying(clearAutomatically = true)
     @Query("delete from PointHistory p where p.user.id = :userId")
     void deleteByUserId(int userId);
+
+    @Query("SELECT ph FROM PointHistory ph WHERE ph.user.id = :userId AND ph.pointChange > 0")
+    List<PointHistory> findRecentPositivePointsByUserId(int userId);
 }

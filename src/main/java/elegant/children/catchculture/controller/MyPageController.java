@@ -7,6 +7,7 @@ import elegant.children.catchculture.dto.user.PointUsageResponseDTO;
 import elegant.children.catchculture.entity.pointhistory.PointChange;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.service.culturalEvent.CulturalEventReportService;
+import elegant.children.catchculture.service.pointHistory.PointGradeService;
 import elegant.children.catchculture.service.pointHistory.PointHistoryService;
 import elegant.children.catchculture.service.pointHistory.PointUsageService;
 import elegant.children.catchculture.service.review.ReviewService;
@@ -36,6 +37,9 @@ public class MyPageController {
     private CulturalEventReportService culturalEventReportService;
     @Autowired
     private PointUsageService pointUsageService;
+
+    @Autowired
+    private PointGradeService pointGradeService;
 
     @PostMapping(value = "/report", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> reportEvent(final @AuthenticationPrincipal User user,
@@ -97,4 +101,9 @@ public class MyPageController {
         return ResponseEntity.ok(pointHistoryService.purchaseReward(user,pointChange));
     }
 
+    @GetMapping("/point-grade")
+    public ResponseEntity<String> viewPointGrade(
+            final @AuthenticationPrincipal User user){
+        return ResponseEntity.ok(pointGradeService.calculateUserRank(user.getId()));
+    }
 }
