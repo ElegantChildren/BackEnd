@@ -16,11 +16,11 @@ spring:
             client-id: 948608093274-1g12niauejkfgbdg2qot01d6fb2doahp.apps.googleusercontent.com
             client-secret: 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
             scope: profile, email
-            redirect-uri: http://elegant.kro.kr/login/oauth2/code/google
+            redirect-uri: https://elegant.kro.kr/login/oauth2/code/google
           kakao:
             client-id: daf061e4c4faaddcdf107de1cb3e50a7
             client-secret: JkFMWHc5iqkpaQDgyQOKJFmCp0hyfpRN
-            redirect-uri: http://elegant.kro.kr/login/oauth2/code/kakao
+            redirect-uri: https://elegant.kro.kr/login/oauth2/code/kakao
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
             scope: profile_image, profile_nickname, account_email
