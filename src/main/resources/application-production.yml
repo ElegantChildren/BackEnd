@@ -30,7 +30,7 @@ spring:
             client-secret: tY9F3gyaXj
             scope: profile_image, name, email
             authorization-grant-type: authorization_code
-            redirect-uri: http://elegant.kro.kr/login/oauth2/code/naver
+            redirect-uri: https://elegant.kro.kr/login/oauth2/code/naver
             client-name: Naver
 
         provider:
