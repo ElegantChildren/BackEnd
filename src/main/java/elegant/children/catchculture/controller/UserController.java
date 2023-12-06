@@ -55,7 +55,7 @@ public class UserController {
         userService.logout(request, response, user);
     }
 
-    @GetMapping("sing-out")
+    @GetMapping("sign-out")
     public void singOut(HttpServletRequest request, HttpServletResponse response, final @AuthenticationPrincipal User user) {
         userService.singOut(request, response, user);
     }
