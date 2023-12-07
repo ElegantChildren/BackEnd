@@ -18,6 +18,7 @@ public class UserProfileResponseDTO {
         return UserProfileResponseDTO.builder()
                 .storedFileUrl(storedFileUrl)
                 .nickname(nickname)
+                .role(role)
                 .build();
     }
 }
