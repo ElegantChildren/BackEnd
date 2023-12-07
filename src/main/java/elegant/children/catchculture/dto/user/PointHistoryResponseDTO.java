@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 public class PointHistoryResponseDTO {
     private int id;
@@ -16,4 +15,14 @@ public class PointHistoryResponseDTO {
     private String description;
     private int pointChange;
     private int userId;
+
+
+    public PointHistoryResponseDTO(int id, LocalDateTime createdAt, String description, int pointChange, int userId) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.description = description;
+        this.pointChange = pointChange;
+        this.userId = userId;
+    }
+
 }
