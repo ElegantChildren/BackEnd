@@ -25,13 +25,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    @GetMapping
-    public ResponseEntity<User> userTest(@AuthenticationPrincipal User user) {
-        if(user == null) {
-            throw new RuntimeException("유저가 없습니다.");
-        }
-        return ResponseEntity.ok(user);
-    }
 
     @GetMapping("/profile")
     public ResponseEntity<UserProfileResponseDTO> getUserProfile(final @AuthenticationPrincipal User user) {

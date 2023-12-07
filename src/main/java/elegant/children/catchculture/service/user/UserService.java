@@ -44,7 +44,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final CulturalEventQueryRepository culturalEventQueryRepository;
-    private final RedisUtils redisUtils;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 

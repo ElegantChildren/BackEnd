@@ -36,7 +36,6 @@ public class SecurityConfig {
     private final UserService userService;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final RedisUtils redisUtils;
     private final ObjectMapper objectMapper;
     private final String OAUTH_BASE_URL = "/oauth2/authorization/**";
     private final String SWAGGER = "/swagger-ui/**";
@@ -88,7 +87,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtTokenProvider, userService, redisUtils, objectMapper);
+        return new JwtAuthenticationFilter(jwtTokenProvider, userService, objectMapper);
     }
 
     @Bean
@@ -103,7 +102,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationSuccessHandler oAuth2LoginSuccessHandler() {
-        return new OAuth2LoginSuccessHandler(jwtTokenProvider, redisUtils);
+        return new OAuth2LoginSuccessHandler(jwtTokenProvider);
     }
 
     @Bean
