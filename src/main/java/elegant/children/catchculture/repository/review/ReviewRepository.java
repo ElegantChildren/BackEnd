@@ -23,6 +23,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     @Query("update Review r set r.description = :description where r.id =:id and r.isDeleted = false")
     void updateReviewDescription(@Param("id") int id, @Param("description") String description);
 
+    @Query("select r from Review r where r.user.id= :userId and r.isDeleted = false order by r.createdAt desc")
     Page<Review> findByUserIdOrderByCreatedAtDesc(int userId, Pageable pageable);
 
     @Query("select r from Review r where r.user.id = :userId and r.isDeleted = false")
