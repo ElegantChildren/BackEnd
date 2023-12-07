@@ -74,12 +74,12 @@ public class ReviewQueryRepository {
 
                 )
                 .orderBy(review.id.desc())
-                .limit(PAGE_SIZE +1)
+                .limit(PAGE_SIZE +1L)
                 .fetch();
 
         boolean hasNext = false;
 
-        if(content.size() == PAGE_SIZE + 1) {
+        if(content.size() == PAGE_SIZE + 1L) {
             content.remove(PAGE_SIZE);
             hasNext = true;
         }

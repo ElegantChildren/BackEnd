@@ -1,6 +1,5 @@
 package elegant.children.catchculture.dto.culturalEvent.response;
 
-import com.querydsl.core.types.dsl.Expressions;
 import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
 import lombok.AllArgsConstructor;
@@ -10,10 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
-
-import static elegant.children.catchculture.entity.culturalevent.QCulturalEvent.culturalEvent;
 
 
 @Getter
