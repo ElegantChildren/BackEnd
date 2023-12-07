@@ -71,12 +71,10 @@ class ReviewTransactionServiceTest {
         final Optional<Review> review = getReview();
 
         doReturn(review).when(reviewRepository).findById(any(Integer.class));
-        doNothing().when(reviewRepository).deleteReviewById(any(Integer.class));
 
         target.deleteReview(any(Integer.class));
 
         verify(reviewRepository, times(1)).findById(any(Integer.class));
-        verify(reviewRepository, times(1)).deleteReviewById(any(Integer.class));
     }
 
     @Test

@@ -9,6 +9,7 @@ import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.event.CreatePointHistoryEvent;
 import elegant.children.catchculture.event.DeleteFileEvent;
 import elegant.children.catchculture.event.SignOutEvent;
+import elegant.children.catchculture.repository.review.ReviewQueryRepository;
 import elegant.children.catchculture.repository.review.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 public class ReviewTransactionService {
 
     private final ReviewRepository reviewRepository;
+    private final ReviewQueryRepository reviewQueryRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public void updateReviewDescription(final int reviewId, final String description) {
@@ -39,14 +41,15 @@ public class ReviewTransactionService {
 
     public void deleteReview(final int reviewId) {
         reviewRepository.findById(reviewId)
-                .ifPresentOrElse(review -> reviewRepository.deleteReviewById(reviewId), () -> {
+                .ifPresentOrElse(review -> review.delete(), () -> {
                     throw new CustomException(ErrorCode.INVALID_REVIEW_ID);
                 });
     }
 
     public void createReview(final Review review, final User user) {
         reviewRepository.save(review);
-        applicationEventPublisher.publishEvent(new CreatePointHistoryEvent(PointChange.REVIEW, user));
+        if(!reviewQueryRepository.existsDeletedReviewByCulturalEventIdAndUserId(review.getCulturalEvent().getId(), user.getId()))
+             applicationEventPublisher.publishEvent(new CreatePointHistoryEvent(PointChange.REVIEW, user));
     }
 
     @EventListener
@@ -63,8 +66,7 @@ public class ReviewTransactionService {
                 .map(fileUrl -> FileEvent.builder().fileName(fileUrl).build())
                 .collect(Collectors.toList());
 
-
         applicationEventPublisher.publishEvent(new DeleteFileEvent(fileEvents));
-        reviewRepository.deleteByUserId(signOutEvent.getUserId());
+        reviews.forEach(review -> review.delete());
     }
 }

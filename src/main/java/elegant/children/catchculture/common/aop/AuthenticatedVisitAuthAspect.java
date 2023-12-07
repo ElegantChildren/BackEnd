@@ -24,7 +24,6 @@ public class AuthenticatedVisitAuthAspect {
     public void isCulturalEventAuthenticated(final int culturalEventId, final User user ) {
         log.info("isCulturalEventAuthenticated");
         if (culturalEventQueryRepository.existById(culturalEventId)) {
-            log.info("existById");
             visitAuthRepository.isAuthenticated(user.getId(), culturalEventId)
                     .ifPresentOrElse(
                             isAuthenticated -> {

@@ -68,7 +68,8 @@ public class ReviewQueryRepository {
                 .where(
                         culturalEventIdEq(culturalEventId),
                         reviewUserIdNe(userId),
-                        reviewIdLt(lastId)
+                        reviewIdLt(lastId),
+                        reviewIsDelEq(false)
 
                 )
                 .orderBy(review.id.desc())
@@ -83,9 +84,20 @@ public class ReviewQueryRepository {
         }
         return new SliceImpl<>(content, PageRequest.ofSize(PAGE_SIZE), hasNext);
 
-
-
     }
+
+    public boolean existsDeletedReviewByCulturalEventIdAndUserId(final int culturalEventId, final int userId) {
+        return queryFactory.selectOne()
+                .from(review)
+                .where(
+                        culturalEventIdEq(culturalEventId),
+                        review.user.id.eq(userId),
+                        reviewIsDelEq(true)
+                )
+                .fetchFirst() != null;
+    }
+
+
 
     private BooleanExpression culturalEventIdEq(final int culturalEventId) {
         return review.culturalEvent.id.eq(culturalEventId);
@@ -101,5 +113,9 @@ public class ReviewQueryRepository {
     private BooleanExpression reviewUserIdNe(final int userId) {
 
         return review.user.id.ne(userId);
+    }
+
+    private BooleanExpression reviewIsDelEq(final boolean isDeleted) {
+        return review.isDeleted.eq(isDeleted);
     }
 }

@@ -42,8 +42,15 @@ public class Review {
     @JoinColumn(name = "cultural_event_id")
     private CulturalEvent culturalEvent;
 
+    private boolean isDeleted;
+
     @PrePersist
     public void prePersist() {
+        this.isDeleted = false;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 }

@@ -80,13 +80,6 @@ public class CulturalEventQueryRepository {
                 .fetchOne();
     }
 
-    private static BooleanExpression interactionLikeStarEq() {
-        return interaction.likeStar.eq(LikeStar.STAR);
-    }
-
-    private BooleanExpression culturalEventIdEq(final int culturalEventId) {
-        return culturalEvent.id.eq(culturalEventId);
-    }
 
     public List<CulturalEventListResponseDTO> getCulturalEventMainList(final List<Integer> culturalEventIdList) {
         final LocalDateTime now = LocalDateTime.now();
@@ -134,7 +127,6 @@ public class CulturalEventQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-        log.info("content : {}", content);
 
         final long count = queryFactory
                 .select(culturalEvent.count())
@@ -146,8 +138,6 @@ public class CulturalEventQueryRepository {
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, count);
-
-
     }
 
 
@@ -156,8 +146,6 @@ public class CulturalEventQueryRepository {
                                                                                 final Pageable pageable, final SortType sortType) {
 
         final LocalDateTime now = LocalDateTime.now();
-
-
 
         final List<CulturalEventListResponseDTO> content = queryFactory.select(Projections.constructor(
                         CulturalEventListResponseDTO.class,
@@ -200,97 +188,30 @@ public class CulturalEventQueryRepository {
                                                                                   final Pageable pageable, final Classification classification) {
 
         final LocalDateTime now = LocalDateTime.now();
-        final List<CulturalEventListResponseDTO> content;
-        final long count;
-        if (classification.equals(Classification.LIKE) || classification.equals(Classification.STAR)) {
-            LikeStar likeStar = LikeStar.of(classification);
-            content = queryFactory.select(
-                            Projections.constructor(
-                                    CulturalEventListResponseDTO.class,
-                                    culturalEvent.id,
-                                    culturalEvent.culturalEventDetail,
-                                    culturalEvent.likeCount,
-                                    culturalEvent.viewCount,
-                                    Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
-                                            culturalEvent.culturalEventDetail.startDate,
-                                            now).as("remainDay")
-                            )
-                    )
-                    .from(culturalEvent)
-                    .innerJoin(interaction)
-                    .on(
-                            culturalEvent.id.eq(interaction.culturalEvent.id),
-                            interaction.user.id.eq(userId),
-                            interaction.likeStar.eq(likeStar)
-                    )
-                    .where(
-//                            notFinishedCulturalEvent(now),
-                            categoryIn(categoryList),
-                            userIdEqWithInteraction(userId)
-                    ).orderBy(
-                            getSortTypeWithClassification(classification)
-                    ).fetch();
+        List<CulturalEventListResponseDTO> content = null;
+        long count = 0;
 
-            count = queryFactory
-                    .select(culturalEvent.count())
-                    .from(culturalEvent)
-                    .innerJoin(interaction)
-                    .on(
-                            culturalEvent.id.eq(interaction.culturalEvent.id),
-                            interaction.user.id.eq(userId),
-                            interaction.likeStar.eq(likeStar)
-                    )
-                    .where(
-//                            notFinishedCulturalEvent(now),
-                            categoryIn(categoryList),
-                            userIdEqWithInteraction(userId)
-                    ).fetchOne();
-
-        } else {
-            content = queryFactory.select(
-                            Projections.constructor(
-                                    CulturalEventListResponseDTO.class,
-                                    culturalEvent.id,
-                                    culturalEvent.culturalEventDetail,
-                                    culturalEvent.likeCount,
-                                    culturalEvent.viewCount,
-                                    Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
-                                            culturalEvent.culturalEventDetail.startDate,
-                                            now).as("remainDay"),
-                                    visitAuth.isAuthenticated
-                            )
-                    )
-                    .from(culturalEvent)
-                    .innerJoin(visitAuth)
-                    .on(
-                            culturalEvent.id.eq(visitAuth.culturalEvent.id),
-                            visitAuth.user.id.eq(userId)
-                    )
-                    .where(
-//                            notFinishedCulturalEvent(now),
-                            categoryIn(categoryList),
-                            userIdEqWithVisitAuth(userId)
-                    ).orderBy(
-                            getSortTypeWithClassification(classification)
-                    ).fetch();
-
-            count = queryFactory
-                    .select(culturalEvent.count())
-                    .from(culturalEvent)
-                    .innerJoin(visitAuth)
-                    .on(
-                            culturalEvent.id.eq(visitAuth.culturalEvent.id),
-                            visitAuth.user.id.eq(userId)
-                    )
-                    .where(
-//                            notFinishedCulturalEvent(now),
-                            categoryIn(categoryList),
-                            userIdEqWithVisitAuth(userId)
-                    ).fetchOne();
+        switch (classification) {
+            case LIKE, STAR -> {
+                final LikeStar likeStar = LikeStar.of(classification);
+                content = getLikeStarContent(categoryList, userId, classification, now, likeStar);
+                count = getLikeStarCount(categoryList, userId, now, likeStar);;
+            }
+            case VISIT_AUTH -> {
+                content = getAuthenticatedContent(categoryList, userId, classification, now);
+                count = getAuthenticatedCount(categoryList, userId, now);
+                break;
+            }
         }
+          return new PageImpl<>(content, pageable, count);
+    }
 
-        return new PageImpl<>(content, pageable, count);
+    private static BooleanExpression interactionLikeStarEq() {
+        return interaction.likeStar.eq(LikeStar.STAR);
+    }
 
+    private BooleanExpression culturalEventIdEq(final int culturalEventId) {
+        return culturalEvent.id.eq(culturalEventId);
     }
 
     private BooleanExpression titleContains(final String keyword) {
@@ -313,8 +234,6 @@ public class CulturalEventQueryRepository {
     private BooleanExpression notFinishedCulturalEvent(final LocalDateTime now) {
         return culturalEvent.culturalEventDetail.endDate.goe(now);
     }
-
-
 
     private static void startDateASC(final List<OrderSpecifier> orderSpecifier) {
         orderSpecifier.add(new OrderSpecifier<>(Order.ASC, culturalEvent.culturalEventDetail.startDate));
@@ -361,5 +280,98 @@ public class CulturalEventQueryRepository {
         startDateASC(orderSpecifier);
 
         return orderSpecifier.toArray(new OrderSpecifier[0]);
+    }
+
+    private Long getAuthenticatedCount(List<Category> categoryList, int userId, LocalDateTime now) {
+        return queryFactory
+                .select(culturalEvent.count())
+                .from(culturalEvent)
+                .innerJoin(visitAuth)
+                .on(
+                        culturalEvent.id.eq(visitAuth.culturalEvent.id),
+                        visitAuth.user.id.eq(userId)
+                )
+                .where(
+                        notFinishedCulturalEvent(now),
+                        categoryIn(categoryList),
+                        userIdEqWithVisitAuth(userId)
+                ).fetchOne();
+    }
+
+    private List<CulturalEventListResponseDTO> getAuthenticatedContent(List<Category> categoryList, int userId, Classification classification, LocalDateTime now) {
+        return queryFactory.select(
+                        Projections.constructor(
+                                CulturalEventListResponseDTO.class,
+                                culturalEvent.id,
+                                culturalEvent.culturalEventDetail,
+                                culturalEvent.likeCount,
+                                culturalEvent.viewCount,
+                                Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
+                                        culturalEvent.culturalEventDetail.startDate,
+                                        now).as("remainDay"),
+                                visitAuth.isAuthenticated
+                        )
+                )
+                .from(culturalEvent)
+                .innerJoin(visitAuth)
+                .on(
+                        culturalEvent.id.eq(visitAuth.culturalEvent.id),
+                        visitAuth.user.id.eq(userId)
+                )
+                .where(
+                        notFinishedCulturalEvent(now),
+                        categoryIn(categoryList),
+                        userIdEqWithVisitAuth(userId)
+                ).orderBy(
+                        getSortTypeWithClassification(classification)
+                ).fetch();
+    }
+
+
+
+    private Long getLikeStarCount(List<Category> categoryList, int userId, LocalDateTime now, LikeStar likeStar) {
+        return queryFactory
+                .select(culturalEvent.count())
+                .from(culturalEvent)
+                .innerJoin(interaction)
+                .on(
+                        culturalEvent.id.eq(interaction.culturalEvent.id),
+                        interaction.user.id.eq(userId),
+                        interaction.likeStar.eq(likeStar)
+                )
+                .where(
+                        notFinishedCulturalEvent(now),
+                        categoryIn(categoryList),
+                        userIdEqWithInteraction(userId)
+                ).fetchOne();
+    }
+
+    private List<CulturalEventListResponseDTO> getLikeStarContent(List<Category> categoryList, int userId, Classification classification, LocalDateTime now, LikeStar likeStar) {
+        return queryFactory.select(
+                        Projections.constructor(
+                                CulturalEventListResponseDTO.class,
+                                culturalEvent.id,
+                                culturalEvent.culturalEventDetail,
+                                culturalEvent.likeCount,
+                                culturalEvent.viewCount,
+                                Expressions.numberTemplate(Integer.class, "function('datediff', {0}, {1})",
+                                        culturalEvent.culturalEventDetail.startDate,
+                                        now).as("remainDay")
+                        )
+                )
+                .from(culturalEvent)
+                .innerJoin(interaction)
+                .on(
+                        culturalEvent.id.eq(interaction.culturalEvent.id),
+                        interaction.user.id.eq(userId),
+                        interaction.likeStar.eq(likeStar)
+                )
+                .where(
+                        notFinishedCulturalEvent(now),
+                        categoryIn(categoryList),
+                        userIdEqWithInteraction(userId)
+                ).orderBy(
+                        getSortTypeWithClassification(classification)
+                ).fetch();
     }
 }
