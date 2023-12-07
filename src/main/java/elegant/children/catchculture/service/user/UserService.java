@@ -111,7 +111,6 @@ public class UserService {
     @CacheEvict(value = "user", key = "#user.email")
     public void logout(HttpServletRequest request, HttpServletResponse response, final User user) {
         CookieUtils.deleteCookie(request, response, cookieName);
-        redisUtils.deleteData(user.getEmail());
     }
 
     @Transactional

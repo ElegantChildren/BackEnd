@@ -19,7 +19,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -140,10 +139,8 @@ class UserServiceTest {
         final MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
         final MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
 
-        doNothing().when(redisUtils).deleteData(any(String.class));
         target.logout(mockHttpServletRequest, mockHttpServletResponse, getUser());
 
-        verify(redisUtils, times(1)).deleteData(any(String.class));
     }
 
 

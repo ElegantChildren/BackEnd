@@ -31,7 +31,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
-    private final RedisUtils redisUtils;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -47,10 +46,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             throw new RuntimeException();
                         final String email = jwtTokenProvider.getEmail(token);
                         final Role role = jwtTokenProvider.getRole(token);
-                        final String ip = ClientUtils.getRemoteIP(request);
-                        if (!ip.equals(redisUtils.getData(email))) {
-                            throw new RuntimeException();
-                        }
                         final ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
                         simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role.name()));
                         userService.findByEmail(email)

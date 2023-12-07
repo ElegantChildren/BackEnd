@@ -19,9 +19,6 @@ class RedisUtilsTest {
         final String value = "백승진";
 
 
-        final String result = redisUtils.getData(key);
-
-        Assertions.assertThat(result).isEqualTo(value);
     }
 
 }

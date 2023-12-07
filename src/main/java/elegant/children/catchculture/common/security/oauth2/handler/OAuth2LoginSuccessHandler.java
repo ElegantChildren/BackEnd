@@ -32,7 +32,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         final Role role = principal.getRole();
         final String token = jwtTokenProvider.generateToken(email, role);
         jwtTokenProvider.sendJwtTokenCookie(response, token);
-        redisUtils.setData(email, ClientUtils.getRemoteIP(request));
         response.sendRedirect("https://catch-culture.netlify.app/main");
     }
 }
