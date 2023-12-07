@@ -2,7 +2,6 @@ package elegant.children.catchculture.common.security.oauth2.handler;
 
 import elegant.children.catchculture.common.security.JwtTokenProvider;
 import elegant.children.catchculture.common.security.oauth2.CustomOAuth2User;
-import elegant.children.catchculture.common.utils.ClientUtils;
 import elegant.children.catchculture.common.utils.RedisUtils;
 import elegant.children.catchculture.entity.user.Role;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,8 +18,6 @@ import java.io.IOException;
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final RedisUtils redisUtils;
-
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
