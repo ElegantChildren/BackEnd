@@ -8,7 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Getter
-@ToString
 public class User {
 
     @Id @GeneratedValue
@@ -46,5 +45,7 @@ public class User {
     }
 
 
-
+    public void updatePoint(int point) {
+        this.point += point;
+    }
 }

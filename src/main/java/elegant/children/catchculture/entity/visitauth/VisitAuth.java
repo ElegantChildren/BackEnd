@@ -4,10 +4,7 @@ import elegant.children.catchculture.common.converter.StoredFileUrlConverter;
 import elegant.children.catchculture.entity.culturalevent.CulturalEvent;
 import elegant.children.catchculture.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,6 +27,7 @@ public class VisitAuth {
     private Boolean isAuthenticated;
 
     private LocalDateTime createdAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -41,6 +39,7 @@ public class VisitAuth {
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
+        this.isAuthenticated = false;
     }
 
     public void authenticate() {
