@@ -56,11 +56,12 @@ public class VisitAuthService {
 
     @Transactional
     public void authenticateVisitAuth(final int visitAuthId, final int userId, final int culturalEventId) {
-        final VisitAuth visitAuth = visitAuthRepository.findByIdWithUserAAndCulturalEvent(visitAuthId, userId, culturalEventId)
+        final VisitAuth visitAuth = visitAuthRepository.findByIdWithUserAndCulturalEvent(visitAuthId, userId, culturalEventId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_VISIT_AUTH_ID));
         visitAuth.authenticate();
         visitAuthRepository.flush();
         applicationEventPublisher.publishEvent(new CreatePointHistoryEvent(PointChange.VISIT_AUTH, visitAuth.getUser()));
+
     }
 
     @Transactional
