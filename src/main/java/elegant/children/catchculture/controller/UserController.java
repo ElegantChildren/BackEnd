@@ -6,7 +6,6 @@ import elegant.children.catchculture.dto.user.UserProfileResponseDTO;
 import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
 import elegant.children.catchculture.service.user.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<UserProfileResponseDTO> getUserProfile(final @AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(UserProfileResponseDTO.of(user.getStoredFileUrl(), user.getNickname()));
+        return ResponseEntity.ok(UserProfileResponseDTO.of(user.getStoredFileUrl(), user.getNickname(), user.getRole()));
     }
 
     @PatchMapping("/profile/nickname")
