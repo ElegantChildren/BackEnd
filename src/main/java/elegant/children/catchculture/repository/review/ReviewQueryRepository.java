@@ -30,7 +30,8 @@ public class ReviewQueryRepository {
     public ReviewRatingResponseDTO getReviewRating(final int culturalEventId) {
         final List<Tuple> result = queryFactory.select(review.rating, review.rating.count()).from(review)
                 .where(
-                        culturalEventIdEq(culturalEventId)
+                        culturalEventIdEq(culturalEventId),
+                        reviewIsDelEq(false)
                 )
                 .groupBy(review.rating)
                 .orderBy(review.rating.asc())
