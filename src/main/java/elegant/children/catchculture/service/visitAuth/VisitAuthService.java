@@ -1,6 +1,5 @@
 package elegant.children.catchculture.service.visitAuth;
 
-import elegant.children.catchculture.common.annotation.AdminUser;
 import elegant.children.catchculture.common.exception.CustomException;
 import elegant.children.catchculture.common.exception.ErrorCode;
 import elegant.children.catchculture.dto.admin.response.VisitAuthResponseDTO;

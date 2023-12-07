@@ -1,6 +1,5 @@
 package elegant.children.catchculture.repository.review;
 
-import elegant.children.catchculture.dto.review.response.ReviewDTO;
 import elegant.children.catchculture.entity.review.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
