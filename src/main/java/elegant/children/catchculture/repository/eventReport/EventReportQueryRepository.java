@@ -38,12 +38,12 @@ public class EventReportQueryRepository {
                 .where(
                         eventReportIdGt(lastId),
                         eventReport.isReported.eq(false)
-                ).limit(PAGE_SIZE + 1)
+                ).limit(PAGE_SIZE + 1L)
                 .orderBy(eventReport.id.asc())
                 .fetch();
 
         boolean hasNext = false;
-        if (content.size() == PAGE_SIZE + 1) {
+        if (content.size() == PAGE_SIZE + 1L) {
             hasNext = true;
             content.remove(PAGE_SIZE);
         }
