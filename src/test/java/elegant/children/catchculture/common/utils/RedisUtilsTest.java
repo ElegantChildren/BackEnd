@@ -10,8 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class RedisUtilsTest {
 
-    @Autowired
-    private RedisUtils redisUtils;
 
     @Test
     public void redisTest() {

@@ -2,7 +2,6 @@ package elegant.children.catchculture.service.user;
 
 import elegant.children.catchculture.common.constant.Classification;
 import elegant.children.catchculture.common.utils.CookieUtils;
-import elegant.children.catchculture.common.utils.RedisUtils;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
 import elegant.children.catchculture.entity.culturalevent.Category;
 import elegant.children.catchculture.entity.user.User;
@@ -16,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -51,16 +49,20 @@ public class UserService {
 
     @Transactional
     @EventListener
-    public void handleCreateCulturalEvent(final CreateCulturalEvent createCulturalEvent) {
-        log.info("handleCreateCulturalEvent");
-        updateUserPoint(createCulturalEvent.getUser(), createCulturalEvent.getPointChange().getPoint());
+    @CachePut(value = "user", key = "#signOutEvent.user.email")
+    public User handleCreateCulturalEvent(final CreateCulturalEvent createCulturalEvent) {
+        final User user = userRepository.findByEmail(createCulturalEvent.getUser().getEmail()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        user.updatePoint(createCulturalEvent.getPointChange().getPoint());
+        return user;
     }
 
     @Transactional
     @EventListener
-    public void handleCreatePointHistoryEvent(final CreatePointHistoryEvent createPointHistoryEvent) {
-        log.info("handleCreatePointHistoryEvent");
-        updateUserPoint(createPointHistoryEvent.getUser(), createPointHistoryEvent.getPointChange().getPoint());
+    @CachePut(value = "user", key = "#createPointHistoryEvent.user.email")
+    public User handleCreatePointHistoryEvent(final CreatePointHistoryEvent createPointHistoryEvent) {
+        final User user = userRepository.findByEmail(createPointHistoryEvent.getUser().getEmail()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        user.updatePoint(createPointHistoryEvent.getPointChange().getPoint());
+        return user;
     }
 
 

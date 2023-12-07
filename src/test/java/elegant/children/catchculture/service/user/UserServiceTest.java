@@ -1,7 +1,6 @@
 package elegant.children.catchculture.service.user;
 
 import elegant.children.catchculture.common.constant.Classification;
-import elegant.children.catchculture.common.utils.RedisUtils;
 import elegant.children.catchculture.dto.culturalEvent.response.CulturalEventListResponseDTO;
 import elegant.children.catchculture.entity.user.SocialType;
 import elegant.children.catchculture.entity.user.User;
@@ -44,10 +43,6 @@ class UserServiceTest {
 
     @Mock
     private CulturalEventQueryRepository culturalEventQueryRepository;
-
-    @Mock
-    private RedisUtils redisUtils;
-
 
     private User getUser() {
         return User.builder()

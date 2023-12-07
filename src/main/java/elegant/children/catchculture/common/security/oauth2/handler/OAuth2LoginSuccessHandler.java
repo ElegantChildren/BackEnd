@@ -2,7 +2,6 @@ package elegant.children.catchculture.common.security.oauth2.handler;
 
 import elegant.children.catchculture.common.security.JwtTokenProvider;
 import elegant.children.catchculture.common.security.oauth2.CustomOAuth2User;
-import elegant.children.catchculture.common.utils.RedisUtils;
 import elegant.children.catchculture.entity.user.Role;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

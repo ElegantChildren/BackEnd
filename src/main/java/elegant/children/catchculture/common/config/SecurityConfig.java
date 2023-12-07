@@ -7,7 +7,6 @@ import elegant.children.catchculture.common.security.JwtTokenProvider;
 import elegant.children.catchculture.common.security.oauth2.CustomOAuth2UserService;
 import elegant.children.catchculture.common.security.oauth2.handler.OAuth2LoginFailureHandler;
 import elegant.children.catchculture.common.security.oauth2.handler.OAuth2LoginSuccessHandler;
-import elegant.children.catchculture.common.utils.RedisUtils;
 import elegant.children.catchculture.repository.user.UserRepository;
 import elegant.children.catchculture.service.user.UserService;
 import lombok.RequiredArgsConstructor;
