@@ -49,7 +49,7 @@ public class UserService {
 
     @Transactional
     @EventListener
-    @CachePut(value = "user", key = "#signOutEvent.user.email")
+    @CachePut(value = "user", key = "#createCulturalEvent.user.email")
     public User handleCreateCulturalEvent(final CreateCulturalEvent createCulturalEvent) {
         final User user = userRepository.findByEmail(createCulturalEvent.getUser().getEmail()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
         user.updatePoint(createCulturalEvent.getPointChange().getPoint());
@@ -60,6 +60,7 @@ public class UserService {
     @EventListener
     @CachePut(value = "user", key = "#createPointHistoryEvent.user.email")
     public User handleCreatePointHistoryEvent(final CreatePointHistoryEvent createPointHistoryEvent) {
+        log.info("handleCreatePointHistoryEvent");
         final User user = userRepository.findByEmail(createPointHistoryEvent.getUser().getEmail()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
         user.updatePoint(createPointHistoryEvent.getPointChange().getPoint());
         return user;
